@@ -1283,3 +1283,16 @@ button:focus:not(:focus-visible) {
     background-color: #e30000;
     border-radius: 14px;
 }
+
+.logo_um {
+    fill: #00AFEF
+}
+
+.logo_dois {
+    fill: #3E4095;
+    fill-rule: nonzero
+}
+
+.text-menususp {
+    padding: 12px;
+}

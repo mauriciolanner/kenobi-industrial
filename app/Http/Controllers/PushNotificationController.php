@@ -21,9 +21,10 @@ class PushNotificationController extends Controller
     //notificações de aprovação
     public function opemTask()
     {
-        $notifications = FormNumber::where('atual_user', auth()->user()->id)->with('form')
-            ->whereIn('status_form', ['2', '3'])
-            ->orWhere('atual_group', auth()->user()->role_id)->orderBy('id', 'desc')->get();
+        // $notifications = FormNumber::where('atual_user', auth()->user()->id)->with('form')
+        //     ->whereIn('status_form', ['2', '3'])
+        //     ->orWhere('atual_group', auth()->user()->role_id)->orderBy('id', 'desc')->get();
+        $notifications = [];
         return response()->json($notifications);
     }
 

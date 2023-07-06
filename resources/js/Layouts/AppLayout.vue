@@ -161,16 +161,21 @@
           <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-                <jet-nav-link :href="route('forms.dashboard')" :class="'pading-x'">
-                  Ver requisições
-                </jet-nav-link>
-
-                <jet-nav-link v-if="$page.props.controllersAccess.borderoView == 1" :href="route('form.Modelo.index')"
+                <jet-nav-link v-if="$page.props.user.coligada == 1" :href="route('consulta.apontamento.matriz')"
                   :class="'pading-x'">
-                  Modelo Formulário
+                  Etiqueta Robopack
                 </jet-nav-link>
-
+                <jet-nav-link v-if="$page.props.user.coligada == 2" :href="route('consulta.fardo')" :class="'pading-x'">
+                  Fardo
+                </jet-nav-link>
+                <jet-nav-link v-if="$page.props.user.coligada == 2" :href="route('consulta.apontamento')"
+                  :class="'pading-x'">
+                  Apontamento
+                </jet-nav-link>
+                <jet-nav-link v-if="$page.props.user.coligada == 2" :href="route('consulta.impressas')"
+                  :class="'pading-x'">
+                  Impressas
+                </jet-nav-link>
               </ul>
             </div>
           </div>

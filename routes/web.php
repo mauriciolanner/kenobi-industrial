@@ -5,6 +5,11 @@ use App\Http\Controllers\FormConfigController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\APIUteisController;
 use App\Http\Controllers\PushNotificationController;
+use App\Http\Controllers\ApontamentoImpressoController;
+use App\Http\Controllers\ConsultaApontamentoController;
+use App\Http\Controllers\ConsultaApontamentoMatriz;
+use App\Http\Controllers\ConsultaSaldoLOController;
+use App\Http\Controllers\TesteController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -72,4 +77,45 @@ Route::middleware(['auth:sanctum', 'verified'])->controller(APIUteisController::
     Route::get('/API/usuarios', 'usuarios')->name('API.utei.usuarios');
     Route::get('/API/roles', 'roles')->name('API.utei.roles');
     Route::get('/API/funcionarios', 'funcionarios')->name('API.utei.funcionarios');
+});
+
+//rotas de Fardo
+Route::middleware(['auth:sanctum', 'verified'])->controller(TesteController::class)->group(function () {
+    Route::get('/consultafardo', 'index')->name('consulta.fardo');
+    Route::get('/fardo/pdf/{id}/{op}/EtiquetaFardo', 'fardoPdf')->name('fardo.pdf');
+    Route::post('/fardo/pdf/EtiquetaFardo/reimpressao', 'fardoPdfReimpressao')->name('fardo.reimprimir.pdf');
+    Route::get('/fardo/consulta/{op}/impressoes', 'consultaNumeroDeImpressoes')->name('fardo.impressoes');
+    Route::get('/fardo/pdf/{id}/{op}/{matricula}/{turno}/EtiquetaDupla', 'etiquetaduplaPdf')->name('etiquetadupla.pdf');
+});
+
+//rotas de Apontamento
+Route::middleware(['auth:sanctum', 'verified'])->controller(ConsultaApontamentoController::class)->group(function () {
+    Route::get('/consultaapontamento', 'index')->name('consulta.apontamento');
+    Route::get('/apontamento/pdf/{recno}/{op}/EtiquetaApontamento', 'apontamentoPdf')->name('apontamento.pdf');
+    Route::get('/API/consultaapontamento', 'APIconsulta')->name('apontamento.APIconsulta');
+});
+
+Route::middleware(['auth:sanctum', 'verified'])->controller(ConsultaApontamentoMatriz::class)->group(function () {
+    Route::get('/consultaapontamento/matriz', 'index')->name('consulta.apontamento.matriz');
+    Route::get('/apontamento/pdf/{op}/EtiquetaApontamento/matriz', 'apontamentoPdf')->name('apontamento.pdf.matriz');
+    Route::get('/API/consultaapontamento/matriz', 'APIconsulta')->name('apontamento.APIconsulta.matriz');
+});
+
+//rotas de Apontamento já impressos
+Route::middleware(['auth:sanctum', 'verified'])->controller(ConsultaSaldoLOController::class)->group(function () {
+    Route::get('/consultasaldo', 'index')->name('consulta.saldo');
+    Route::get('/consultasaldo/{produto_id}/{lote}')->name('apontamento.pdf');
+});
+
+//rotas do Relatorio de Estoque
+Route::middleware(['auth:sanctum', 'verified'])->controller(RelatorioEstoqueController::class)->group(function () {
+    Route::get('/relatorioestoque', 'Index')->name('consulta.relatoriodeestoque');
+    Route::get('/controledeestoque/post', 'relatoriodeestoque')->name('post.relatoriodeestoque');
+    Route::get('/controledeestoque/sql', 'consultarelatorio')->name('post.relatoriodeestoque.teste');
+});
+
+//rotas de Apontamento já impressos
+Route::middleware(['auth:sanctum', 'verified'])->controller(ApontamentoImpressoController::class)->group(function () {
+    Route::get('/apontamentoimpresso', 'index')->name('consulta.impressas');
+    Route::get('/impressas/pdf/{recno}/{op}/{numseq}/ApontamentoImpresso', 'impressasPdf')->name('apontamento.impressas.pdf');
 });

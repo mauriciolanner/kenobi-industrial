@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "codedge/laravel-fpdf": "^1.9",
         "doctrine/dbal": "^3.3",
         "eduardokum/laravel-boleto": "^0.9.3",
         "fruitcake/laravel-cors": "^2.0",
@@ -22,8 +23,8 @@
         "nascent-africa/jetstrap": "^2.5",
         "pusher/pusher-php-server": "^7.0",
         "ricorocks-digital-agency/soap": "^1.6",
-        "tightenco/ziggy": "^1.0",
-        "simplesoftwareio/simple-qrcode": "^4.2"
+        "simplesoftwareio/simple-qrcode": "^4.2",
+        "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
