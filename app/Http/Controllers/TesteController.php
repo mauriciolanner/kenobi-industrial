@@ -35,7 +35,7 @@ class TesteController extends Controller
 
     public function consultaNumeroDeImpressoes($op)
     {
-        $numeroImpressoes = DB::connection('sqlsrv')->select("SELECT num_impressoes FROM log_etiqueta_fardos WHERE op LIKE '%$op%'");
+        $numeroImpressoes = DB::connection('sqlsrv')->select("SELECT top 1 num_impressoes FROM log_etiqueta_fardos WHERE op LIKE '%$op%' ORDER BY num_impressoes DESC");
         if ($numeroImpressoes != []) {
             return response()->json($numeroImpressoes);
         }
@@ -43,21 +43,23 @@ class TesteController extends Controller
 
     public function fardoPdfReimpressao(Request $request)
     {
-        $id = $request->id;
-        $op = $request->op;
-        $motivoImpressao = $request->motivoImpressao;
-        $etiquetaReimprimir = $request->etiquetaReimprimir;
 
-        $numeroImpressoes = DB::connection('sqlsrv')->select("SELECT num_impressoes FROM log_etiqueta_fardos WHERE op LIKE '%$op%'");
+        Validator::make($request->all(), [
+            "motivoImpressao" => 'required',
+            "reimprecaoEtiqueta" => 'required',
+        ])->validate();
 
-        $linha = $this->consultaProduto(substr($id, 0, 9), $op);
+        $numeroImpressoes = DB::connection('sqlsrv')->select("SELECT top 1 num_impressoes FROM log_etiqueta_fardos WHERE op LIKE '%$request->reimprecaoOp%' ORDER BY num_impressoes DESC");
+
+        $linha = $this->consultaProduto(substr($request->reimprecaoId, 0, 9), $request->reimprecaoOp);
         $qtdOP = $linha[0]->Quantidade;
         $Date = date('d/m/Y', strtotime($linha[0]->Validade));
         $QtdPorEmbalagem = $linha[0]->QtdPorEmbalagem;
         $quantMaxFardos = floor($qtdOP / $QtdPorEmbalagem);
+        $etiquetaReimp = $request->reimprecaoEtiqueta;
 
-        if ($etiquetaReimprimir > $quantMaxFardos) {
-            $etiquetaReimprimir = $quantMaxFardos;
+        if ($etiquetaReimp > $quantMaxFardos) {
+            $etiquetaReimp = $quantMaxFardos;
         }
 
         //$pdf = new Fpdf;
@@ -68,7 +70,7 @@ class TesteController extends Controller
         $pdf->AddPage();
         //$pdf->Cell (113,55,"",1,1);
         $pdf->Cell(250, 116, "", 1, 1);
-        $pdf->Code39(16, 75, substr($op, 0, 8));
+        $pdf->Code39(16, 75, substr($request->reimprecaoOp, 0, 8));
         $pdf->Cell(0, 0, "", 0, 0, "C");
         $pdf->SetFont("", "B", 25);
         $pdf->Cell(-320, -15, "Bomix Divisao Sopro", 0, 0, "C");
@@ -81,13 +83,13 @@ class TesteController extends Controller
         $pdf->SetFont("", "B", 20);
         $pdf->Cell(-100, -215, $linha[0]->Produto, 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
-        $pdf->Cell(-310, -200, substr($id, 0, 9), 0, 0, "C");
+        $pdf->Cell(-310, -200, substr($request->reimprecaoId, 0, 9), 0, 0, "C");
 
         $pdf->SetFont("", "B", 25);
         $pdf->Cell(-340, -220, $linha[0]->Produto, 0, 0, "C");
         $pdf->Cell(0, -58, "", 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
-        $pdf->Cell(-469, -170, "OP:  " . $op, 0, 0, "C");
+        $pdf->Cell(-469, -170, "OP:  " . $request->reimprecaoOp, 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
         $pdf->Cell(-476, -145, "Lote:  " . $linha[0]->Lote, 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
@@ -99,23 +101,23 @@ class TesteController extends Controller
         $pdf->Cell(0, 0, "", 0, 0, "C");
         $pdf->SetFont("", "B", 15);
         $pdf->Cell(-130, -170, "Identificação", 0, 0, "C");
-        $pdf->Image(asset('/img/etiqueta_identificacao.png'), 195, 35, 55, 55, 'PNG');
+        $pdf->Image('../public/img/etiqueta_identificacao.png', 195, 35, 55, 55, 'PNG');
         $pdf->SetFont("", "B", 18);
         $pdf->Cell(135, -55, "ETIQUETA", 0, 0, "C");
         $pdf->SetFont("", "B", 15);
-        $pdf->Cell(-135, -35, "$etiquetaReimprimir/$quantMaxFardos", 0, 0, "C");
+        $pdf->Cell(-135, -35, "$etiquetaReimp/$quantMaxFardos", 0, 0, "C");
 
         // Remoção do campo Turno como pedido na reunião por Fabio/Sopro em 29/06/2023 - Alterado por Vinícius Evangelista - 30/06/2023
         // $pdf->Cell(-70, -185, $turno, 0, 0, "C");
 
-        $mensagemLogImpressao = "A etiqueta $etiquetaReimprimir da OP: $op foi reimpressa";
+        $mensagemLogImpressao = "A etiqueta $etiquetaReimp da OP: $request->reimprecaoOp foi reimpressa";
         LogEtiquetaFardo::create(
             [
                 'usuario' => auth()->user()->name,
                 'log' => $mensagemLogImpressao,
-                'op' => $op,
+                'op' => $request->reimprecaoOp,
                 'num_impressoes' => $numeroImpressoes,
-                'motivo_da_impressao' => $motivoImpressao
+                'motivo_da_impressao' => $request->motivoImpressao
             ]
         );
 
@@ -123,13 +125,13 @@ class TesteController extends Controller
         exit;
     }
 
-    public function fardoPdf($id, $op)
+    public function fardoPdf(Request $request)
     {
-        $numeroImpressoes = DB::connection('sqlsrv')->select("SELECT num_impressoes FROM log_etiqueta_fardos WHERE op LIKE '%$op%'");
+        $numeroImpressoes = DB::connection('sqlsrv')->select("SELECT top 1 num_impressoes FROM log_etiqueta_fardos WHERE op LIKE '%$request->imprecaoOp%' ORDER BY num_impressoes DESC");
 
         // Antigas variáveis da função: ($id, $op, $matricula, $turno)
         //dd($id,$op,$matricula,$turno);
-        $linha = $this->consultaProduto(substr($id, 0, 9), $op);
+        $linha = $this->consultaProduto(substr($request->imprecaoId, 0, 9), $request->imprecaoOp);
         $qtdOP = $linha[0]->Quantidade;
         $Date = date('d/m/Y', strtotime($linha[0]->Validade));
         $QtdPorEmbalagem = $linha[0]->QtdPorEmbalagem;
@@ -143,7 +145,7 @@ class TesteController extends Controller
                 $pdf->AddPage();
                 //$pdf->Cell (113,55,"",1,1);
                 $pdf->Cell(250, 116, "", 1, 1);
-                $pdf->Code39(16, 75, substr($op, 0, 8));
+                $pdf->Code39(16, 75, substr($request->imprecaoOp, 0, 8));
                 $pdf->Cell(0, 0, "", 0, 0, "C");
                 $pdf->SetFont("", "B", 25);
                 $pdf->Cell(-320, -15, "Bomix Divisao Sopro", 0, 0, "C");
@@ -157,13 +159,13 @@ class TesteController extends Controller
                 // $pdf->Cell(-100, -215, $linha[0]->Produto, 0, 0, $align = "C");
                 $pdf->Cell(-100, -215, $linha[0]->Produto, 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
-                $pdf->Cell(-310, -200, substr($id, 0, 9), 0, 0, "C");
+                $pdf->Cell(-310, -200, substr($request->imprecaoId, 0, 9), 0, 0, "C");
 
                 $pdf->Cell(-360, -200, substr($linha[0]->Produto, 74, 111), 0, 0, "C");
                 $pdf->Cell(-340, -220, $linha[0]->Produto, 0, 0, "C");
                 $pdf->Cell(0, -58, "", 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
-                $pdf->Cell(-469, -170, "OP:  " . $op, 0, 0, "C");
+                $pdf->Cell(-469, -170, "OP:  " . $request->imprecaoOp, 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
                 $pdf->Cell(-476, -145, "Lote:  " . $linha[0]->Lote, 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
@@ -175,7 +177,7 @@ class TesteController extends Controller
                 $pdf->Cell(0, 0, "", 0, 0, "C");
                 $pdf->SetFont("", "B", 15);
                 $pdf->Cell(-130, -170, "Identificação", 0, 0, "C");
-                $pdf->Image(asset('/img/etiqueta_identificacao.png'), 195, 35, 55, 55, 'PNG');
+                $pdf->Image('../public/img/etiqueta_identificacao.png', 195, 35, 55, 55, 'PNG');
                 $pdf->SetFont("", "B", 18);
                 $pdf->Cell(135, -55, "ETIQUETA", 0, 0, "C");
                 $pdf->SetFont("", "B", 15);
@@ -184,12 +186,12 @@ class TesteController extends Controller
                 // Remoção do campo Turno como pedido na reunião por Fabio/Sopro em 29/06/2023 - Alterado por Vinícius Evangelista - 30/06/2023
                 // $pdf->Cell(-70, -185, $turno, 0, 0, "C");
 
-                $mensagemLogImpressao = "A " . ($i + 1) . "ª etiqueta de $quantMaxFardos da OP: $op foi criada";
+                $mensagemLogImpressao = "A " . ($i + 1) . "ª etiqueta de $quantMaxFardos da OP: $request->imprecaoOp foi criada";
                 LogEtiquetaFardo::create(
                     [
                         'usuario' => auth()->user()->name,
                         'log' => $mensagemLogImpressao,
-                        'op' => $op,
+                        'op' => $request->imprecaoOp,
                         'num_impressoes' => $numeroImpressoes,
                         'motivo_da_impressao' => 'Primeira impressão'
                     ]
@@ -197,52 +199,51 @@ class TesteController extends Controller
             }
         }
 
-        $pdf->Output();
-        exit;
-
-        //Etiqueta Antiga ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-        // $pdf->AddPage();
-        // //$pdf->Cell (113,55,"",1,1);
-        // $pdf->Cell(250, 116, "", 1, 1);
-        // $pdf->Code39(13, 80, substr($op, 0, 8));
-        // $pdf->Cell(0, 0, "", 0, 0, "C");
-        // $pdf->SetFont("", "B", 25);
-        // $pdf->Cell(-320, -10, "Bomix Divisao Sopro", 0, 0, "C");
-        // $pdf->Cell(0, 0, "", 0, 0, "C");
-        // $pdf->SetFont("", "B", 20);
-        // $pdf->Cell(-120, -10, "Matricula:  " . $matricula, 0, 0, "C");
-        // $pdf->Cell(0, 0, "", 0, 0, "C");
-        // $pdf->SetFont("", "B", 25);
-        // if (strlen($linha[0]->Produto) > '37') {
-        //     $pdf->Cell(-360, -220, substr($linha[0]->Produto, 0, 37), 0, 0, "C");
-        //     $pdf->Cell(0, 0, "", 0, 0, "C");
-        //     $pdf->Cell(-300, -200, substr($linha[0]->Produto, 37, 74), 0, 0, "C");
-        //     $pdf->Cell(0, 0, "", 0, 0, "C");
-        //     $pdf->Cell(-360, -200, substr($linha[0]->Produto, 74, 111), 0, 0, "C");
-        // } else {
-        //     $pdf->Cell(-360, -220, $linha[0]->Produto, 0, 0, "C");
-        // }
-        // $pdf->Cell(-390, -220, $linha[0]->Produto, 0, 0, "C");
-        // $pdf->Cell(0, -58, "", 0, 0, "C");
-        // $pdf->Cell(-480, -145, $id, 0, 0, "C");
-        // $pdf->Cell(0, 0, "", 0, 0, "C");
-        // $pdf->Cell(-314, -145, "OP:  " . $op, 0, 0, "C");
-        // $pdf->Cell(0, 0, "", 0, 0, "C");
-        // $pdf->Cell(-480, -120, "Lote:  " . $linha[0]->Lote, 0, 0, "C");
-        // $pdf->Cell(0, 0, "", 0, 0, "C");
-        // $pdf->Cell(-306, -120, "Validade:  " . $Date, 0, 0, "C");
-        // $pdf->Cell(0, 0, "", 0, 0, "C");
-        // //	$pdf->Cell (-160,-145,"Operador: ",0,0,"C");
-        // $pdf->Cell(0, 0, "", 0, 0, "C");
-        // $pdf->Cell(-135, -120, "Contem:  " . intval($QtdPorEmbalagem), 0, 0, "C");
-        // $pdf->Cell(0, 0, "", 0, 0, "C");
-        // $pdf->Cell(-175, -70, date("d/m/Y H:i:s"), 0, 0, "C");
-        // $pdf->SetFont("", "", 80); //Times
-        // $pdf->Cell(0, 0, "", 0, 0, "C");
-        // $pdf->Cell(-70, -185, $turno, 0, 0, "C");
-        // $pdf->Output();
-        // exit;
+        return $pdf->Output();
     }
+
+    //Etiqueta Antiga ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // $pdf->AddPage();
+    // //$pdf->Cell (113,55,"",1,1);
+    // $pdf->Cell(250, 116, "", 1, 1);
+    // $pdf->Code39(13, 80, substr($op, 0, 8));
+    // $pdf->Cell(0, 0, "", 0, 0, "C");
+    // $pdf->SetFont("", "B", 25);
+    // $pdf->Cell(-320, -10, "Bomix Divisao Sopro", 0, 0, "C");
+    // $pdf->Cell(0, 0, "", 0, 0, "C");
+    // $pdf->SetFont("", "B", 20);
+    // $pdf->Cell(-120, -10, "Matricula:  " . $matricula, 0, 0, "C");
+    // $pdf->Cell(0, 0, "", 0, 0, "C");
+    // $pdf->SetFont("", "B", 25);
+    // if (strlen($linha[0]->Produto) > '37') {
+    //     $pdf->Cell(-360, -220, substr($linha[0]->Produto, 0, 37), 0, 0, "C");
+    //     $pdf->Cell(0, 0, "", 0, 0, "C");
+    //     $pdf->Cell(-300, -200, substr($linha[0]->Produto, 37, 74), 0, 0, "C");
+    //     $pdf->Cell(0, 0, "", 0, 0, "C");
+    //     $pdf->Cell(-360, -200, substr($linha[0]->Produto, 74, 111), 0, 0, "C");
+    // } else {
+    //     $pdf->Cell(-360, -220, $linha[0]->Produto, 0, 0, "C");
+    // }
+    // $pdf->Cell(-390, -220, $linha[0]->Produto, 0, 0, "C");
+    // $pdf->Cell(0, -58, "", 0, 0, "C");
+    // $pdf->Cell(-480, -145, $id, 0, 0, "C");
+    // $pdf->Cell(0, 0, "", 0, 0, "C");
+    // $pdf->Cell(-314, -145, "OP:  " . $op, 0, 0, "C");
+    // $pdf->Cell(0, 0, "", 0, 0, "C");
+    // $pdf->Cell(-480, -120, "Lote:  " . $linha[0]->Lote, 0, 0, "C");
+    // $pdf->Cell(0, 0, "", 0, 0, "C");
+    // $pdf->Cell(-306, -120, "Validade:  " . $Date, 0, 0, "C");
+    // $pdf->Cell(0, 0, "", 0, 0, "C");
+    // //	$pdf->Cell (-160,-145,"Operador: ",0,0,"C");
+    // $pdf->Cell(0, 0, "", 0, 0, "C");
+    // $pdf->Cell(-135, -120, "Contem:  " . intval($QtdPorEmbalagem), 0, 0, "C");
+    // $pdf->Cell(0, 0, "", 0, 0, "C");
+    // $pdf->Cell(-175, -70, date("d/m/Y H:i:s"), 0, 0, "C");
+    // $pdf->SetFont("", "", 80); //Times
+    // $pdf->Cell(0, 0, "", 0, 0, "C");
+    // $pdf->Cell(-70, -185, $turno, 0, 0, "C");
+    // $pdf->Output();
+    // exit;
 
     static function consulta($busca)
     {

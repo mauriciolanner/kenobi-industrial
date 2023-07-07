@@ -4,11 +4,19 @@
             <h2 class="h4 font-weight-bold">Consulta Fardo</h2>
         </template>
 
-        <div class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top table-responsive">
+        <div
+            class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top table-responsive"
+        >
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <jet-input-search id="buscar" :class="'mt-3'" type="text" v-model="buscador" @keyup="buscar"
-                        placeholder="Buscar por OP..." />
+                    <jet-input-search
+                        id="buscar"
+                        :class="'mt-3'"
+                        type="text"
+                        v-model="buscador"
+                        @keyup="buscar"
+                        placeholder="Buscar por OP..."
+                    />
                 </div>
                 <!-- <div class="col-md-3">
                     <jet-input-search id="buscar" :class="'mt-3'" type="text" v-model="matricula" placeholder="Matricula" />
@@ -53,7 +61,15 @@
                                     {{ parseInt(consulta.QtdPorEmbalagem) }}
                                 </td>
                                 <td>
-                                    <button class="btn btn-info" @click="fazerPDF(consulta.ID, consulta.OrdemProducao)">
+                                    <button
+                                        class="btn btn-info"
+                                        @click="
+                                            fazerPDF(
+                                                consulta.ID,
+                                                consulta.OrdemProducao
+                                            )
+                                        "
+                                    >
                                         <i class="bi bi-printer"></i>
                                     </button>
                                 </td>
@@ -70,16 +86,30 @@
         </div>
 
         <!-- Modal Impressão -->
-        <div class="modal fade" id="modalImpressao" tabindex="-1" aria-labelledby="modalImpressaoLabel" aria-hidden="true">
+        <div
+            class="modal fade"
+            id="modalImpressao"
+            tabindex="-1"
+            aria-labelledby="modalImpressaoLabel"
+            aria-hidden="true"
+        >
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header text-end">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12 text-center">
-                                <h1 class="text-success" style="font-size: 64px;">
+                                <h1
+                                    class="text-success"
+                                    style="font-size: 64px"
+                                >
                                     <i class="bi bi-printer"></i>
                                 </h1>
                                 <p>Deseja continuar com a impressão</p>
@@ -88,52 +118,99 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            @click="modalAtivo1 = false">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                            @click="modalAtivo1 = false"
+                        >
                             Fechar
                         </button>
-                        <a :href="route('fardo.pdf', [consultasSalvas.id, consultasSalvas.op])" target="_blank"
-                            @click="modalAtivo1 = false" class="btn btn-primary">
+                        <button
+                            class="btn btn-primary"
+                            @click="
+                                imprimir(consultasSalvas.id, consultasSalvas.op)
+                            "
+                        >
                             Imprimir
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Modal Impressão dois -->
-        <div class="modal fade" id="modalImpressaodois" tabindex="-1" aria-labelledby="modalImpressaodoisLabel"
-            aria-hidden="true">
+        <div
+            class="modal fade"
+            id="modalImpressaodois"
+            tabindex="-1"
+            aria-labelledby="modalImpressaodoisLabel"
+            aria-hidden="true"
+        >
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header text-end">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12 text-center">
-                                <h1 class="text-success" style="font-size: 64px;">
+                                <h1
+                                    class="text-success"
+                                    style="font-size: 64px"
+                                >
                                     <i class="bi bi-printer"></i>
                                 </h1>
                             </div>
 
                             <div class="col-md-12">
-                                <label class="form-label" for="motivo">Insira o motivo para a reimpressão</label>
-                                <input class="form-control" :class="{ 'is-invalid': validamotivo_impressao }" type="text"
-                                    name="motivo_impressao" id="motivo_impressao" v-model="motivo_impressao"
-                                    @blur="checarMotivo" />
-                                <div v-if="validamotivo_impressao" class="invalid-feedback">
+                                <label class="form-label" for="motivo"
+                                    >Insira o motivo para a reimpressão</label
+                                >
+                                <input
+                                    class="form-control"
+                                    :class="{
+                                        'is-invalid': validamotivo_impressao,
+                                    }"
+                                    type="text"
+                                    name="motivo_impressao"
+                                    id="motivo_impressao"
+                                    v-model="motivo_impressao"
+                                    @blur="checarMotivo"
+                                />
+                                <div
+                                    v-if="validamotivo_impressao"
+                                    class="invalid-feedback"
+                                >
                                     Preencha o motivo
                                 </div>
                             </div>
 
                             <div class="col-md-12 mt-3">
-                                <label class="form-label" for="motivo">Insira o número da etiqueta que deve ser
-                                    impressa</label>
-                                <input class="form-control" :class="{ 'is-invalid': validaetiquetaReimprimir }" type="text"
-                                    name="etiquetaReimprimir" id="etiquetaReimprimir" v-model="etiquetaReimprimir"
-                                    @blur="checarQuantidade" />
-                                <div v-if="validaetiquetaReimprimir" class="invalid-feedback">
+                                <label class="form-label" for="motivo"
+                                    >Insira o número da etiqueta que deve ser
+                                    impressa</label
+                                >
+                                <input
+                                    class="form-control"
+                                    :class="{
+                                        'is-invalid': validaetiquetaReimprimir,
+                                    }"
+                                    type="text"
+                                    name="etiquetaReimprimir"
+                                    id="etiquetaReimprimir"
+                                    v-model="etiquetaReimprimir"
+                                    @blur="checarQuantidade"
+                                />
+                                <div
+                                    v-if="validaetiquetaReimprimir"
+                                    class="invalid-feedback"
+                                >
                                     Preencha o numero da etiqueta
                                 </div>
                             </div>
@@ -141,12 +218,24 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            @click="modalAtivo2 = false">
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                            @click="modalAtivo2 = false"
+                        >
                             Fechar
                         </button>
                         <div>
-                            <button class="btn btn-primary" @click="reimprimir(consultasSalvas.id, consultasSalvas.op)">
+                            <button
+                                class="btn btn-primary"
+                                @click="
+                                    reimprimir(
+                                        consultasSalvas.id,
+                                        consultasSalvas.op
+                                    )
+                                "
+                            >
                                 Confirmar impressão
                             </button>
                         </div>
@@ -154,7 +243,6 @@
                 </div>
             </div>
         </div>
-
     </app-layout>
 </template>
 
@@ -181,39 +269,74 @@ export default defineComponent({
             this.modal.hide();
         },
         buscar() {
-            this.$inertia.get(route('consulta.fardo'),
+            this.$inertia.get(
+                route("consulta.fardo"),
                 { busca: this.buscador },
                 { preserveState: true }
             );
         },
-        reimprimir(id, op) {
-            this.validaetiquetaReimprimir = (this.etiquetaReimprimir != '') ? false : true;
-            this.validamotivo_impressao = (this.motivo_impressao != '') ? false : true;
+        imprimir() {
+            this.imprecaoDados.imprecaoId = this.consultasSalvas.id;
+            this.imprecaoDados.imprecaoOp = this.consultasSalvas.op;
+            let _this = this;
 
-            if (!(this.validamotivo_impressao && this.validaetiquetaReimprimir)) {
-                axios.post(route('fardo.reimprimir.pdf'), {
-                    id: id,
-                    op: op,
-                    motivoImpressao: this.motivo_impressao,
-                    etiquetaReimprimir: this.etiquetaReimprimir,
-                }).then(response => {
-                    let blob = new Blob([response.data], { type: 'application/pdf' })
-                    let link = document.createElement('a')
-                    link.href = window.URL.createObjectURL(blob)
-                    link.download = 'etiqueta.pdf'
-                    link.click()
-                }).catch(error => {
-
+            axios
+                .post(route("fardo.pdf"), this.imprecaoDados, {
+                    responseType: "arraybuffer",
+                })
+                .then((response) => {
+                    console.log(response);
+                    let blob = new Blob([response.data], {
+                        type: "application/pdf",
+                    });
+                    let link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "etiquetas.pdf";
+                    link.click();
+                })
+                .catch(function (error) {
+                    console.log(error);
                 });
-            }
+        },
+        reimprimir() {
+            this.reimprimirDados.reimprecaoEtiqueta = this.etiquetaReimprimir;
+            this.reimprimirDados.motivoImpressao = this.motivo_impressao;
+            this.reimprimirDados.reimprecaoId = this.consultasSalvas.id;
+            this.reimprimirDados.reimprecaoOp = this.consultasSalvas.op;
 
+            this.validaetiquetaReimprimir =
+                this.etiquetaReimprimir != "" ? false : true;
+            this.validamotivo_impressao =
+                this.motivo_impressao != "" ? false : true;
+
+            if (
+                this.validamotivo_impressao == false &&
+                this.validaetiquetaReimprimir == false
+            ) {
+                axios
+                    .post(route("fardo.reimprimir.pdf"), this.reimprimirDados, {
+                        responseType: "arraybuffer",
+                    })
+                    .then((response) => {
+                        console.log(response);
+                        let blob = new Blob([response.data], {
+                            type: "application/pdf",
+                        });
+                        let link = document.createElement("a");
+                        link.href = URL.createObjectURL(blob);
+                        link.download = "etiquetaReimprimir.pdf";
+                        link.click();
+                    })
+                    .catch((error) => {});
+            }
         },
         fazerPDF(id, op) {
-            console.log('teste')
+            console.log("teste");
             this.consultasSalvas.id = id;
             this.consultasSalvas.op = op;
 
-            axios.get(route("fardo.impressoes", op))
+            axios
+                .get(route("fardo.impressoes", op))
                 .then((response) => {
                     if (response.data === "") {
                         this.quantImpressoes = 0;
@@ -225,9 +348,9 @@ export default defineComponent({
                     }
 
                     if (this.quantImpressoes === 0) {
-                        this.abreModal('modalImpressao')
+                        this.abreModal("modalImpressao");
                     } else {
-                        this.abreModal('modalImpressaodois')
+                        this.abreModal("modalImpressaodois");
                     }
                 })
                 .catch(function (error) {
@@ -256,7 +379,7 @@ export default defineComponent({
     props: ["consultas", "asset", "user"],
     data() {
         return {
-            modal: '',
+            modal: "",
             modalAtivo1: false,
             modalAtivo2: false,
             etiquetaReimprimir: "",
@@ -267,9 +390,19 @@ export default defineComponent({
             validamotivo_impressao: false,
             quantImpressoes: "",
             motivo_impressao: "",
-            consultasSalvas: {
+            consultasSalvas: this.$inertia.form({
                 id: "",
                 op: "",
+            }),
+            reimprimirDados: {
+                reimprecaoId: "",
+                reimprecaoOp: "",
+                motivoImpressao: "",
+                reimprecaoEtiqueta: "",
+            },
+            imprecaoDados: {
+                imprecaoId: "",
+                imprecaoOp: "",
             },
         };
     },

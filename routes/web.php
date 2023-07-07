@@ -82,7 +82,7 @@ Route::middleware(['auth:sanctum', 'verified'])->controller(APIUteisController::
 //rotas de Fardo
 Route::middleware(['auth:sanctum', 'verified'])->controller(TesteController::class)->group(function () {
     Route::get('/consultafardo', 'index')->name('consulta.fardo');
-    Route::get('/fardo/pdf/{id}/{op}/EtiquetaFardo', 'fardoPdf')->name('fardo.pdf');
+    Route::post('/fardo/pdf/imprimir/EtiquetaFardo', 'fardoPdf')->name('fardo.pdf');
     Route::post('/fardo/pdf/EtiquetaFardo/reimpressao', 'fardoPdfReimpressao')->name('fardo.reimprimir.pdf');
     Route::get('/fardo/consulta/{op}/impressoes', 'consultaNumeroDeImpressoes')->name('fardo.impressoes');
     Route::get('/fardo/pdf/{id}/{op}/{matricula}/{turno}/EtiquetaDupla', 'etiquetaduplaPdf')->name('etiquetadupla.pdf');
