@@ -24,7 +24,7 @@ class ConsultaApontamentoMatriz extends Controller
         }
 
         return Inertia::render(
-            'ConsultaApontamento/index',
+            'ConsultaApontamento/indexMatriz',
             [
                 //'consultas' => $this->consulta($request->busca)
             ]
@@ -53,7 +53,6 @@ class ConsultaApontamentoMatriz extends Controller
 
     public function APIconsulta(Request $request)
     {
-        //dd("select * from BMX_VW_ROBOPAC where UMA LIKE '%" . $request->busca . "%'");
         $dados = DB::connection('protheus')->select("select * from BMX_VW_ROBOPAC where UMA LIKE '%" . $request->busca . "%'");
         return response()->json($dados);
     }
