@@ -9,6 +9,7 @@ use App\Http\Controllers\ApontamentoImpressoController;
 use App\Http\Controllers\ConsultaApontamentoController;
 use App\Http\Controllers\ConsultaApontamentoMatriz;
 use App\Http\Controllers\ConsultaSaldoLOController;
+use App\Http\Controllers\MecaluxController;
 use App\Http\Controllers\TesteController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -118,4 +119,10 @@ Route::middleware(['auth:sanctum', 'verified'])->controller(RelatorioEstoqueCont
 Route::middleware(['auth:sanctum', 'verified'])->controller(ApontamentoImpressoController::class)->group(function () {
     Route::get('/apontamentoimpresso', 'index')->name('consulta.impressas');
     Route::get('/impressas/pdf/{recno}/{op}/{numseq}/ApontamentoImpresso', 'impressasPdf')->name('apontamento.impressas.pdf');
+});
+
+//rotas de Apontamento já impressos
+Route::middleware(['auth:sanctum', 'verified'])->controller(MecaluxController::class)->group(function () {
+    Route::get('/etiquetaMecalux', 'index')->name('mecalux.index');
+    Route::get('/Api/etiquetaMecalux', 'APIMecaluxRecurso')->name('mecalux.apiEtiquetas');
 });

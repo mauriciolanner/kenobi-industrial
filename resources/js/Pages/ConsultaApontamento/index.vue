@@ -18,28 +18,32 @@
                     <table class="table table-striped table-padrao">
                         <thead>
                             <tr>
-                                <th scope="col">UMA</th>
+                                <th scope="col">OP</th>
+                                <th scope="col">T</th>
+                                <th scope="col">Emissão</th>
                                 <th scope="col">ID</th>
-                                <th scope="col">Setor</th>
-                                <th scope="col">Data</th>
                                 <th scope="col">Produto</th>
-                                <th scope="col">Receita</th>
+                                <th scope="col">Lote</th>
+                                <th scope="col">Produzida</th>
+                                <th scope="col">Saldo</th>
+                                <th scope="col">NumSeq</th>
                                 <th scope="col">Etiqueta</th>
                             </tr>
                         </thead>
                         <tbody v-if="!loading">
                             <tr v-for="consulta in consultas">
-
-                                <td>{{ consulta.UMA }}</td>
-                                <td>{{ consulta.ID }}</td>
-                                <td>{{ consulta.SETOR }}</td>
-                                <td>{{ consulta.DATA }}</td>
-                                <td>{{ consulta.DESCRICAO }}</td>
-                                <td>{{ consulta.RECEITA }}</td>
-                                <td>
-                                    <a :href="route('apontamento.pdf.matriz', consulta.UMA.trim())" target="blank"
-                                        class="btn btn-info"><i class="bi bi-printer"></i></a>
-                                </td>
+                                <th>{{ consulta.OrdemProducao }}</th>
+                                <td>{{ consulta.Turno }}</td>
+                                <td>{{ consulta.Emissao }}</td>
+                                <td>{{ consulta.Produto_ID }}</td>
+                                <td>{{ consulta.Produto }}</td>
+                                <td>{{ consulta.Lote }}</td>
+                                <td>{{ parseInt(consulta.QtdProduzida) }}</td>
+                                <td>{{ parseInt(consulta.Saldo) }}</td>
+                                <td>{{ consulta.NumSeq }}</td>
+                                <td><a v-if="consulta.Via != '0'"
+                                        :href="'/apontamento/pdf/' + consulta.Recno + '/' + consulta.OrdemProducao + '/EtiquetaApontamento'"
+                                        target="blank" class="btn btn-info"><i class="bi bi-printer"></i></a></td>
                             </tr>
                         </tbody>
                         <tbody v-else>
@@ -99,7 +103,7 @@ export default defineComponent({
         },
         async dadosConsulta() {
             this.loading = true
-            await axios.get(route('apontamento.APIconsulta.matriz'), {
+            await axios.get(route('apontamento.APIconsulta'), {
                 params: {
                     busca: this.buscador
                 }
