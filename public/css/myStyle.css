@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 * {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 .w-100 {
@@ -20,7 +20,6 @@ a {
 .tabelas-lista {
     padding: 50px;
 }
-
 
 .icone-busca {
     background-color: #f3f4f6 !important;
@@ -69,7 +68,7 @@ a {
 }
 
 .star-ico {
-    color: rgb(255, 166, 0)
+    color: rgb(255, 166, 0);
 }
 
 .ico-logo {
@@ -92,7 +91,7 @@ a {
 }
 
 .swal-icon--success {
-    border-color: #fff
+    border-color: #fff;
 }
 
 .swal-icon--success:after,
@@ -104,7 +103,7 @@ a {
     height: 120px;
     background: #38c172;
     -webkit-transform: rotate(45deg);
-    transform: rotate(45deg)
+    transform: rotate(45deg);
 }
 
 .swal-icon--success:before {
@@ -114,7 +113,7 @@ a {
     -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
     -webkit-transform-origin: 60px 60px;
-    transform-origin: 60px 60px
+    transform-origin: 60px 60px;
 }
 
 .swal-icon--success:after {
@@ -126,7 +125,7 @@ a {
     -webkit-transform-origin: 0 60px;
     transform-origin: 0 60px;
     -webkit-animation: rotatePlaceholder 4.25s ease-in;
-    animation: rotatePlaceholder 4.25s ease-in
+    animation: rotatePlaceholder 4.25s ease-in;
 }
 
 .swal-icon--success__ring {
@@ -138,7 +137,7 @@ a {
     position: absolute;
     left: -4px;
     top: -4px;
-    z-index: 2
+    z-index: 2;
 }
 
 .swal-icon--success__hide-corners {
@@ -151,7 +150,7 @@ a {
     top: 8px;
     z-index: 1;
     -webkit-transform: rotate(-45deg);
-    transform: rotate(-45deg)
+    transform: rotate(-45deg);
 }
 
 .swal-icon--success__line {
@@ -160,7 +159,7 @@ a {
     display: block;
     border-radius: 2px;
     position: absolute;
-    z-index: 2
+    z-index: 2;
 }
 
 .swal-icon--success__line--tip {
@@ -169,8 +168,8 @@ a {
     top: 46px;
     -webkit-transform: rotate(45deg);
     transform: rotate(45deg);
-    -webkit-animation: animateSuccessTip .75s;
-    animation: animateSuccessTip .75s
+    -webkit-animation: animateSuccessTip 0.75s;
+    animation: animateSuccessTip 0.75s;
 }
 
 .swal-icon--success__line--long {
@@ -179,8 +178,8 @@ a {
     top: 38px;
     -webkit-transform: rotate(-45deg);
     transform: rotate(-45deg);
-    -webkit-animation: animateSuccessLong .75s;
-    animation: animateSuccessLong .75s
+    -webkit-animation: animateSuccessLong 0.75s;
+    animation: animateSuccessLong 0.75s;
 }
 
 .swal-icon {
@@ -192,58 +191,58 @@ a {
     padding: 0;
     position: relative;
     box-sizing: content-box;
-    margin: 20px auto
+    margin: 20px auto;
 }
 
 .swal-icon:first-child {
-    margin-top: 32px
+    margin-top: 32px;
 }
 
 @keyframes animateSuccessLong {
     0% {
         width: 0;
         right: 46px;
-        top: 54px
+        top: 54px;
     }
 
     65% {
         width: 0;
         right: 46px;
-        top: 54px
+        top: 54px;
     }
 
     84% {
         width: 55px;
         right: 0;
-        top: 35px
+        top: 35px;
     }
 
     to {
         width: 47px;
         right: 8px;
-        top: 38px
+        top: 38px;
     }
 }
 
 @keyframes rotatePlaceholder {
     0% {
         -webkit-transform: rotate(-45deg);
-        transform: rotate(-45deg)
+        transform: rotate(-45deg);
     }
 
     5% {
         -webkit-transform: rotate(-45deg);
-        transform: rotate(-45deg)
+        transform: rotate(-45deg);
     }
 
     12% {
         -webkit-transform: rotate(-405deg);
-        transform: rotate(-405deg)
+        transform: rotate(-405deg);
     }
 
     to {
         -webkit-transform: rotate(-405deg);
-        transform: rotate(-405deg)
+        transform: rotate(-405deg);
     }
 }
 
@@ -251,31 +250,31 @@ a {
     0% {
         width: 0;
         left: 1px;
-        top: 19px
+        top: 19px;
     }
 
     54% {
         width: 0;
         left: 1px;
-        top: 19px
+        top: 19px;
     }
 
     70% {
         width: 50px;
         left: -8px;
-        top: 37px
+        top: 37px;
     }
 
     84% {
         width: 17px;
         left: 21px;
-        top: 48px
+        top: 48px;
     }
 
     to {
         width: 25px;
         left: 14px;
-        top: 45px
+        top: 45px;
     }
 }
 
@@ -329,22 +328,23 @@ a {
 }
 
 .logo-sweetalert {
-    background: url(https://sweetalert.js.org/assets/images/logo.svg) center no-repeat;
+    background: url(https://sweetalert.js.org/assets/images/logo.svg) center
+        no-repeat;
     background-size: contain;
     width: 70px;
     height: 40px;
-    margin-left: .5em;
+    margin-left: 0.5em;
     color: transparent;
 }
 
 .btn-dash :hover {
     background-color: #0169b2;
-    color: #fff
+    color: #fff;
 }
 
 .bg-success {
     background-color: #38c172;
-    color: #fff
+    color: #fff;
 }
 
 .font-10 {
@@ -372,9 +372,8 @@ a {
     border-radius: 28px;
 }
 
-
 .bg-login {
-    background: url('../img/bg_login.jpg') !important;
+    background: url("../img/bg_login.jpg") !important;
     background-color: #eaecee !important;
     background-repeat: no-repeat !important;
     background-position: center !important;
@@ -405,7 +404,7 @@ a {
 }
 
 .bg-total {
-    background: url('../img/bg_azul.jpg') top center no-repeat !important;
+    background: url("../img/bg_azul.jpg") top center no-repeat !important;
     background-color: #eaecee !important;
 }
 
@@ -479,7 +478,6 @@ a {
 
 .dropdown-menu {
     width: 400px !important;
-
 }
 
 .form-control {
@@ -487,7 +485,6 @@ a {
     border: 0px !important;
     background-color: #d9d9d9;
 }
-
 
 .icone_imput_menor {
     border-radius: 0 !important;
@@ -674,7 +671,6 @@ button:focus:not(:focus-visible) {
 .tab-form {
     padding-left: 44px;
     padding-right: 44px;
-
 }
 
 .tab-form .nav-tabs {
@@ -794,23 +790,22 @@ button:focus:not(:focus-visible) {
 
 /*LOGOTIPO*/
 .fil0 {
-    fill: #00AFEF
+    fill: #00afef;
 }
 
 .fil1 {
-    fill: #3E4095
+    fill: #3e4095;
 }
 
 .fil2 {
-    fill: #3E4095
+    fill: #3e4095;
 }
 
 .fnt0 {
     font-weight: normal;
     font-size: 1565.64px;
-    font-family: 'Futura Md BT'
+    font-family: "Futura Md BT";
 }
-
 
 .widget-49 .widget-49-title-wrapper {
     display: flex;
@@ -828,14 +823,20 @@ button:focus:not(:focus-visible) {
     border-radius: 50%;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-primary .widget-49-date-day {
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-date-primary
+    .widget-49-date-day {
     color: #4e73e5;
     font-weight: 500;
     font-size: 1.5rem;
     line-height: 1;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-primary .widget-49-date-month {
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-date-primary
+    .widget-49-date-month {
     color: #4e73e5;
     line-height: 1;
     font-size: 1rem;
@@ -853,14 +854,20 @@ button:focus:not(:focus-visible) {
     border-radius: 50%;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-secondary .widget-49-date-day {
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-date-secondary
+    .widget-49-date-day {
     color: #dde1e9;
     font-weight: 500;
     font-size: 1.5rem;
     line-height: 1;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-secondary .widget-49-date-month {
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-date-secondary
+    .widget-49-date-month {
     color: #dde1e9;
     line-height: 1;
     font-size: 1rem;
@@ -878,14 +885,20 @@ button:focus:not(:focus-visible) {
     border-radius: 50%;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-success .widget-49-date-day {
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-date-success
+    .widget-49-date-day {
     color: #17d1bd;
     font-weight: 500;
     font-size: 1.5rem;
     line-height: 1;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-success .widget-49-date-month {
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-date-success
+    .widget-49-date-month {
     color: #17d1bd;
     line-height: 1;
     font-size: 1rem;
@@ -928,15 +941,21 @@ button:focus:not(:focus-visible) {
     border-radius: 50%;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-warning .widget-49-date-day {
-    color: #FFC868;
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-date-warning
+    .widget-49-date-day {
+    color: #ffc868;
     font-weight: 500;
     font-size: 1.5rem;
     line-height: 1;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-warning .widget-49-date-month {
-    color: #FFC868;
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-date-warning
+    .widget-49-date-month {
+    color: #ffc868;
     line-height: 1;
     font-size: 1rem;
     text-transform: uppercase;
@@ -954,14 +973,17 @@ button:focus:not(:focus-visible) {
 }
 
 .widget-49 .widget-49-title-wrapper .widget-49-date-danger .widget-49-date-day {
-    color: #F95062;
+    color: #f95062;
     font-weight: 500;
     font-size: 1.5rem;
     line-height: 1;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-danger .widget-49-date-month {
-    color: #F95062;
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-date-danger
+    .widget-49-date-month {
+    color: #f95062;
     line-height: 1;
     font-size: 1rem;
     text-transform: uppercase;
@@ -985,7 +1007,10 @@ button:focus:not(:focus-visible) {
     line-height: 1;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-date-light .widget-49-date-month {
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-date-light
+    .widget-49-date-month {
     color: #f7f9fa;
     line-height: 1;
     font-size: 1rem;
@@ -1029,14 +1054,14 @@ button:focus:not(:focus-visible) {
 }
 
 .widget-49 .widget-49-title-wrapper .widget-49-date-base .widget-49-date-day {
-    color: #68CBD7;
+    color: #68cbd7;
     font-weight: 500;
     font-size: 1.5rem;
     line-height: 1;
 }
 
 .widget-49 .widget-49-title-wrapper .widget-49-date-base .widget-49-date-month {
-    color: #68CBD7;
+    color: #68cbd7;
     line-height: 1;
     font-size: 1rem;
     text-transform: uppercase;
@@ -1048,20 +1073,26 @@ button:focus:not(:focus-visible) {
     margin-left: 1rem;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-meeting-info .widget-49-pro-title {
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-meeting-info
+    .widget-49-pro-title {
     color: #3c4142;
     font-size: 21px;
 }
 
-.widget-49 .widget-49-title-wrapper .widget-49-meeting-info .widget-49-meeting-time {
-    color: #B1BAC5;
+.widget-49
+    .widget-49-title-wrapper
+    .widget-49-meeting-info
+    .widget-49-meeting-time {
+    color: #b1bac5;
     font-size: 13px;
 }
 
 .widget-49 .widget-49-meeting-points {
     font-weight: 400;
     font-size: 13px;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
 }
 
 .widget-49 .widget-49-meeting-points .widget-49-meeting-item {
@@ -1070,7 +1101,7 @@ button:focus:not(:focus-visible) {
 }
 
 .widget-49 .widget-49-meeting-points .widget-49-meeting-item span {
-    margin-left: .5rem;
+    margin-left: 0.5rem;
 }
 
 .widget-49 .widget-49-meeting-action {
@@ -1116,14 +1147,14 @@ button:focus:not(:focus-visible) {
 
 /* Transparent Overlay */
 .loading:before {
-    content: '';
+    content: "";
     display: block;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(rgba(20, 20, 20, .8), rgba(0, 0, 0, .8));
+    background: radial-gradient(rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0.8));
     background: rgba(255, 255, 255, 0.8);
 }
 
@@ -1138,7 +1169,7 @@ button:focus:not(:focus-visible) {
 }
 
 .loading:not(:required):after {
-    content: '';
+    content: "";
     display: block;
     font-size: 10px;
     width: 1em;
@@ -1150,8 +1181,15 @@ button:focus:not(:focus-visible) {
     -o-animation: spinner 150ms infinite linear;
     animation: spinner 150ms infinite linear;
     border-radius: 0.5em;
-    -webkit-box-shadow: rgb(38, 0, 141) 1.5em 0 0 0, rgb(38, 0, 141) 1.1em 1.1em 0 0, rgb(38, 0, 141) 0 1.5em 0 0, rgb(38, 0, 141) -1.1em 1.1em 0 0, rgb(38, 0, 141) -1.5em 0 0 0, rgb(38, 0, 141) -1.1em -1.1em 0 0, rgb(38, 0, 141) 0 -1.5em 0 0, rgb(38, 0, 141) 1.1em -1.1em 0 0;
-    box-shadow: rgb(38, 0, 141) 1.5em 0 0 0, rgb(38, 0, 141) 1.1em 1.1em 0 0, rgb(38, 0, 141) 0 1.5em 0 0, rgb(38, 0, 141) -1.1em 1.1em 0 0, rgb(38, 0, 141) -1.5em 0 0 0, rgb(38, 0, 141) -1.1em -1.1em 0 0, rgb(38, 0, 141) 0 -1.5em 0 0, rgb(38, 0, 141) 1.1em -1.1em 0 0;
+    -webkit-box-shadow: rgb(38, 0, 141) 1.5em 0 0 0,
+        rgb(38, 0, 141) 1.1em 1.1em 0 0, rgb(38, 0, 141) 0 1.5em 0 0,
+        rgb(38, 0, 141) -1.1em 1.1em 0 0, rgb(38, 0, 141) -1.5em 0 0 0,
+        rgb(38, 0, 141) -1.1em -1.1em 0 0, rgb(38, 0, 141) 0 -1.5em 0 0,
+        rgb(38, 0, 141) 1.1em -1.1em 0 0;
+    box-shadow: rgb(38, 0, 141) 1.5em 0 0 0, rgb(38, 0, 141) 1.1em 1.1em 0 0,
+        rgb(38, 0, 141) 0 1.5em 0 0, rgb(38, 0, 141) -1.1em 1.1em 0 0,
+        rgb(38, 0, 141) -1.5em 0 0 0, rgb(38, 0, 141) -1.1em -1.1em 0 0,
+        rgb(38, 0, 141) 0 -1.5em 0 0, rgb(38, 0, 141) 1.1em -1.1em 0 0;
 }
 
 /* Animation */
@@ -1228,7 +1266,7 @@ button:focus:not(:focus-visible) {
     }
 }
 
-.table> :not(:first-child) {
+.table > :not(:first-child) {
     border-top: 1px solid currentColor;
 }
 
@@ -1237,7 +1275,6 @@ button:focus:not(:focus-visible) {
     padding: 13px 5px 5px 8px;
     border-radius: 6px;
 }
-
 
 .card-timeline {
     padding: 15px;
@@ -1285,12 +1322,12 @@ button:focus:not(:focus-visible) {
 }
 
 .logo_um {
-    fill: #00AFEF
+    fill: #00afef;
 }
 
 .logo_dois {
-    fill: #3E4095;
-    fill-rule: nonzero
+    fill: #3e4095;
+    fill-rule: nonzero;
 }
 
 .text-menususp {

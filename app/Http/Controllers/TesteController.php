@@ -141,16 +141,16 @@ class TesteController extends Controller
 
         if ($numeroImpressoes == []) {
             $numeroImpressoes = 1;
-            for ($i = 0; $i < $quantMaxFardos; $i++) {
+            for ($i = $quantMaxFardos; $i > 0; $i--) {
                 $pdf->AddPage();
                 //$pdf->Cell (113,55,"",1,1);
                 $pdf->Cell(250, 116, "", 1, 1);
                 $pdf->Code39(16, 75, substr($request->imprecaoOp, 0, 8));
                 $pdf->Cell(0, 0, "", 0, 0, "C");
-                $pdf->SetFont("", "B", 25);
+                $pdf->SetFont("", "B", 30);
                 $pdf->Cell(-320, -15, "Bomix Divisao Sopro", 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
-                $pdf->SetFont("", "B", 20);
+                $pdf->SetFont("", "B", 25);
 
                 // Remoção do campo de matricula como pedido na reunião por Fabio/Sopro em 29/06/2023 - Alterado por Vinícius Evangelista - 30/06/2023
                 // $pdf->Cell(-120, -10, "Matricula:  " . $matricula, 0, 0, "C");
@@ -160,7 +160,7 @@ class TesteController extends Controller
                 $pdf->Cell(-100, -215, $linha[0]->Produto, 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
                 $pdf->Cell(-310, -200, substr($request->imprecaoId, 0, 9), 0, 0, "C");
-
+                $pdf->SetFont("", "B", 30);
                 $pdf->Cell(-360, -200, substr($linha[0]->Produto, 74, 111), 0, 0, "C");
                 $pdf->Cell(-340, -220, $linha[0]->Produto, 0, 0, "C");
                 $pdf->Cell(0, -58, "", 0, 0, "C");
@@ -175,18 +175,18 @@ class TesteController extends Controller
                 $pdf->Cell(0, 0, "", 0, 0, "C");
                 $pdf->Cell(-295, -120, "Contem:  " . intval($QtdPorEmbalagem), 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
-                $pdf->SetFont("", "B", 15);
+                $pdf->SetFont("", "B", 20);
                 $pdf->Cell(-130, -170, "Identificação", 0, 0, "C");
                 $pdf->Image('../public/img/etiqueta_identificacao.png', 195, 35, 55, 55, 'PNG');
-                $pdf->SetFont("", "B", 18);
+                $pdf->SetFont("", "B", 23);
                 $pdf->Cell(135, -55, "ETIQUETA", 0, 0, "C");
-                $pdf->SetFont("", "B", 15);
-                $pdf->Cell(-135, -35, ($i + 1) . "/$quantMaxFardos", 0, 0, "C");
+                $pdf->SetFont("", "B", 20);
+                $pdf->Cell(-135, -35, ($i) . "/$quantMaxFardos", 0, 0, "C");
 
                 // Remoção do campo Turno como pedido na reunião por Fabio/Sopro em 29/06/2023 - Alterado por Vinícius Evangelista - 30/06/2023
                 // $pdf->Cell(-70, -185, $turno, 0, 0, "C");
 
-                $mensagemLogImpressao = "A " . ($i + 1) . "ª etiqueta de $quantMaxFardos da OP: $request->imprecaoOp foi criada";
+                $mensagemLogImpressao = "A " . ($i) . "ª etiqueta de $quantMaxFardos da OP: $request->imprecaoOp foi criada";
                 LogEtiquetaFardo::create(
                     [
                         'usuario' => auth()->user()->name,

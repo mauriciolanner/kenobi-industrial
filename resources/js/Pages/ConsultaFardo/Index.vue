@@ -201,7 +201,8 @@
                                     :class="{
                                         'is-invalid': validaetiquetaReimprimir,
                                     }"
-                                    type="text"
+                                    type="number"
+                                    min="0"
                                     name="etiquetaReimprimir"
                                     id="etiquetaReimprimir"
                                     v-model="etiquetaReimprimir"
@@ -229,12 +230,7 @@
                         <div>
                             <button
                                 class="btn btn-primary"
-                                @click="
-                                    reimprimir(
-                                        consultasSalvas.id,
-                                        consultasSalvas.op
-                                    )
-                                "
+                                @click="reimprimir()"
                             >
                                 Confirmar impressão
                             </button>
@@ -304,6 +300,8 @@ export default defineComponent({
             this.reimprimirDados.reimprecaoId = this.consultasSalvas.id;
             this.reimprimirDados.reimprecaoOp = this.consultasSalvas.op;
 
+            let _this = this;
+
             this.validaetiquetaReimprimir =
                 this.etiquetaReimprimir != "" ? false : true;
             this.validamotivo_impressao =
@@ -326,6 +324,9 @@ export default defineComponent({
                         link.href = URL.createObjectURL(blob);
                         link.download = "etiquetaReimprimir.pdf";
                         link.click();
+
+                        _this.etiquetaReimprimir = "";
+                        _this.motivo_impressao = "";
                     })
                     .catch((error) => {});
             }
