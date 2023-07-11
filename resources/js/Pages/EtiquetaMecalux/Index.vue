@@ -7,10 +7,17 @@
 
         <div class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top table-responsive">
             <div class="row mb-3">
-
-                <div class="col-md-12">
-                    <jet-input-search id="buscar" :class="'mt-3'" type="text" v-model="buscador" @keyup="buscar"
-                        placeholder="Buscar..." />
+                <div class="col-md-3">
+                    <VueMultiselect v-model="selectRecurso" :placeholder="'Por recurso'" :selectedLabel="'Selecionado'"
+                        :deselectLabel="'remover'" @select="dadosConsulta(page)" :selectLabel="'Selecionar'"
+                        :options="recursos">
+                    </VueMultiselect>
+                </div>
+                <div class="col-md-6">
+                    <jet-input-search id="buscar" type="text" v-model="buscador" placeholder="Buscar..." />
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-success" @click="buscar"><i class="bi bi-search"></i></button>
                 </div>
             </div>
             <div class="row">
@@ -18,31 +25,31 @@
                     <table class="table table-striped table-padrao">
                         <thead>
                             <tr>
+                                <th scope="col">OP</th>
                                 <th scope="col">Cod Apont.</th>
                                 <th scope="col">MES</th>
                                 <th scope="col">Data Mov</th>
                                 <th scope="col">Quant</th>
                                 <th scope="col">Produto</th>
                                 <th scope="col">Receita</th>
-                                <th scope="col">OP</th>
                                 <th scope="col">Recurso</th>
                                 <th scope="col">Opções</th>
                             </tr>
                         </thead>
-                        <tbody v-if="!loading">
-                            <tr v-for="consulta in consultas.data">
-
+                        <tbody v-if="true">
+                            <tr v-for="consulta in consultas.data" :class="{ 'loading-tabel': loading }">
+                                <td>{{ consulta.OP }}</td>
                                 <td>{{ consulta.CODIGO_APONTAMENTO }}</td>
                                 <td>{{ consulta.APONTAMENTO_MES }}</td>
                                 <td>{{ consulta.DtMov }}</td>
-                                <td>{{ consulta.QUANTIDADE }}</td>
+                                <td>{{ parseInt(consulta.QUANTIDADE) }}</td>
                                 <td>{{ consulta.PRODUTO }}</td>
                                 <td>{{ consulta.RECEITA }}</td>
-                                <td>{{ consulta.OP }}</td>
                                 <td>{{ consulta.RECURSO }}</td>
                                 <td>
-                                    <a :href="route('apontamento.pdf.matriz', consulta.CODIGO_APONTAMENTO.trim())"
-                                        target="blank" class="btn btn-info"><i class="bi bi-printer"></i></a>
+                                    <a :href="route('mecalux.apontamentoPdf', consulta.CODIGO_APONTAMENTO.trim())"
+                                        @click="dadosConsulta(page)" target="blank" class="btn btn-info"><i
+                                            class="bi bi-printer"></i></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -59,21 +66,20 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
 
-                <div class="col-md-12">
-
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-end">
-                            <li v-for="(link, index) in consultas.links" class="page-item"
-                                v-bind:class="{ active: link.active }">
-                                <Link href="#" @click="dadosConsulta(link.label)"
-                                    v-if="Number.isInteger(parseInt(link.label))" class="page-link">
-                                {{ link.label }}
-                                </Link>
-                            </li>
-                        </ul>
-                    </nav>
+                    <div class="col-md-12">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-end">
+                                <li v-for="(link, index) in consultas.links" class="page-item"
+                                    v-bind:class="{ active: link.active }">
+                                    <a href="#" @click="dadosConsulta(link.label)"
+                                        v-if="Number.isInteger(parseInt(link.label))" class="page-link">
+                                        {{ link.label }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
 
                 </div>
             </div>
@@ -85,15 +91,17 @@
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import JetInputSearch from "@/Jetstream/Input.vue";
+import VueMultiselect from 'vue-multiselect';
 
 export default defineComponent({
     components: {
         AppLayout,
         JetInputSearch,
+        VueMultiselect
     },
     mounted() {
         this.dadosConsulta(this.page);
-        //setInterval(() => this.dadosConsulta(), 1000 * 15);
+        setInterval(() => this.dadosConsulta(this.page), 1000 * 10);
     },
     methods: {
         buscar() {
@@ -123,7 +131,8 @@ export default defineComponent({
             await axios.get(route('mecalux.apiEtiquetas'), {
                 params: {
                     busca: this.buscador,
-                    page: this.page
+                    page: this.page,
+                    recurso: this.selectRecurso
                 }
             }).then(response => {
                 this.consultas = response.data;
@@ -138,6 +147,13 @@ export default defineComponent({
             loading: false,
             consultas: [],
             buscador: '',
+            selectRecurso: '',
+            recursos: [
+                '180-03', '380-22', '550-13', '380-06', '180-02', '380-21', '160-03', '220-04', '180-04', '180-07', '380-10', '380-14', '160-02', '550-14', '380-02',
+                '550-08', '550-09', '180-05', '550-07', '550-05', '380-01', '550-06', '380-16', '550-21', '160-01', '180-06', '380-08', '380-12', '220-01', '550-18',
+                '550-19', '550-17', '380-05', '550-12', '380-18', '380-20', '380-11', '550-20', '550-22', '380-07', '550-16', '380-03', '380-09', '380-15', '380-04',
+                '180-01', '380-19', '160-04', '220-02', '220-03', '380-17', '550-15', '550-10', '380-13', '680-01', '550-11',
+            ]
         };
     },
 });

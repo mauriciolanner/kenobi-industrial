@@ -165,6 +165,9 @@
                   :class="'pading-x'">
                   Etiqueta Robopack
                 </jet-nav-link>
+                <jet-nav-link v-if="$page.props.user.coligada == 1" :href="route('mecalux.index')" :class="'pading-x'">
+                  Etiqueta Mecalux
+                </jet-nav-link>
                 <jet-nav-link v-if="$page.props.user.coligada == 2" :href="route('consulta.fardo')" :class="'pading-x'">
                   Fardo
                 </jet-nav-link>

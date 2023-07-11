@@ -328,8 +328,7 @@ a {
 }
 
 .logo-sweetalert {
-    background: url(https://sweetalert.js.org/assets/images/logo.svg) center
-        no-repeat;
+    background: url(https://sweetalert.js.org/assets/images/logo.svg) center no-repeat;
     background-size: contain;
     width: 70px;
     height: 40px;
@@ -823,20 +822,14 @@ button:focus:not(:focus-visible) {
     border-radius: 50%;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-date-primary
-    .widget-49-date-day {
+.widget-49 .widget-49-title-wrapper .widget-49-date-primary .widget-49-date-day {
     color: #4e73e5;
     font-weight: 500;
     font-size: 1.5rem;
     line-height: 1;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-date-primary
-    .widget-49-date-month {
+.widget-49 .widget-49-title-wrapper .widget-49-date-primary .widget-49-date-month {
     color: #4e73e5;
     line-height: 1;
     font-size: 1rem;
@@ -854,20 +847,14 @@ button:focus:not(:focus-visible) {
     border-radius: 50%;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-date-secondary
-    .widget-49-date-day {
+.widget-49 .widget-49-title-wrapper .widget-49-date-secondary .widget-49-date-day {
     color: #dde1e9;
     font-weight: 500;
     font-size: 1.5rem;
     line-height: 1;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-date-secondary
-    .widget-49-date-month {
+.widget-49 .widget-49-title-wrapper .widget-49-date-secondary .widget-49-date-month {
     color: #dde1e9;
     line-height: 1;
     font-size: 1rem;
@@ -885,20 +872,14 @@ button:focus:not(:focus-visible) {
     border-radius: 50%;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-date-success
-    .widget-49-date-day {
+.widget-49 .widget-49-title-wrapper .widget-49-date-success .widget-49-date-day {
     color: #17d1bd;
     font-weight: 500;
     font-size: 1.5rem;
     line-height: 1;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-date-success
-    .widget-49-date-month {
+.widget-49 .widget-49-title-wrapper .widget-49-date-success .widget-49-date-month {
     color: #17d1bd;
     line-height: 1;
     font-size: 1rem;
@@ -941,20 +922,14 @@ button:focus:not(:focus-visible) {
     border-radius: 50%;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-date-warning
-    .widget-49-date-day {
+.widget-49 .widget-49-title-wrapper .widget-49-date-warning .widget-49-date-day {
     color: #ffc868;
     font-weight: 500;
     font-size: 1.5rem;
     line-height: 1;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-date-warning
-    .widget-49-date-month {
+.widget-49 .widget-49-title-wrapper .widget-49-date-warning .widget-49-date-month {
     color: #ffc868;
     line-height: 1;
     font-size: 1rem;
@@ -979,10 +954,7 @@ button:focus:not(:focus-visible) {
     line-height: 1;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-date-danger
-    .widget-49-date-month {
+.widget-49 .widget-49-title-wrapper .widget-49-date-danger .widget-49-date-month {
     color: #f95062;
     line-height: 1;
     font-size: 1rem;
@@ -1007,10 +979,7 @@ button:focus:not(:focus-visible) {
     line-height: 1;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-date-light
-    .widget-49-date-month {
+.widget-49 .widget-49-title-wrapper .widget-49-date-light .widget-49-date-month {
     color: #f7f9fa;
     line-height: 1;
     font-size: 1rem;
@@ -1073,18 +1042,12 @@ button:focus:not(:focus-visible) {
     margin-left: 1rem;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-meeting-info
-    .widget-49-pro-title {
+.widget-49 .widget-49-title-wrapper .widget-49-meeting-info .widget-49-pro-title {
     color: #3c4142;
     font-size: 21px;
 }
 
-.widget-49
-    .widget-49-title-wrapper
-    .widget-49-meeting-info
-    .widget-49-meeting-time {
+.widget-49 .widget-49-title-wrapper .widget-49-meeting-info .widget-49-meeting-time {
     color: #b1bac5;
     font-size: 13px;
 }
@@ -1266,7 +1229,7 @@ button:focus:not(:focus-visible) {
     }
 }
 
-.table > :not(:first-child) {
+.table> :not(:first-child) {
     border-top: 1px solid currentColor;
 }
 
@@ -1332,4 +1295,33 @@ button:focus:not(:focus-visible) {
 
 .text-menususp {
     padding: 12px;
+}
+
+tr.loading-tabel {
+    background-image: linear-gradient(to right, transparent 50%, rgba(0, 0, 0, .05) 50%);
+    background-size: 200% 100%;
+    animation: loading-tabel 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+tr.loading-tabel td {
+    opacity: .45;
+    pointer-events: none;
+}
+
+@keyframes loading-tabel {
+    0% {
+        background-position: 0;
+    }
+
+    50% {
+        background-position: -30%;
+    }
+
+    80% {
+        background-position: -100%;
+    }
+
+    100% {
+        background-position: -200%;
+    }
 }

@@ -125,4 +125,5 @@ Route::middleware(['auth:sanctum', 'verified'])->controller(ApontamentoImpressoC
 Route::middleware(['auth:sanctum', 'verified'])->controller(MecaluxController::class)->group(function () {
     Route::get('/etiquetaMecalux', 'index')->name('mecalux.index');
     Route::get('/Api/etiquetaMecalux', 'APIMecaluxRecurso')->name('mecalux.apiEtiquetas');
+    Route::get('/Api/etiquetaMecalux/print/{cod}', 'apontamentoPdf')->name('mecalux.apontamentoPdf');
 });
