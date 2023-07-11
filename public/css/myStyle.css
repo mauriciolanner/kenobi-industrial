@@ -1325,3 +1325,15 @@ tr.loading-tabel td {
         background-position: -200%;
     }
 }
+
+.colunasAbaImpressas {
+    padding-bottom: 37px !important;
+}
+
+.colIni {
+    padding-left: 10px !important;
+}
+
+.colFim {
+    padding-right: 10px !important;
+}

@@ -24,15 +24,17 @@ class ApontamentoImpressoController extends Controller
             return redirect('/');
         }
 
+        // dd($request);
+
         return Inertia::render(
 
             'ApontamentoImpresso/Index',
             [
                 'asset' => asset(''),
-                'consultas' => $this->consulta($request->busca, $request->dataini, $request->datafinal),
+                'consultas' => $this->consulta($request->busca),
                 'saldopr' => $this->consultaSaldoPR($request->busca, $request->dataini, $request->datafinal),
                 'saldolo' => $this->consultaSaldoLO($request->busca, $request->dataini, $request->datafinal),
-                'consulta2' => $this->consulta2($request->busca, $request->dataini, $request->datafinal)
+                'consulta2' => $this->consulta2($request->busca)
             ]
         );
     }
