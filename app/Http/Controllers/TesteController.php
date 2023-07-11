@@ -49,7 +49,8 @@ class TesteController extends Controller
             "reimprecaoEtiqueta" => 'required',
         ])->validate();
 
-        $numeroImpressoes = DB::connection('sqlsrv')->select("SELECT top 1 num_impressoes FROM log_etiqueta_fardos WHERE op LIKE '%$request->reimprecaoOp%' ORDER BY num_impressoes DESC");
+        $numeroImpressoes = LogEtiquetaFardo::where('op', 'LIKE', '%' . $request->reimprecaoOp . '%')
+            ->orderBy('num_impressoes', 'desc')->first();
 
         $linha = $this->consultaProduto(substr($request->reimprecaoId, 0, 9), $request->reimprecaoOp);
         $qtdOP = $linha[0]->Quantidade;
@@ -65,14 +66,14 @@ class TesteController extends Controller
         //$pdf = new Fpdf;
         $pdf = new PDFCode39('L', 'mm');
 
-        $numImpressoesConvertido = (int) $numeroImpressoes[count($numeroImpressoes) - 1]->num_impressoes;
+        $numImpressoesConvertido = intval($numeroImpressoes->num_impressoes);
         $numeroImpressoes = $numImpressoesConvertido + 1;
         $pdf->AddPage();
         //$pdf->Cell (113,55,"",1,1);
         $pdf->Cell(250, 116, "", 1, 1);
         $pdf->Code39(16, 75, substr($request->reimprecaoOp, 0, 8));
         $pdf->Cell(0, 0, "", 0, 0, "C");
-        $pdf->SetFont("", "B", 25);
+        $pdf->SetFont("", "B", 30);
         $pdf->Cell(-320, -15, "Bomix Divisao Sopro", 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
         $pdf->SetFont("", "B", 20);
@@ -80,31 +81,32 @@ class TesteController extends Controller
         // Remoção do campo de matricula como pedido na reunião por Fabio/Sopro em 29/06/2023 - Alterado por Vinícius Evangelista - 30/06/2023
         // $pdf->Cell(-120, -10, "Matricula:  " . $matricula, 0, 0, "C");
 
-        $pdf->SetFont("", "B", 20);
+        $pdf->SetFont("", "B", 22);
         $pdf->Cell(-100, -215, $linha[0]->Produto, 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
         $pdf->Cell(-310, -200, substr($request->reimprecaoId, 0, 9), 0, 0, "C");
 
-        $pdf->SetFont("", "B", 25);
+        $pdf->SetFont("", "B", 27);
         $pdf->Cell(-340, -220, $linha[0]->Produto, 0, 0, "C");
         $pdf->Cell(0, -58, "", 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
-        $pdf->Cell(-469, -170, "OP:  " . $request->reimprecaoOp, 0, 0, "C");
+        $pdf->Cell(-465, -170, "OP:  " . $request->reimprecaoOp, 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
         $pdf->Cell(-476, -145, "Lote:  " . $linha[0]->Lote, 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
-        $pdf->Cell(-456, -120, "Validade:  " . $Date, 0, 0, "C");
+        $pdf->Cell(-453, -120, "Validade:  " . $Date, 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
         //	$pdf->Cell (-160,-145,"Operador: ",0,0,"C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
         $pdf->Cell(-295, -120, "Contem:  " . intval($QtdPorEmbalagem), 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
-        $pdf->SetFont("", "B", 15);
+        $pdf->SetFont("", "B", 20);
         $pdf->Cell(-130, -170, "Identificação", 0, 0, "C");
-        $pdf->Image('../public/img/etiqueta_identificacao.png', 195, 35, 55, 55, 'PNG');
-        $pdf->SetFont("", "B", 18);
+        //$pdf->Image(asset('img/etiqueta_identificacao.png'), 195, 35, 55, 55, 'PNG');
+        $pdf->Image(public_path() . "/img/etiqueta_identificacao.png", 195, 35, 55, 55, 'PNG');
+        $pdf->SetFont("", "B", 20);
         $pdf->Cell(135, -55, "ETIQUETA", 0, 0, "C");
-        $pdf->SetFont("", "B", 15);
+        $pdf->SetFont("", "B", 20);
         $pdf->Cell(-135, -35, "$etiquetaReimp/$quantMaxFardos", 0, 0, "C");
 
         // Remoção do campo Turno como pedido na reunião por Fabio/Sopro em 29/06/2023 - Alterado por Vinícius Evangelista - 30/06/2023
@@ -127,7 +129,9 @@ class TesteController extends Controller
 
     public function fardoPdf(Request $request)
     {
-        $numeroImpressoes = DB::connection('sqlsrv')->select("SELECT top 1 num_impressoes FROM log_etiqueta_fardos WHERE op LIKE '%$request->imprecaoOp%' ORDER BY num_impressoes DESC");
+        $numeroImpressoes = LogEtiquetaFardo::where('op', 'LIKE', '%' . $request->imprecaoOp . '%')
+            ->orderBy('num_impressoes', 'desc')->first();
+
 
         // Antigas variáveis da função: ($id, $op, $matricula, $turno)
         //dd($id,$op,$matricula,$turno);
@@ -155,21 +159,22 @@ class TesteController extends Controller
                 // Remoção do campo de matricula como pedido na reunião por Fabio/Sopro em 29/06/2023 - Alterado por Vinícius Evangelista - 30/06/2023
                 // $pdf->Cell(-120, -10, "Matricula:  " . $matricula, 0, 0, "C");
 
-                $pdf->SetFont("", "B", 20);
+                $pdf->SetFont("", "B", 22);
                 // $pdf->Cell(-100, -215, $linha[0]->Produto, 0, 0, $align = "C");
                 $pdf->Cell(-100, -215, $linha[0]->Produto, 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
                 $pdf->Cell(-310, -200, substr($request->imprecaoId, 0, 9), 0, 0, "C");
-                $pdf->SetFont("", "B", 30);
+
+                $pdf->SetFont("", "B", 27);
                 $pdf->Cell(-360, -200, substr($linha[0]->Produto, 74, 111), 0, 0, "C");
                 $pdf->Cell(-340, -220, $linha[0]->Produto, 0, 0, "C");
                 $pdf->Cell(0, -58, "", 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
-                $pdf->Cell(-469, -170, "OP:  " . $request->imprecaoOp, 0, 0, "C");
+                $pdf->Cell(-465, -170, "OP:  " . $request->imprecaoOp, 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
                 $pdf->Cell(-476, -145, "Lote:  " . $linha[0]->Lote, 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
-                $pdf->Cell(-456, -120, "Validade:  " . $Date, 0, 0, "C");
+                $pdf->Cell(-453, -120, "Validade:  " . $Date, 0, 0, "C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
                 //	$pdf->Cell (-160,-145,"Operador: ",0,0,"C");
                 $pdf->Cell(0, 0, "", 0, 0, "C");
@@ -177,8 +182,9 @@ class TesteController extends Controller
                 $pdf->Cell(0, 0, "", 0, 0, "C");
                 $pdf->SetFont("", "B", 20);
                 $pdf->Cell(-130, -170, "Identificação", 0, 0, "C");
-                $pdf->Image('../public/img/etiqueta_identificacao.png', 195, 35, 55, 55, 'PNG');
-                $pdf->SetFont("", "B", 23);
+                // $pdf->Image(asset('img/etiqueta_identificacao.png'), 195, 35, 55, 55, 'PNG');
+                $pdf->Image(public_path() . "/img/etiqueta_identificacao.png", 195, 35, 55, 55, 'PNG');
+                $pdf->SetFont("", "B", 20);
                 $pdf->Cell(135, -55, "ETIQUETA", 0, 0, "C");
                 $pdf->SetFont("", "B", 20);
                 $pdf->Cell(-135, -35, ($i) . "/$quantMaxFardos", 0, 0, "C");

@@ -1333,3 +1333,15 @@ button:focus:not(:focus-visible) {
 .text-menususp {
     padding: 12px;
 }
+
+.colunasAbaImpressas {
+    padding-bottom: 37px !important;
+}
+
+.colIni {
+    padding-left: 10px !important;
+}
+
+.colFim {
+    padding-right: 10px !important;
+}
