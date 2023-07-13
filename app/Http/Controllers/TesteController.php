@@ -71,7 +71,7 @@ class TesteController extends Controller
         $pdf->AddPage();
         //$pdf->Cell (113,55,"",1,1);
         $pdf->Cell(250, 116, "", 1, 1);
-        $pdf->Code39(16, 75, substr($request->reimprecaoOp, 0, 8));
+        $pdf->Code39(16, 80, substr($request->reimprecaoOp, 0, 8));
         $pdf->Cell(0, 0, "", 0, 0, "C");
         $pdf->SetFont("", "B", 30);
         $pdf->Cell(-320, -15, "Bomix Divisao Sopro", 0, 0, "C");
@@ -101,13 +101,13 @@ class TesteController extends Controller
         $pdf->Cell(-295, -120, "Contem:  " . intval($QtdPorEmbalagem), 0, 0, "C");
         $pdf->Cell(0, 0, "", 0, 0, "C");
         $pdf->SetFont("", "B", 20);
-        $pdf->Cell(-130, -170, "Identificação", 0, 0, "C");
+        $pdf->Cell(-144, -180, "Identificação", 0, 0, "C");
         //$pdf->Image(asset('img/etiqueta_identificacao.png'), 195, 35, 55, 55, 'PNG');
-        $pdf->Image(public_path() . "/img/etiqueta_identificacao.png", 195, 35, 55, 55, 'PNG');
-        $pdf->SetFont("", "B", 20);
-        $pdf->Cell(135, -55, "ETIQUETA", 0, 0, "C");
-        $pdf->SetFont("", "B", 20);
-        $pdf->Cell(-135, -35, "$etiquetaReimp/$quantMaxFardos", 0, 0, "C");
+        $pdf->Image(public_path() . "/img/etiqueta_identificacao.png", 177, 25, 70, 70, 'PNG');
+        $pdf->SetFont("", "B", 26);
+        $pdf->Cell(140, -47, "ETIQUETA", 0, 0, "C");
+        $pdf->SetFont("", "B", 33);
+        $pdf->Cell(-135, -23, "$etiquetaReimp/$quantMaxFardos", 0, 0, "C");
 
         // Remoção do campo Turno como pedido na reunião por Fabio/Sopro em 29/06/2023 - Alterado por Vinícius Evangelista - 30/06/2023
         // $pdf->Cell(-70, -185, $turno, 0, 0, "C");
