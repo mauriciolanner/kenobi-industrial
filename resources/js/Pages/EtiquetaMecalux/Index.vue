@@ -22,7 +22,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <table class="table table-striped table-padrao">
+                    <table class="table table-striped table-padrao table-responsive">
                         <thead>
                             <tr>
                                 <th scope="col">OP</th>
@@ -47,9 +47,25 @@
                                 <td>{{ consulta.RECEITA }}</td>
                                 <td>{{ consulta.RECURSO }}</td>
                                 <td>
-                                    <a :href="route('mecalux.apontamentoPdf', consulta.CODIGO_APONTAMENTO.trim())"
+                                    <div class="dropdown">
+                                        <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="bi bi-printer"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#"
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 38)">Impressora 38</a></li>
+                                            <li><a class="dropdown-item" href="#"
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 39)">Impressora 39</a></li>
+                                            <li><a class="dropdown-item" href="#"
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 40)">Impressora 40</a></li>
+                                            <li><a class="dropdown-item" href="#"
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 41)">Impressora 41</a></li>
+                                        </ul>
+                                    </div>
+                                    <!-- <a :href="route('mecalux.apontamentoPdf', consulta.CODIGO_APONTAMENTO.trim())"
                                         @click="dadosConsulta(page)" target="blank" class="btn btn-info"><i
-                                            class="bi bi-printer"></i></a>
+                                            class="bi bi-printer"></i></a> -->
                                 </td>
                             </tr>
                         </tbody>
@@ -106,6 +122,9 @@ export default defineComponent({
     methods: {
         buscar() {
             this.dadosConsulta(this.page)
+        },
+        goPrint(cod, printer) {
+            this.$inertia.get(route('mecalux.apontamentoPdf', [cod, printer]))
         },
         formataData(dateIni) {
             var date = new Date(dateIni);

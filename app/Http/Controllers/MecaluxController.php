@@ -29,13 +29,16 @@ class MecaluxController extends Controller
         DB::statement("EXEC dbo.KenobiAtualizaImpressoesMecalux");
 
         $etiquetas = ImpressaoMecalux::where('IMPRESSO', '0')
-            ->where('RECURSO', $request->recurso)
-            ->orderBy('APONTAMENTO_MES', 'DESC')->paginate(10);
+            ->where('RECURSO', $request->recurso);
 
-        return response()->json($etiquetas);
+        if ($request->busca != '') {
+            $etiquetas = ImpressaoMecalux::where('OP', 'LIKE', '%' . $request->busca . '%');
+        }
+
+        return response()->json($etiquetas->orderBy('APONTAMENTO_MES', 'DESC')->paginate(10));
     }
 
-    public function apontamentoPdf($cod)
+    public function apontamentoPdf($cod, $printer)
     {
         $linha = ImpressaoMecalux::where('CODIGO_APONTAMENTO', $cod)->first();
 
@@ -60,9 +63,17 @@ class MecaluxController extends Controller
         ImpressaoMecalux::where('id', $linha->id)->update([
             'IMPRESSO' => 1
         ]);
-        
-        $pdf->Output();
-        exit;
+
+        $pdf->Output("F", public_path("PDF\\" . $cod . ".pdf"));
+        echo 'DEL /F /Q /A C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf';
+        exec('C:\xampp\PDFtoPrinter.exe "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf" "\\\192.168.254.71\192.168.255.2' . $printer . '"');
+        exec('DEL /F /Q /A C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf');
+
+        return back(303)->with([
+            'title' => 'Impresso',
+            'message' => 'Etiqueta impressa com sucesso.',
+            'type' => 'alert-success'
+        ]);
     }
 
     static function mes($mes)
