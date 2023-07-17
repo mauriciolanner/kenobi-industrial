@@ -75,7 +75,7 @@
                                     <div class="text-center">
                                         <div class="spinner-border text-info" style="width: 5rem; height: 5rem;"
                                             role="status">
-                                            <span class="visually-hidden">Loading...</span>
+                                            <span class="visually-hidden">Loading....</span>
                                         </div>
                                     </div>
                                 </th>
