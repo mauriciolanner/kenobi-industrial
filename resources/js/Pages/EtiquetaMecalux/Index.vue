@@ -18,6 +18,7 @@
                 </div>
                 <div class="col-md-1">
                     <button class="btn btn-success" @click="buscar"><i class="bi bi-search"></i></button>
+
                 </div>
             </div>
             <div class="row">
@@ -97,6 +98,15 @@
                         </nav>
                     </div>
 
+                    <div v-if="erroPrint" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Erro na impressão!</strong> Ouve um erro ao tentar imprimir, tente novamente.
+                        <button type="button" class="btn-close" @click="erroPrint = false"></button>
+                    </div>
+                    <div v-if="successPrint" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Sucesso!</strong> Etiqueta impressa com msucesso.
+                        <button type="button" class="btn-close" @click="successPrint = false"></button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -124,7 +134,13 @@ export default defineComponent({
             this.dadosConsulta(this.page)
         },
         goPrint(cod, printer) {
-            this.$inertia.get(route('mecalux.apontamentoPdf', [cod, printer]))
+            this.erroPrint = false
+            this.successPrint = false
+            axios.get(route('mecalux.apontamentoPdf', [cod, printer])).then(response => {
+                this.successPrint = true
+            }).catch(function (error) {
+                this.erroPrint = true
+            })
         },
         formataData(dateIni) {
             var date = new Date(dateIni);
@@ -162,6 +178,8 @@ export default defineComponent({
     props: [],
     data() {
         return {
+            erroPrint: false,
+            successPrint: false,
             page: 1,
             loading: false,
             consultas: [],
