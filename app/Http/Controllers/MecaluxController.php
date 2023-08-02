@@ -57,15 +57,15 @@ class MecaluxController extends Controller
         $pdf->SetMargins(0, 0, 0, 0);
         $pdf->AddPage();
         $pdf->SetAutoPageBreak(false);
-        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetFont('helvetica', 'B', 9);
         $pdf->Cell(100/*width*/, 8/*height*/, "BOMIX | " . $now->format('d') . ' ' .  $this->mes($now->format('m')) . ' ' .  $now->format('Y') . ' ' . $now->isoFormat('h:mm') . ' | RECEITA: ' .  $linha->RECEITA/*String*/, 'B'/*Border*/, 1/*ln*/, 'C'/*alinhamento*/, false);
 
-        $pdf->SetFont('helvetica', 'B', 14);
+        $pdf->SetFont('helvetica', 'B', 10);
         $pdf->Code128(10/*x*/, 14/*y*/, $linha->OP . $linha->CODIGO_APONTAMENTO, 80/*width*/, 15/*height*/);
         $pdf->Cell(100, 6, $linha->OP . $linha->CODIGO_APONTAMENTO, 0, 0, "C");
 
         $pdf->SetFont('helvetica', '', 7);
-        $pdf->SetXY(3, 30);
+        $pdf->SetXY(3, 26);
         $pdf->Cell(100, 10, $produto[0]->B1_DESC, 0, 1, "");
 
         ImpressaoMecalux::where('id', $linha->id)->update([
@@ -74,6 +74,7 @@ class MecaluxController extends Controller
 
         $pdf->Output("F", public_path("PDF\\" . $cod . ".pdf"));
 
+        dd('testes');
         exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf"  \\\192.168.254.71\192.168.255.2' . $printer . '');
         exec('DEL /F /Q /A C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf');
 
