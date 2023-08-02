@@ -13,7 +13,8 @@
         <div class="collapse" id="collapseExample">
             <div class="row">
                 <div class="col-md-1" v-for="rec in recursos">
-                    <button @click="trocaRecurso(rec)" class="btn btn-info w-100 mb-2" style="border-radius: 9px;">
+                    <button @click="trocaRecurso(rec)" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample" class="btn btn-info w-100 mb-2" style="border-radius: 9px;">
                         {{ rec }}
                     </button>
                 </div>
