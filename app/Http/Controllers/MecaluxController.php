@@ -16,10 +16,18 @@ class MecaluxController extends Controller
     //
     public function index(Request $request)
     {
+        $recursos = [];
+        $todosRecursos = DB::connection('protheus')->select('select Code from PCF4.dbo.TBLResource where FlgEnable = 1 order by Code');
+
+        foreach ($todosRecursos as $rec) {
+            array_push($recursos, $rec->Code);
+        }
+
         return Inertia::render(
             'EtiquetaMecalux/Index',
             [
-                //'consultas' => $this->consulta($request->busca)
+                'recurso' => ($request->recurso != '') ? $request->recurso : '',
+                'recursos' => $recursos
             ]
         );
     }
@@ -65,12 +73,8 @@ class MecaluxController extends Controller
         ]);
 
         $pdf->Output("F", public_path("PDF\\" . $cod . ".pdf"));
-
-        // exec('taskkill /f /im PDFtoPrinter.exe');
-        // exec('taskkill /f /im PDFXCview.exe');
-        exec('C:\xampp\PDFtoPrinter.exe "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf" "\\\192.168.254.71\192.168.255.2' . $printer . '"');
-        // exec('taskkill /f /im PDFtoPrinter.exe');
-        // exec('taskkill /f /im PDFXCview.exe');
+        
+        exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf"  \\\192.168.254.71\192.168.255.2' . $printer . '');
         exec('DEL /F /Q /A C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf');
 
         return response()->json(['status' => true]);
