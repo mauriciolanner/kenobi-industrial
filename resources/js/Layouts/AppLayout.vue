@@ -161,8 +161,7 @@
           <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <jet-nav-link v-if="$page.props.user.coligada == 1" :href="route('consulta.apontamento.matriz')"
-                  :class="'pading-x'">
+                <jet-nav-link v-if="false" :href="route('consulta.apontamento.matriz')" :class="'pading-x'">
                   Etiqueta Robopack
                 </jet-nav-link>
                 <jet-nav-link v-if="$page.props.user.coligada == 1" :href="route('mecalux.index')" :class="'pading-x'">

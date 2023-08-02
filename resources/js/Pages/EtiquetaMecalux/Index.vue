@@ -54,13 +54,13 @@
                                             <i class="bi bi-printer"></i>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#"
+                                            <li><a class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 38)">Impressora 38</a></li>
-                                            <li><a class="dropdown-item" href="#"
+                                            <li><a class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 39)">Impressora 39</a></li>
-                                            <li><a class="dropdown-item" href="#"
+                                            <li><a class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 40)">Impressora 40</a></li>
-                                            <li><a class="dropdown-item" href="#"
+                                            <li><a class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 41)">Impressora 41</a></li>
                                         </ul>
                                     </div>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Funcionario;
+use Illuminate\Support\Facades\DB;
 
 class APIUteisController extends Controller
 {
@@ -33,5 +34,11 @@ class APIUteisController extends Controller
         }
 
         return response()->json($funcionarios->orderBy('NOME', 'ASC')->get());
+    }
+
+    public function recursos()
+    {
+        $dados = DB::connection('protheus')->select('select Code, Nickname from PCF4.dbo.TBLResource where FlgEnable = 1 order by Code');
+        return response()->json($dados);
     }
 }

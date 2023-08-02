@@ -78,6 +78,7 @@ Route::middleware(['auth:sanctum', 'verified'])->controller(APIUteisController::
     Route::get('/API/usuarios', 'usuarios')->name('API.utei.usuarios');
     Route::get('/API/roles', 'roles')->name('API.utei.roles');
     Route::get('/API/funcionarios', 'funcionarios')->name('API.utei.funcionarios');
+    Route::get('/API/recursos', 'recursos')->name('API.utei.recursos');
 });
 
 //rotas de Fardo
