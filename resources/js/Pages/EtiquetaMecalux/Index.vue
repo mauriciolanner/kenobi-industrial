@@ -57,6 +57,7 @@
                                 <th scope="col">Produto</th>
                                 <th scope="col">Receita</th>
                                 <th scope="col">Recurso</th>
+                                <th scope="col">Impresso em</th>
                                 <th scope="col">Opções</th>
                             </tr>
                         </thead>
@@ -70,6 +71,12 @@
                                 <td>{{ consulta.PRODUTO }}</td>
                                 <td>{{ consulta.RECEITA }}</td>
                                 <td>{{ consulta.RECURSO }}</td>
+                                <td>
+                                    <div v-if="consulta.IMPRESSO == 1" class="impresso bg-success text-center">
+                                        <i class="bi bi-printer-fill"></i>
+                                    </div>
+                                    {{ dateTask(consulta.updated_at) }}
+                                </td>
                                 <td>
                                     <div class="dropdown">
                                         <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -168,6 +175,32 @@ export default defineComponent({
                     this.erroPrint = true
                     this.loading = false
                 })
+        },
+        dateTask(dateIni) {
+            if (dateIni == null)
+                return '';
+
+            var date = new Date(dateIni);
+            var mes = '';
+            (date.getMonth() == 0) ? mes = 'Jan' : '';
+            (date.getMonth() == 1) ? mes = 'Fev' : '';
+            (date.getMonth() == 2) ? mes = 'Mar' : '';
+            (date.getMonth() == 3) ? mes = 'Abr' : '';
+            (date.getMonth() == 4) ? mes = 'Mai' : '';
+            (date.getMonth() == 5) ? mes = 'Jun' : '';
+            (date.getMonth() == 6) ? mes = 'Jul' : '';
+            (date.getMonth() == 7) ? mes = 'Ago' : '';
+            (date.getMonth() == 8) ? mes = 'Set' : '';
+            (date.getMonth() == 9) ? mes = 'Out' : '';
+            (date.getMonth() == 10) ? mes = 'Nov' : '';
+            (date.getMonth() == 11) ? mes = 'Dez' : '';
+
+            var retorno = date.getDate() + ' ' + mes +
+                ', ' + date.getFullYear() +
+                ' ' + date.getHours() +
+                ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + '';
+
+            return retorno;
         },
         formataData(dateIni) {
             var date = new Date(dateIni);

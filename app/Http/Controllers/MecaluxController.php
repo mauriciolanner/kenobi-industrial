@@ -34,7 +34,9 @@ class MecaluxController extends Controller
 
     public function APIMecaluxRecurso(Request $request)
     {
-        DB::statement("EXEC dbo.KenobiAtualizaImpressoesMecalux");
+        //DB::statement("EXEC dbo.KenobiAtualizaImpressoesMecalux");
+
+        
 
         $etiquetas = ImpressaoMecalux::where('IMPRESSO', '0')
             ->where('RECURSO', $request->recurso);

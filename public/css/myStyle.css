@@ -1337,3 +1337,10 @@ tr.loading-tabel td {
 .colFim {
     padding-right: 10px !important;
 }
+
+.impresso {
+    width: 35px;
+    height: 35px;
+    border-radius: 50px;
+    font-size: 24px;
+}
