@@ -21,7 +21,7 @@
         </div>
 
 
-        <div class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top table-responsive">
+        <div class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top">
             <div class="row mb-3">
                 <div class="col-md-3">
                     <VueMultiselect v-model="selectRecurso" :placeholder="'Por recurso'" :selectedLabel="'Selecionado'"
