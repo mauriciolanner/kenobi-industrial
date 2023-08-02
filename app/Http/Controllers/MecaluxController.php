@@ -74,11 +74,11 @@ class MecaluxController extends Controller
 
         $pdf->Output("F", public_path("PDF\\" . $cod . ".pdf"));
 
-        exec('taskkill /f /im PDFtoPrinter.exe');
-        exec('taskkill /f /im PDFXCview.exe');
+        // exec('taskkill /f /im PDFtoPrinter.exe');
+        // exec('taskkill /f /im PDFXCview.exe');
         exec('C:\xampp\PDFtoPrinter.exe "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf" "\\\192.168.254.71\192.168.255.2' . $printer . '"');
-        exec('taskkill /f /im PDFtoPrinter.exe');
-        exec('taskkill /f /im PDFXCview.exe');
+        // exec('taskkill /f /im PDFtoPrinter.exe');
+        // exec('taskkill /f /im PDFXCview.exe');
         exec('DEL /F /Q /A C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf');
 
         return response()->json(['status' => true]);
