@@ -25,12 +25,12 @@
 
         <div class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top">
             <div class="row mb-3">
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                     <VueMultiselect v-model="selectRecurso" :placeholder="'Por recurso'" :selectedLabel="'Selecionado'"
                         :deselectLabel="'remover'" @select="dadosConsulta(page)" :selectLabel="'Selecionar'"
                         :options="recursos">
                     </VueMultiselect>
-                </div>
+                </div> -->
                 <div class="col-md-6">
                     <jet-input-search id="buscar" type="text" v-model="buscador" placeholder="Buscar..." />
                 </div>
