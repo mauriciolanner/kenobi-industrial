@@ -14,7 +14,8 @@
             <div class="row">
                 <div class="col-md-1" v-for="rec in recursos">
                     <button @click="trocaRecurso(rec)" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                aria-expanded="false" aria-controls="collapseExample" class="btn btn-info w-100 mb-2" style="border-radius: 9px;">
+                        aria-expanded="false" aria-controls="collapseExample" class="btn btn-info w-100 mb-2"
+                        style="border-radius: 9px;">
                         {{ rec }}
                     </button>
                 </div>
@@ -84,6 +85,8 @@
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 40)">Impressora 40</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 41)">Impressora 41</a></li>
+                                            <li><a class="dropdown-item fs-3" href="#"
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 88)">Não existe</a></li>
                                         </ul>
                                     </div>
                                     <!-- <a :href="route('mecalux.apontamentoPdf', consulta.CODIGO_APONTAMENTO.trim())"
