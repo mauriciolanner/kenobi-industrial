@@ -85,8 +85,6 @@
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 40)">Impressora 40</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 41)">Impressora 41</a></li>
-                                            <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 88)">Não existe</a></li>
                                         </ul>
                                     </div>
                                     <!-- <a :href="route('mecalux.apontamentoPdf', consulta.CODIGO_APONTAMENTO.trim())"
