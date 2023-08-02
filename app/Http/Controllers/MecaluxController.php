@@ -65,7 +65,7 @@ class MecaluxController extends Controller
         ]);
 
         $pdf->Output("F", public_path("PDF\\" . $cod . ".pdf"));
-        echo 'DEL /F /Q /A C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf';
+
         exec('C:\xampp\PDFtoPrinter.exe "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf" "\\\192.168.254.71\192.168.255.2' . $printer . '"');
         exec('DEL /F /Q /A C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf');
 
