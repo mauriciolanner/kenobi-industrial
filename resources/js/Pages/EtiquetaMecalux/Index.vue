@@ -1,8 +1,24 @@
 <template>
     <app-layout title="Etiqueta Mecalux">
         <template #header>
-            <h2 class="h4 font-weight-bold">Etiqueta Mecalux</h2>
+            <h2 class="h4 font-weight-bold">Etiqueta Mecalux - {{ recurso }}</h2>
         </template>
+
+        <p class="d-inline-flex gap-1">
+            <button class="btn " type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample">
+                <i style="font-size: 17px;" class="bi bi-arrows-expand"></i> Escolher recurso
+            </button>
+        </p>
+        <div class="collapse" id="collapseExample">
+            <div class="row">
+                <div class="col-md-1" v-for="rec in recursos">
+                    <button @click="trocaRecurso(rec)" class="btn btn-info w-100 mb-2" style="border-radius: 9px;">
+                        {{ rec }}
+                    </button>
+                </div>
+            </div>
+        </div>
 
 
         <div class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top table-responsive">
@@ -17,13 +33,18 @@
                     <jet-input-search id="buscar" type="text" v-model="buscador" placeholder="Buscar..." />
                 </div>
                 <div class="col-md-1">
-                    <button class="btn btn-success" @click="buscar"><i class="bi bi-search"></i></button>
+                    <button class="btn btn-success" @click="buscar">
+                        <div v-if="loading" class="spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Carregando...</span>
+                        </div>
+                        <i v-else class="bi bi-search"></i>
+                    </button>
 
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <table class="table table-striped table-padrao table-responsive">
+                    <table class="table table-striped table-padrao">
                         <thead>
                             <tr>
                                 <th scope="col">OP</th>
@@ -133,14 +154,18 @@ export default defineComponent({
         buscar() {
             this.dadosConsulta(this.page)
         },
-        goPrint(cod, printer) {
+        async goPrint(cod, printer) {
+            this.loading = true
             this.erroPrint = false
             this.successPrint = false
-            axios.get(route('mecalux.apontamentoPdf', [cod, printer])).then(response => {
-                this.successPrint = true
-            }).catch(function (error) {
-                this.erroPrint = true
-            })
+            await axios.get(route('mecalux.apontamentoPdf', [cod, printer]))
+                .then(response => {
+                    this.successPrint = true
+                    this.loading = false
+                }).catch(function (error) {
+                    this.erroPrint = true
+                    this.loading = false
+                })
         },
         formataData(dateIni) {
             var date = new Date(dateIni);
@@ -160,6 +185,10 @@ export default defineComponent({
 
             return date.getDate() + ' ' + mes + ', ' + date.getFullYear();
         },
+        trocaRecurso(rec) {
+            this.selectRecurso = rec
+            this.dadosConsulta(this.page)
+        },
         async dadosConsulta(page) {
             this.page = page
             this.loading = true
@@ -175,7 +204,7 @@ export default defineComponent({
             });
         }
     },
-    props: [],
+    props: ['recurso', 'recursos'],
     data() {
         return {
             erroPrint: false,
@@ -184,13 +213,13 @@ export default defineComponent({
             loading: false,
             consultas: [],
             buscador: '',
-            selectRecurso: '',
-            recursos: [
-                '180-03', '380-22', '550-13', '380-06', '180-02', '380-21', '160-03', '220-04', '180-04', '180-07', '380-10', '380-14', '160-02', '550-14', '380-02',
-                '550-08', '550-09', '180-05', '550-07', '550-05', '380-01', '550-06', '380-16', '550-21', '160-01', '180-06', '380-08', '380-12', '220-01', '550-18',
-                '550-19', '550-17', '380-05', '550-12', '380-18', '380-20', '380-11', '550-20', '550-22', '380-07', '550-16', '380-03', '380-09', '380-15', '380-04',
-                '180-01', '380-19', '160-04', '220-02', '220-03', '380-17', '550-15', '550-10', '380-13', '680-01', '550-11',
-            ]
+            selectRecurso: this.recurso,
+            // recursos: [
+            //     '180-03', '380-22', '550-13', '380-06', '180-02', '380-21', '160-03', '220-04', '180-04', '180-07', '380-10', '380-14', '160-02', '550-14', '380-02',
+            //     '550-08', '550-09', '180-05', '550-07', '550-05', '380-01', '550-06', '380-16', '550-21', '160-01', '180-06', '380-08', '380-12', '220-01', '550-18',
+            //     '550-19', '550-17', '380-05', '550-12', '380-18', '380-20', '380-11', '550-20', '550-22', '380-07', '550-16', '380-03', '380-09', '380-15', '380-04',
+            //     '180-01', '380-19', '160-04', '220-02', '220-03', '380-17', '550-15', '550-10', '380-13', '680-01', '550-11',
+            // ]
         };
     },
 });

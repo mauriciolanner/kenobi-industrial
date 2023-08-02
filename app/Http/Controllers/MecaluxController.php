@@ -16,10 +16,18 @@ class MecaluxController extends Controller
     //
     public function index(Request $request)
     {
+        $recursos = [];
+        $todosRecursos = DB::connection('protheus')->select('select Code from PCF4.dbo.TBLResource where FlgEnable = 1 order by Code');
+
+        foreach ($todosRecursos as $rec) {
+            array_push($recursos, $rec->Code);
+        }
+
         return Inertia::render(
             'EtiquetaMecalux/Index',
             [
-                //'consultas' => $this->consulta($request->busca)
+                'recurso' => ($request->recurso != '') ? $request->recurso : '',
+                'recursos' => $recursos
             ]
         );
     }
