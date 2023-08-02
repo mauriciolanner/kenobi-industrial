@@ -126,7 +126,7 @@
                         <button type="button" class="btn-close" @click="erroPrint = false"></button>
                     </div>
                     <div v-if="successPrint" class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Sucesso!</strong> Etiqueta impressa com msucesso.
+                        <strong>Sucesso!</strong> <i class="bi bi-printer"></i> Etiqueta impressa com sucesso.
                         <button type="button" class="btn-close" @click="successPrint = false"></button>
                     </div>
 
