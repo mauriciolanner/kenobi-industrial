@@ -64,7 +64,7 @@ class MecaluxController extends Controller
             ->where('RECURSO', $request->recurso);
 
         if ($request->busca != '') {
-            $etiquetas = ImpressaoMecalux::where('OP', 'LIKE', '%' . $request->busca . '%')->orWhere('CODIGO_APONTAMENTO', 'LIKE', '%' . $request->busca . '%');
+            $etiquetas = ImpressaoMecalux::where('OP', 'LIKE', '%' . $request->busca . '%')->orWhere('APONTAMENTO_MES', 'LIKE', '%' . $request->busca . '%');
         }
 
         return response()->json($etiquetas->orderBy('APONTAMENTO_MES', 'DESC')->paginate(10));
