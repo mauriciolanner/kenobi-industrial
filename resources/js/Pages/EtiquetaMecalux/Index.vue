@@ -58,7 +58,6 @@
                         <thead>
                             <tr>
                                 <th scope="col">OP</th>
-                                <th scope="col">Cod Apont.</th>
                                 <th scope="col">MES</th>
                                 <th scope="col">Data Mov</th>
                                 <th scope="col">Quant</th>
@@ -72,7 +71,6 @@
                         <tbody v-if="true">
                             <tr v-for="consulta in consultas.data">
                                 <td>{{ consulta.OP }}</td>
-                                <td>{{ consulta.CODIGO_APONTAMENTO }}</td>
                                 <td>{{ consulta.APONTAMENTO_MES }}</td>
                                 <td>{{ consulta.DtMov }}</td>
                                 <td>{{ parseInt(consulta.QUANTIDADE) }}</td>
