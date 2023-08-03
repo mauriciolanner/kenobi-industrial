@@ -188,7 +188,7 @@ export default defineComponent({
     },
     mounted() {
         this.dadosConsulta(this.page);
-        setInterval(() => this.dadosConsulta(this.page), (1000 * 60) * 3);
+        setInterval(() => this.dadosConsulta(this.page), 1000 * 20);
     },
     methods: {
         buscar() {
