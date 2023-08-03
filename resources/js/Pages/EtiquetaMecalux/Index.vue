@@ -100,7 +100,8 @@
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 40)">Impressora 40</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 41)">Impressora 41</a></li>
-                                            <li><a class="dropdown-item fs-3" href="#"
+                                            <li v-if="$page.props.user.user_name != 'producao'"><a
+                                                    class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 'PDF')">EM PDF</a></li>
                                         </ul>
                                     </div>
