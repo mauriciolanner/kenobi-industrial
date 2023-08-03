@@ -1,7 +1,7 @@
 <template>
     <app-layout title="Etiqueta Mecalux">
         <template #header>
-            <h2 class="h4 font-weight-bold">Etiqueta Mecalux - {{ recurso }}</h2>
+            <h2 class="h4 font-weight-bold">Etiqueta Mecalux - {{ selectRecurso }}</h2>
         </template>
 
         <p class="d-inline-flex gap-1">
@@ -25,12 +25,12 @@
 
         <div class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top">
             <div class="row mb-3">
-                <!-- <div class="col-md-3">
+                <div class="col-md-3">
                     <VueMultiselect v-model="selectRecurso" :placeholder="'Por recurso'" :selectedLabel="'Selecionado'"
                         :deselectLabel="'remover'" @select="dadosConsulta(page)" :selectLabel="'Selecionar'"
                         :options="recursos">
                     </VueMultiselect>
-                </div> -->
+                </div>
                 <div class="col-6">
                     <jet-input-search id="buscar" v-on:keyup.enter="buscar" type="text" v-model="buscador"
                         placeholder="Buscar..." />
@@ -188,7 +188,7 @@ export default defineComponent({
     },
     mounted() {
         this.dadosConsulta(this.page);
-        setInterval(() => this.dadosConsulta(this.page), 1000 * 60);
+        setInterval(() => this.dadosConsulta(this.page), (1000 * 60) * 3);
     },
     methods: {
         buscar() {
@@ -255,12 +255,25 @@ export default defineComponent({
         },
         trocaRecurso(rec) {
             this.selectRecurso = rec
+            console.log(this.selectRecurso)
             this.dadosConsulta(this.page)
         },
+        cancelaAxios() {
+            for (var i = 0; i < this.source.length; i++)
+                this.source[i].cancel('Operação ' + i + ' cancelada pelo usuário');
+        },
         async dadosConsulta(page) {
+            if (this.source.length > 0)
+                this.cancelaAxios();
+
+            this.CancelToken = axios.CancelToken;
+            this.source.push(this.CancelToken.source());
+            var position = this.source.length - 1
             this.page = page
             this.loading = true
+
             await axios.get(route('mecalux.apiEtiquetas'), {
+                cancelToken: this.source[position].token,
                 params: {
                     busca: this.buscador,
                     page: this.page,
@@ -269,6 +282,13 @@ export default defineComponent({
             }).then(response => {
                 this.consultas = response.data;
                 this.loading = false
+            }).catch(function (thrown) {
+                if (axios.isCancel(thrown)) {
+                    console.log('AXIOS CANCELADO', thrown.message);
+                    this.loading = false
+                } else {
+                    // manipulando erro
+                }
             });
         },
         viewDoc(arquivo) {
@@ -281,6 +301,8 @@ export default defineComponent({
     props: ['recurso', 'recursos', 'asset'],
     data() {
         return {
+            CancelToken: '',
+            source: [],
             attSrc: '',
             erroPrint: false,
             successPrint: false,

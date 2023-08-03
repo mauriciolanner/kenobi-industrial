@@ -35,31 +35,30 @@ class MecaluxController extends Controller
 
     public function APIMecaluxRecurso(Request $request)
     {
-        $todosApontamentos = DB::connection('protheus')
-            ->select("SELECT * from P12OFICIAL.dbo.BMX_VW_APONTAMENTO_MES
-            where CODIGO_APONTAMENTO not in 
-            (select CODIGO_APONTAMENTO COLLATE SQL_Latin1_General_CP1_CI_AS from Kenobi.dbo.impressao_mecaluxes)");
+        // $todosApontamentos = DB::connection('protheus')
+        //     ->select("SELECT * from P12OFICIAL.dbo.BMX_VW_APONTAMENTO_MES
+        //     where CODIGO_APONTAMENTO");
 
 
-        foreach ($todosApontamentos as $apontamento) {
-            ImpressaoMecalux::firstOrCreate(
-                ["CODIGO_APONTAMENTO" => $apontamento->CODIGO_APONTAMENTO],
-                [
-                    "APONTAMENTO_MES" => $apontamento->APONTAMENTO_MES,
-                    "ID_INTEGRACAO_MES" => $apontamento->ID_INTEGRACAO_MES,
-                    "DtMov" => $apontamento->DtMov,
-                    "QUANTIDADE" => $apontamento->QUANTIDADE,
-                    "PRODUTO" => $apontamento->PRODUTO,
-                    "RECEITA" => $apontamento->RECEITA,
-                    "OP" => $apontamento->OP,
-                    "ARMAZEM" => $apontamento->ARMAZEM,
-                    "ErrDescription" => $apontamento->ErrDescription,
-                    "IDPCFACTORY" => $apontamento->IDPCFACTORY,
-                    "RECURSO" => $apontamento->RECURSO,
-                    "IMPRESSO" => "0"
-                ]
-            );
-        }
+        // foreach ($todosApontamentos as $apontamento) {
+        //     ImpressaoMecalux::firstOrCreate(
+        //         ["CODIGO_APONTAMENTO" => $apontamento->CODIGO_APONTAMENTO],
+        //         [
+        //             "APONTAMENTO_MES" => $apontamento->APONTAMENTO_MES,
+        //             "ID_INTEGRACAO_MES" => $apontamento->ID_INTEGRACAO_MES,
+        //             "DtMov" => $apontamento->DtMov,
+        //             "QUANTIDADE" => $apontamento->QUANTIDADE,
+        //             "PRODUTO" => $apontamento->PRODUTO,
+        //             "RECEITA" => $apontamento->RECEITA,
+        //             "OP" => $apontamento->OP,
+        //             "ARMAZEM" => $apontamento->ARMAZEM,
+        //             "ErrDescription" => $apontamento->ErrDescription,
+        //             "IDPCFACTORY" => $apontamento->IDPCFACTORY,
+        //             "RECURSO" => $apontamento->RECURSO,
+        //             "IMPRESSO" => "0"
+        //         ]
+        //     );
+        // }
 
         $etiquetas = ImpressaoMecalux::where('IMPRESSO', '0')
             ->where('RECURSO', $request->recurso);
