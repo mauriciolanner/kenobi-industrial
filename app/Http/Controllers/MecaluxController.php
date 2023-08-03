@@ -87,7 +87,7 @@ class MecaluxController extends Controller
         $pdf->AddPage();
         $pdf->SetAutoPageBreak(false);
         $pdf->SetFont('helvetica', 'B', 9);
-        $pdf->Cell(100/*width*/, 8/*height*/, "BOMIX | " . $now->format('d') . ' ' .  $this->mes($now->format('m')) . ' ' .  $now->format('Y') . ' ' . $now->isoFormat('h:mm') . ' | RECEITA: ' .  trim($linha->RECEITA) . ' | ' . $turnoAgora . ' | QTD: ' . intval($linha->QUANTIDADE) /*String*/, 'B'/*Border*/, 1/*ln*/, 'C'/*alinhamento*/, false);
+        $pdf->Cell(100/*width*/, 8/*height*/, "BOMIX | " . $now->format('d') . ' ' .  $this->mes($now->format('m')) . ' ' .  $now->format('Y') . ' ' . $now->isoFormat('H:mm') . ' | RECEITA: ' .  trim($linha->RECEITA) . ' | ' . $turnoAgora . ' | QTD: ' . intval($linha->QUANTIDADE) /*String*/, 'B'/*Border*/, 1/*ln*/, 'C'/*alinhamento*/, false);
 
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->Code128(10/*x*/, 14/*y*/, $linha->OP . $linha->CODIGO_APONTAMENTO, 80/*width*/, 15/*height*/);
@@ -95,7 +95,7 @@ class MecaluxController extends Controller
 
         $pdf->SetFont('helvetica', '', 7);
         $pdf->SetXY(3, 26);
-        $pdf->Cell(100, 10, $produto[0]->B1_DESC, 0, 1, "");
+        $pdf->Cell(100, 10, $linha->PRODUTO . ' - ' . $produto[0]->B1_DESC, 0, 1, "");
 
         $pdf->Output("F", public_path("PDF\\" . $cod . ".pdf"));
 
