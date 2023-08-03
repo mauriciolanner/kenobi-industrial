@@ -27,14 +27,39 @@ class MecaluxController extends Controller
             'EtiquetaMecalux/Index',
             [
                 'recurso' => ($request->recurso != '') ? $request->recurso : '',
-                'recursos' => $recursos
+                'recursos' => $recursos,
+                'asset' => asset('')
             ]
         );
     }
 
     public function APIMecaluxRecurso(Request $request)
     {
-        DB::statement("EXEC dbo.KenobiAtualizaImpressoesMecalux");
+        $todosApontamentos = DB::connection('protheus')
+            ->select("SELECT * from P12OFICIAL.dbo.BMX_VW_APONTAMENTO_MES
+            where CODIGO_APONTAMENTO not in 
+            (select CODIGO_APONTAMENTO COLLATE SQL_Latin1_General_CP1_CI_AS from Kenobi.dbo.impressao_mecaluxes)");
+
+
+        foreach ($todosApontamentos as $apontamento) {
+            ImpressaoMecalux::firstOrCreate(
+                ["CODIGO_APONTAMENTO" => $apontamento->CODIGO_APONTAMENTO],
+                [
+                    "APONTAMENTO_MES" => $apontamento->APONTAMENTO_MES,
+                    "ID_INTEGRACAO_MES" => $apontamento->ID_INTEGRACAO_MES,
+                    "DtMov" => $apontamento->DtMov,
+                    "QUANTIDADE" => $apontamento->QUANTIDADE,
+                    "PRODUTO" => $apontamento->PRODUTO,
+                    "RECEITA" => $apontamento->RECEITA,
+                    "OP" => $apontamento->OP,
+                    "ARMAZEM" => $apontamento->ARMAZEM,
+                    "ErrDescription" => $apontamento->ErrDescription,
+                    "IDPCFACTORY" => $apontamento->IDPCFACTORY,
+                    "RECURSO" => $apontamento->RECURSO,
+                    "IMPRESSO" => "0"
+                ]
+            );
+        }
 
         $etiquetas = ImpressaoMecalux::where('IMPRESSO', '0')
             ->where('RECURSO', $request->recurso);
@@ -74,9 +99,10 @@ class MecaluxController extends Controller
 
         $pdf->Output("F", public_path("PDF\\" . $cod . ".pdf"));
 
-        dd('testes');
-        exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf"  \\\192.168.254.71\192.168.255.2' . $printer . '');
-        exec('DEL /F /Q /A C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf');
+        if ($printer != 'PDF')
+            exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf"  \\\192.168.254.71\192.168.255.2' . $printer . '');
+
+        //exec('DEL /F /Q /A C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf');
 
         return response()->json(['status' => true]);
     }

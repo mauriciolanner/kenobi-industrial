@@ -31,17 +31,25 @@
                         :options="recursos">
                     </VueMultiselect>
                 </div> -->
-                <div class="col-md-6">
-                    <jet-input-search id="buscar" type="text" v-model="buscador" placeholder="Buscar..." />
+                <div class="col-6">
+                    <jet-input-search id="buscar" v-on:keyup.enter="buscar" type="text" v-model="buscador"
+                        placeholder="Buscar..." />
                 </div>
-                <div class="col-md-1">
+                <div class="col-1">
                     <button class="btn btn-success" @click="buscar">
                         <div v-if="loading" class="spinner-border spinner-border-sm" role="status">
                             <span class="visually-hidden">Carregando...</span>
                         </div>
                         <i v-else class="bi bi-search"></i>
                     </button>
-
+                </div>
+                <div class="col-1">
+                    <button class="btn w-100 btn-info" @click="buscar">
+                        <div v-if="loading" class="spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Carregando...</span>
+                        </div>
+                        <i v-else class="bi bi-arrow-clockwise"></i>
+                    </button>
                 </div>
             </div>
             <div class="row">
@@ -62,7 +70,7 @@
                             </tr>
                         </thead>
                         <tbody v-if="true">
-                            <tr v-for="consulta in consultas.data" :class="{ 'loading-tabel': loading }">
+                            <tr v-for="consulta in consultas.data">
                                 <td>{{ consulta.OP }}</td>
                                 <td>{{ consulta.CODIGO_APONTAMENTO }}</td>
                                 <td>{{ consulta.APONTAMENTO_MES }}</td>
@@ -73,15 +81,15 @@
                                 <td>{{ consulta.RECURSO }}</td>
                                 <td>
                                     <div v-if="consulta.IMPRESSO == 1" class="impresso bg-success text-center">
-                                        <i class="bi bi-printer-fill"></i>
+                                        <i class="bi bi-printer-fill" style="font-size: 19px;"></i><br>
+                                        {{ dateTask(consulta.updated_at) }}
                                     </div>
-                                    {{ dateTask(consulta.updated_at) }}
                                 </td>
                                 <td>
                                     <div class="dropdown">
                                         <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                             aria-expanded="false">
-                                            <i class="bi bi-printer"></i>
+                                            <i class="bi bi-printer" style="font-size: 19px;"></i>
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item fs-3" href="#"
@@ -92,6 +100,9 @@
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 40)">Impressora 40</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 41)">Impressora 41</a></li>
+                                            <li v-if="$page.props.user.user_name != 'producao'"><a
+                                                    class="dropdown-item fs-3" href="#"
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 'PDF')">EM PDF</a></li>
                                         </ul>
                                     </div>
                                     <!-- <a :href="route('mecalux.apontamentoPdf', consulta.CODIGO_APONTAMENTO.trim())"
@@ -113,6 +124,26 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <!-- ModalAnexos -->
+                    <div class="modal fade" id="modalAnexos" tabindex="-1" aria-labelledby="modalAnexosLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-fullscreen">
+                            <div class="modal-content">
+                                <div class="modal-header text-end">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <iframe :src="attSrc" height="450px" width="100%"></iframe>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">FECHAR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="col-md-12">
                         <nav aria-label="Page navigation example">
@@ -157,7 +188,7 @@ export default defineComponent({
     },
     mounted() {
         this.dadosConsulta(this.page);
-        setInterval(() => this.dadosConsulta(this.page), 1000 * 10);
+        setInterval(() => this.dadosConsulta(this.page), 1000 * 60);
     },
     methods: {
         buscar() {
@@ -171,6 +202,8 @@ export default defineComponent({
                 .then(response => {
                     this.successPrint = true
                     this.loading = false
+                    if (printer == 'PDF')
+                        this.viewDoc(cod)
                 }).catch(function (error) {
                     this.erroPrint = true
                     this.loading = false
@@ -237,11 +270,18 @@ export default defineComponent({
                 this.consultas = response.data;
                 this.loading = false
             });
-        }
+        },
+        viewDoc(arquivo) {
+            console.log(this.asset + "public/PDF/" + arquivo + '.pdf')
+            this.attSrc = this.asset + "public/PDF/" + arquivo + '.pdf';
+            var modalAtt = new bootstrap.Modal(document.getElementById("modalAnexos"), {});
+            modalAtt.show()
+        },
     },
-    props: ['recurso', 'recursos'],
+    props: ['recurso', 'recursos', 'asset'],
     data() {
         return {
+            attSrc: '',
             erroPrint: false,
             successPrint: false,
             page: 1,
