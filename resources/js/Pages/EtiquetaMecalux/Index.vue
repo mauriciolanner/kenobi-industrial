@@ -202,6 +202,7 @@ export default defineComponent({
                 .then(response => {
                     this.successPrint = true
                     this.loading = false
+                    this.dadosConsulta(this.page)
                     if (printer == 'PDF')
                         this.viewDoc(cod)
                 }).catch(function (error) {

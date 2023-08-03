@@ -72,6 +72,11 @@ class MecaluxController extends Controller
 
     public function apontamentoPdf($cod, $printer)
     {
+        $turnoAgora = '';
+        (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 05:20:00'), Carbon::now()->format('Y-m-d 13:50:00'))) ? $turnoAgora = 'T1' : '';
+        (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 13:50:00'), Carbon::now()->format('Y-m-d 22:00:00'))) ? $turnoAgora = 'T2' : '';
+        (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 22:00:00'), Carbon::now()->addDay()->format('Y-m-d 05:20:00'))) ? $turnoAgora = 'T3' : '';
+
         $linha = ImpressaoMecalux::where('CODIGO_APONTAMENTO', $cod)->first();
 
         $now = Carbon::now();
@@ -82,7 +87,7 @@ class MecaluxController extends Controller
         $pdf->AddPage();
         $pdf->SetAutoPageBreak(false);
         $pdf->SetFont('helvetica', 'B', 9);
-        $pdf->Cell(100/*width*/, 8/*height*/, "BOMIX | " . $now->format('d') . ' ' .  $this->mes($now->format('m')) . ' ' .  $now->format('Y') . ' ' . $now->isoFormat('h:mm') . ' | RECEITA: ' .  $linha->RECEITA/*String*/, 'B'/*Border*/, 1/*ln*/, 'C'/*alinhamento*/, false);
+        $pdf->Cell(100/*width*/, 8/*height*/, "BOMIX | " . $now->format('d') . ' ' .  $this->mes($now->format('m')) . ' ' .  $now->format('Y') . ' ' . $now->isoFormat('h:mm') . ' | RECEITA: ' .  trim($linha->RECEITA) . ' | ' . $turnoAgora . ' | QTD: ' . intval($linha->QUANTIDADE) /*String*/, 'B'/*Border*/, 1/*ln*/, 'C'/*alinhamento*/, false);
 
         $pdf->SetFont('helvetica', 'B', 10);
         $pdf->Code128(10/*x*/, 14/*y*/, $linha->OP . $linha->CODIGO_APONTAMENTO, 80/*width*/, 15/*height*/);
@@ -92,11 +97,12 @@ class MecaluxController extends Controller
         $pdf->SetXY(3, 26);
         $pdf->Cell(100, 10, $produto[0]->B1_DESC, 0, 1, "");
 
+        $pdf->Output("F", public_path("PDF\\" . $cod . ".pdf"));
+
         ImpressaoMecalux::where('id', $linha->id)->update([
             'IMPRESSO' => 1
         ]);
 
-        $pdf->Output("F", public_path("PDF\\" . $cod . ".pdf"));
 
         if ($printer != 'PDF')
             exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf"  \\\192.168.254.71\192.168.255.2' . $printer . '');
