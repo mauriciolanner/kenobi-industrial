@@ -303,6 +303,39 @@
                                                                             <th
                                                                                 scope="col"
                                                                             >
+                                                                                Saldo
+                                                                                QL
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr
+                                                                            v-for="saldo in saldoQL"
+                                                                        >
+                                                                            <th>
+                                                                                {{
+                                                                                    parseInt(
+                                                                                        saldo.SaldoQL
+                                                                                    )
+                                                                                }}
+                                                                            </th>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div
+                                                                class="col-md-12"
+                                                            >
+                                                                <table
+                                                                    class="table table-striped table-padrao"
+                                                                >
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th
+                                                                                scope="col"
+                                                                            >
                                                                                 OP
                                                                             </th>
                                                                             <th
@@ -432,7 +465,7 @@ export default defineComponent({
             return date.getDate() + " " + mes + ", " + date.getFullYear();
         },
     },
-    props: ["consultas", "saldopr", "saldolo", "consulta2", "asset"],
+    props: ["consultas", "saldoQL", "saldopr", "saldolo", "consulta2", "asset"],
     data() {
         return {
             buscador: "",
