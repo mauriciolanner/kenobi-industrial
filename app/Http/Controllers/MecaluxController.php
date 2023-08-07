@@ -73,9 +73,9 @@ class MecaluxController extends Controller
     public function apontamentoPdf($cod, $printer)
     {
         $turnoAgora = '';
-        (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 05:20:00'), Carbon::now()->format('Y-m-d 13:50:00'))) ? $turnoAgora = 'T1' : '';
-        (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 13:50:00'), Carbon::now()->format('Y-m-d 22:00:00'))) ? $turnoAgora = 'T2' : '';
-        (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 22:00:00'), Carbon::now()->addDay()->format('Y-m-d 05:20:00'))) ? $turnoAgora = 'T3' : '';
+        (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 05:20:00'), Carbon::now()->format('Y-m-d 13:50:00'))) ? $turnoAgora = 'TURNO 1' : '';
+        (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 13:50:00'), Carbon::now()->format('Y-m-d 22:00:00'))) ? $turnoAgora = 'TURNO 2' : '';
+        (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 22:00:00'), Carbon::now()->addDay()->format('Y-m-d 05:20:00'))) ? $turnoAgora = 'TURNO 3' : '';
 
         $linha = ImpressaoMecalux::where('CODIGO_APONTAMENTO', $cod)->first();
 
@@ -86,12 +86,13 @@ class MecaluxController extends Controller
         $pdf->SetMargins(0, 0, 0, 0);
         $pdf->AddPage();
         $pdf->SetAutoPageBreak(false);
-        $pdf->SetFont('helvetica', 'B', 9);
-        $pdf->Cell(100/*width*/, 8/*height*/, "BOMIX | " . $now->format('d') . ' ' .  $this->mes($now->format('m')) . ' ' .  $now->format('Y') . ' ' . $now->isoFormat('H:mm') . ' | RECEITA: ' .  trim($linha->RECEITA) . ' | ' . $turnoAgora . ' | QTD: ' . intval($linha->QUANTIDADE) /*String*/, 'B'/*Border*/, 1/*ln*/, 'C'/*alinhamento*/, false);
+        $pdf->SetFont('helvetica', 'B', 8);
+        $pdf->Cell(100/*width*/, 4/*height*/, "BOMIX | " . $now->format('d') . ' ' .  $this->mes($now->format('m')) . ' ' .  $now->format('Y') . ' ' . $now->isoFormat('H:mm') . ' | ' . $turnoAgora . ' | QTD: ' . intval($linha->QUANTIDADE)/*String*/, ''/*Border*/, 1/*ln*/, 'C'/*alinhamento*/, false);
+        $pdf->Cell(100/*width*/, 4/*height*/, 'RECEITA: ' .  trim($linha->RECEITA) . ' | ' . $turnoAgora . ' | RECURSO: ' . $linha->RECURSO/*String*/, 'B'/*Border*/, 1/*ln*/, 'C'/*alinhamento*/, false);
 
-        $pdf->SetFont('helvetica', 'B', 10);
+        $pdf->SetFont('helvetica', 'B', 8);
         $pdf->Code128(10/*x*/, 14/*y*/, $linha->OP . $linha->CODIGO_APONTAMENTO, 80/*width*/, 15/*height*/);
-        $pdf->Cell(100, 6, $linha->OP . $linha->CODIGO_APONTAMENTO, 0, 0, "C");
+        $pdf->Cell(100, 6, $linha->OP . ' - ' . $linha->APONTAMENTO_MES . ' - ' . $linha->RECEITA, 0, 0, "C");
 
         $pdf->SetFont('helvetica', '', 7);
         $pdf->SetXY(3, 26);

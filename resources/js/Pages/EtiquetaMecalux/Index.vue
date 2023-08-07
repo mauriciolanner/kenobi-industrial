@@ -72,7 +72,7 @@
                             <tr v-for="consulta in consultas.data">
                                 <td>{{ consulta.OP }}</td>
                                 <td>{{ consulta.APONTAMENTO_MES }}</td>
-                                <td>{{ consulta.DtMov }}</td>
+                                <td>{{ dateTask(consulta.DtMov) }}</td>
                                 <td>{{ parseInt(consulta.QUANTIDADE) }}</td>
                                 <td>{{ consulta.PRODUTO }}</td>
                                 <td>{{ consulta.RECEITA }}</td>
