@@ -197,7 +197,46 @@
                                                                 <table class="table table-striped table-padrao">
                                                                     <thead>
                                                                         <tr>
+<<<<<<< HEAD
+                                                                            <th
+                                                                                scope="col"
+                                                                            >
+                                                                                Saldo
+                                                                                QL
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr
+                                                                            v-for="saldo in saldoQL"
+                                                                        >
+                                                                            <th>
+                                                                                {{
+                                                                                    parseInt(
+                                                                                        saldo.SaldoQL
+                                                                                    )
+                                                                                }}
+                                                                            </th>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div
+                                                                class="col-md-12"
+                                                            >
+                                                                <table
+                                                                    class="table table-striped table-padrao"
+                                                                >
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th
+                                                                                scope="col"
+                                                                            >
+=======
                                                                             <th scope="col">
+>>>>>>> 5bd54f401ba1f08134b436ccf0efc02d646537ba
                                                                                 OP
                                                                             </th>
                                                                             <th scope="col">
@@ -312,7 +351,7 @@ export default defineComponent({
             return date.getDate() + " " + mes + ", " + date.getFullYear();
         },
     },
-    props: ["consultas", "saldopr", "saldolo", "consulta2", "asset"],
+    props: ["consultas", "saldoQL", "saldopr", "saldolo", "consulta2", "asset"],
     data() {
         return {
             buscador: "",

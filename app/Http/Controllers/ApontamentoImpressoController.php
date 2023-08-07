@@ -34,6 +34,7 @@ class ApontamentoImpressoController extends Controller
                 'consultas' => $this->consulta($request->busca),
                 'saldopr' => $this->consultaSaldoPR($request->busca, $request->dataini, $request->datafinal),
                 'saldolo' => $this->consultaSaldoLO($request->busca, $request->dataini, $request->datafinal),
+                'saldoQL' => $this->consultaSaldoQL($request->busca, $request->dataini, $request->datafinal),
                 'consulta2' => $this->consulta2($request->busca)
             ]
         );
@@ -172,8 +173,6 @@ class ApontamentoImpressoController extends Controller
         Apontamento.R_E_C_N_O_ desc";
 
             $dados = DB::connection('protheus')->select($sql);
-
-            //dd($sql);
             if ($dados != []) {
                 return $dados;
             }
@@ -264,13 +263,24 @@ class ApontamentoImpressoController extends Controller
         }
     }
 
+    public function consultaSaldoQL($busca, $dataini, $datafinal)
+    {
+        $dados = $this->consulta($busca, $dataini, $datafinal);
+
+        if ($dados != '') {
+            $consulta_saldo_ql = "SELECT B8_SALDO AS 'SaldoQL' from SB8010 (NOLOCK) WHERE B8_PRODUTO = '{$dados[0]->Produto_ID}' AND B8_LOCAL='QL' AND B8_LOTECTL = '{$dados[0]->Lote}' AND B8_FILIAL = '020101' AND D_E_L_E_T_=''";
+            $resQL = DB::connection('protheus')->select($consulta_saldo_ql);
+
+            return $resQL;
+        }
+    }
+
     public function consultaSaldoLO($busca, $dataini, $datafinal)
     {
         $dados = $this->consulta($busca, $dataini, $datafinal);
         if ($dados != '') {
             $consulta_saldo_lo = "SELECT B8_SALDO AS 'SaldoLO' from SB8010 (NOLOCK) WHERE B8_PRODUTO = '{$dados[0]->Produto_ID}' AND B8_LOCAL='LO' AND B8_LOTECTL = '{$dados[0]->Lote}' AND B8_FILIAL = '020101' AND D_E_L_E_T_=''";
             $resLO = DB::connection('protheus')->select($consulta_saldo_lo);
-
             return $resLO;
         }
     }

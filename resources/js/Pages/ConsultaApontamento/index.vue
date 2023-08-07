@@ -4,13 +4,19 @@
             <h2 class="h4 font-weight-bold">Consulta Apontamento</h2>
         </template>
 
-
-        <div class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top table-responsive">
+        <div
+            class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top table-responsive"
+        >
             <div class="row mb-3">
-
                 <div class="col-md-12">
-                    <jet-input-search id="buscar" :class="'mt-3'" type="text" v-model="buscador" @keyup="buscar"
-                        placeholder="Buscar..." />
+                    <jet-input-search
+                        id="buscar"
+                        :class="'mt-3'"
+                        type="text"
+                        v-model="buscador"
+                        @keyup="buscar"
+                        placeholder="Buscar..."
+                    />
                 </div>
             </div>
             <div class="row">
@@ -41,18 +47,41 @@
                                 <td>{{ parseInt(consulta.QtdProduzida) }}</td>
                                 <td>{{ parseInt(consulta.Saldo) }}</td>
                                 <td>{{ consulta.NumSeq }}</td>
-                                <td><a v-if="consulta.Via != '0'"
-                                        :href="'/apontamento/pdf/' + consulta.Recno + '/' + consulta.OrdemProducao + '/EtiquetaApontamento'"
-                                        target="blank" class="btn btn-info"><i class="bi bi-printer"></i></a></td>
+                                <td>
+                                    <a
+                                        v-if="consulta.Via != '0'"
+                                        @click="
+                                            mostrarConsole(
+                                                consulta.Recno,
+                                                consulta.OrdemProducao
+                                            )
+                                        "
+                                        :href="
+                                            '/apontamento/pdf/' +
+                                            consulta.Recno +
+                                            '/' +
+                                            consulta.OrdemProducao.trim() +
+                                            '/EtiquetaApontamento'
+                                        "
+                                        target="blank"
+                                        class="btn btn-info"
+                                        ><i class="bi bi-printer"></i
+                                    ></a>
+                                </td>
                             </tr>
                         </tbody>
                         <tbody v-else>
                             <tr>
                                 <th scope="col text-center" colspan="10">
                                     <div class="text-center">
-                                        <div class="spinner-border text-info" style="width: 5rem; height: 5rem;"
-                                            role="status">
-                                            <span class="visually-hidden">Loading...</span>
+                                        <div
+                                            class="spinner-border text-info"
+                                            style="width: 5rem; height: 5rem"
+                                            role="status"
+                                        >
+                                            <span class="visually-hidden"
+                                                >Loading...</span
+                                            >
                                         </div>
                                     </div>
                                 </th>
@@ -80,45 +109,50 @@ export default defineComponent({
         //setInterval(() => this.dadosConsulta(), 1000 * 5);
     },
     methods: {
+        mostrarConsole(recno, op) {
+            console.log(recno, op);
+        },
         buscar() {
-            this.dadosConsulta()
+            this.dadosConsulta();
         },
         formataData(dateIni) {
             var date = new Date(dateIni);
-            var mes = '';
-            (date.getMonth() == 0) ? mes = 'Jan' : '';
-            (date.getMonth() == 1) ? mes = 'Fev' : '';
-            (date.getMonth() == 2) ? mes = 'Mar' : '';
-            (date.getMonth() == 3) ? mes = 'Abr' : '';
-            (date.getMonth() == 4) ? mes = 'Mai' : '';
-            (date.getMonth() == 5) ? mes = 'Jun' : '';
-            (date.getMonth() == 6) ? mes = 'Jul' : '';
-            (date.getMonth() == 7) ? mes = 'Ago' : '';
-            (date.getMonth() == 8) ? mes = 'Set' : '';
-            (date.getMonth() == 9) ? mes = 'Out' : '';
-            (date.getMonth() == 10) ? mes = 'Nov' : '';
-            (date.getMonth() == 11) ? mes = 'Dez' : '';
+            var mes = "";
+            date.getMonth() == 0 ? (mes = "Jan") : "";
+            date.getMonth() == 1 ? (mes = "Fev") : "";
+            date.getMonth() == 2 ? (mes = "Mar") : "";
+            date.getMonth() == 3 ? (mes = "Abr") : "";
+            date.getMonth() == 4 ? (mes = "Mai") : "";
+            date.getMonth() == 5 ? (mes = "Jun") : "";
+            date.getMonth() == 6 ? (mes = "Jul") : "";
+            date.getMonth() == 7 ? (mes = "Ago") : "";
+            date.getMonth() == 8 ? (mes = "Set") : "";
+            date.getMonth() == 9 ? (mes = "Out") : "";
+            date.getMonth() == 10 ? (mes = "Nov") : "";
+            date.getMonth() == 11 ? (mes = "Dez") : "";
 
-            return date.getDate() + ' ' + mes + ', ' + date.getFullYear();
+            return date.getDate() + " " + mes + ", " + date.getFullYear();
         },
         async dadosConsulta() {
-            this.loading = true
-            await axios.get(route('apontamento.APIconsulta'), {
-                params: {
-                    busca: this.buscador
-                }
-            }).then(response => {
-                this.consultas = response.data;
-                this.loading = false
-            });
-        }
+            this.loading = true;
+            await axios
+                .get(route("apontamento.APIconsulta"), {
+                    params: {
+                        busca: this.buscador,
+                    },
+                })
+                .then((response) => {
+                    this.consultas = response.data;
+                    this.loading = false;
+                });
+        },
     },
     props: [],
     data() {
         return {
             loading: false,
             consultas: [],
-            buscador: '',
+            buscador: "",
         };
     },
 });
