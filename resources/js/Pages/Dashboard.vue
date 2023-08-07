@@ -5,6 +5,18 @@
 
     <div class="row dashboard-mt">
 
+      <div class="col-md-12" v-if="$page.props.user.coligada == 1">
+        <div class="row">
+          <div class="col-xxl-2 col-md-3 text-center" v-for="recurso in recursos" :key="recurso.Code">
+            <button @click="goLink(recurso.Code)" class="btn btn-cap bg-info shadow-sm w-100 mb-3"
+              style="border-radius: 9px;">
+              <h1>{{ recurso.Code }}</h1>
+              <h5>{{ recurso.Nickname }}</h5>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="col-md-3">
 
         <div class="card-body bg-white shadow-sm border-bottom rounded-top table-responsive">
@@ -188,8 +200,7 @@ export default defineComponent({
   },
   mounted() {
     this.opemTask();
-    //this.aniversariantes();
-
+    this.atualizaRecursos();
   },
   methods: {
     mesAni(mes) {
@@ -224,6 +235,13 @@ export default defineComponent({
           this.loadingNotifications = false
         })
     },
+    goLink(recurso) {
+      console.log('--' + recurso)
+      this.$inertia.get(route('mecalux.index'),
+        { recurso: recurso },
+        { preserveState: true }
+      );
+    },
     async aniversariantes() {
       this.loadingNotifications = true
       await axios.get(route('API.utei.birthday'))
@@ -249,6 +267,15 @@ export default defineComponent({
         }).catch(function (error) {
           console.error(error);
           this.loadingNotifications = false
+        })
+    },
+    async atualizaRecursos() {
+      console.log('teste')
+      await axios.get(route('API.utei.recursos'))
+        .then(response => {
+          this.recursos = response.data;
+        }).catch(function (error) {
+          console.error(error);
         })
     },
     dateTask(dateIni) {
@@ -279,6 +306,7 @@ export default defineComponent({
   data() {
     return {
       links: false,
+      recursos: [],
       opemForms: [],
       birthDays: [],
     };

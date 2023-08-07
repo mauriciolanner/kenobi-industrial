@@ -78,6 +78,7 @@ Route::middleware(['auth:sanctum', 'verified'])->controller(APIUteisController::
     Route::get('/API/usuarios', 'usuarios')->name('API.utei.usuarios');
     Route::get('/API/roles', 'roles')->name('API.utei.roles');
     Route::get('/API/funcionarios', 'funcionarios')->name('API.utei.funcionarios');
+    Route::get('/API/recursos', 'recursos')->name('API.utei.recursos');
 });
 
 //rotas de Fardo
@@ -125,5 +126,5 @@ Route::middleware(['auth:sanctum', 'verified'])->controller(ApontamentoImpressoC
 Route::middleware(['auth:sanctum', 'verified'])->controller(MecaluxController::class)->group(function () {
     Route::get('/etiquetaMecalux', 'index')->name('mecalux.index');
     Route::get('/Api/etiquetaMecalux', 'APIMecaluxRecurso')->name('mecalux.apiEtiquetas');
-    Route::get('/Api/etiquetaMecalux/print/{cod}', 'apontamentoPdf')->name('mecalux.apontamentoPdf');
+    Route::get('/Api/etiquetaMecalux/print/{cod}/{print}', 'apontamentoPdf')->name('mecalux.apontamentoPdf');
 });
