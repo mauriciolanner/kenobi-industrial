@@ -24,5 +24,6 @@ class ImpressaoMecalux extends Model
         'IDPCFACTORY',
         'RECURSO',
         'IMPRESSO',
+        'ESTORNO'
     ];
 }
