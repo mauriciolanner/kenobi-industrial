@@ -48,25 +48,18 @@
                                 <td>{{ parseInt(consulta.Saldo) }}</td>
                                 <td>{{ consulta.NumSeq }}</td>
                                 <td>
-                                    <a
+                                    <button
                                         v-if="consulta.Via != '0'"
                                         @click="
-                                            mostrarConsole(
+                                            imprimir(
                                                 consulta.Recno,
                                                 consulta.OrdemProducao
                                             )
                                         "
-                                        :href="
-                                            '/apontamento/pdf/' +
-                                            consulta.Recno +
-                                            '/' +
-                                            consulta.OrdemProducao.trim() +
-                                            '/EtiquetaApontamento'
-                                        "
-                                        target="blank"
                                         class="btn btn-info"
-                                        ><i class="bi bi-printer"></i
-                                    ></a>
+                                    >
+                                        <i class="bi bi-printer"> </i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -132,6 +125,33 @@ export default defineComponent({
             date.getMonth() == 11 ? (mes = "Dez") : "";
 
             return date.getDate() + " " + mes + ", " + date.getFullYear();
+        },
+        imprimir(recno, op) {
+            op = op.trim();
+            recno = recno.trim();
+            axios
+                .get(
+                    route("apontamento.criar.pdf", {
+                        recnoEnviado: recno,
+                        opEnviada: op,
+                    }),
+                    {
+                        responseType: "arraybuffer",
+                    }
+                )
+                .then((response) => {
+                    console.log(response);
+                    let blob = new Blob([response.data], {
+                        type: "application/pdf",
+                    });
+                    let link = document.createElement("a");
+                    link.href = URL.createObjectURL(blob);
+                    link.download = "etiqueta-apontamento.pdf";
+                    link.click();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
         async dadosConsulta() {
             this.loading = true;

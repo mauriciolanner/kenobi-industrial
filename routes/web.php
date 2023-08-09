@@ -93,7 +93,7 @@ Route::middleware(['auth:sanctum', 'verified'])->controller(TesteController::cla
 //rotas de Apontamento
 Route::middleware(['auth:sanctum', 'verified'])->controller(ConsultaApontamentoController::class)->group(function () {
     Route::get('/consultaapontamento', 'index')->name('consulta.apontamento');
-    Route::get('/apontamento/pdf/{recno}/{op}/EtiquetaApontamento', 'apontamentoPdf')->name('apontamento.pdf');
+    Route::get('/apontamento/pdf/EtiquetaApontamento', 'apontamentoPdf')->name('apontamento.criar.pdf');
     Route::get('/API/consultaapontamento', 'APIconsulta')->name('apontamento.APIconsulta');
 });
 

@@ -1,5 +1,5 @@
 <template>
-    <AppLayout title="Etiquetas Impressas">
+    <app-layout title="Etiquetas Impressas">
         <template #header>
             <h2 class="h4 font-weight-bold">Etiquetas Impressas</h2>
         </template>
@@ -272,6 +272,37 @@
                                                                             scope="col"
                                                                         >
                                                                             Saldo
+                                                                            QL
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr
+                                                                        v-for="saldoql in saldoQL"
+                                                                    >
+                                                                        <th>
+                                                                            {{
+                                                                                parseInt(
+                                                                                    saldoql.saldoQL
+                                                                                )
+                                                                            }}
+                                                                        </th>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <table
+                                                                class="table table-striped table-padrao"
+                                                            >
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th
+                                                                            scope="col"
+                                                                        >
+                                                                            Saldo
                                                                             LO
                                                                         </th>
                                                                     </tr>
@@ -300,46 +331,9 @@
                                                                 >
                                                                     <thead>
                                                                         <tr>
-<<<<<<< HEAD
                                                                             <th
                                                                                 scope="col"
                                                                             >
-                                                                                Saldo
-                                                                                QL
-                                                                            </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr
-                                                                            v-for="saldo in saldoQL"
-                                                                        >
-                                                                            <th>
-                                                                                {{
-                                                                                    parseInt(
-                                                                                        saldo.SaldoQL
-                                                                                    )
-                                                                                }}
-                                                                            </th>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div
-                                                                class="col-md-12"
-                                                            >
-                                                                <table
-                                                                    class="table table-striped table-padrao"
-                                                                >
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th
-                                                                                scope="col"
-                                                                            >
-=======
-                                                                            <th scope="col">
->>>>>>> 12bc7a3e21862e44feaa5d0e3092a4f6d6b2208c
                                                                                 OP
                                                                             </th>
                                                                             <th
@@ -420,7 +414,7 @@
                 </div>
             </div>
         </div>
-    </AppLayout>
+    </app-layout>
 </template>
 
 <script>
@@ -432,6 +426,9 @@ export default defineComponent({
     components: {
         AppLayout,
         JetInputSearch,
+    },
+    mounted() {
+        console.log(this.saldoQL, this.saldolo, this.saldopr);
     },
     methods: {
         buscar() {

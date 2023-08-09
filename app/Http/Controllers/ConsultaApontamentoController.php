@@ -59,8 +59,10 @@ class ConsultaApontamentoController extends Controller
     }
 
 
-    public function apontamentoPdf($recno, $op)
+    public function apontamentoPdf(Request $request)
     {
+        $recno = $request->recnoEnviado;
+        $op = $request->opEnviada;
         $linha = $this->consultaProduto($recno, trim($op));
         $this->updateInicial($recno);
         $pdf = new PDFCode39('L', 'mm');
