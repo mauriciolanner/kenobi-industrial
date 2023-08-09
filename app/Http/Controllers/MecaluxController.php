@@ -61,10 +61,10 @@ class MecaluxController extends Controller
         // }
 
         $etiquetas = ImpressaoMecalux::where('IMPRESSO', '0')
-            ->where('RECURSO', $request->recurso);
+            ->where('RECURSO', $request->recurso)->whereNull('ESTORNO');
 
         if ($request->busca != '') {
-            $etiquetas = ImpressaoMecalux::where('OP', 'LIKE', '%' . $request->busca . '%')->orWhere('APONTAMENTO_MES', 'LIKE', '%' . $request->busca . '%');
+            $etiquetas = ImpressaoMecalux::whereNull('ESTORNO')->where('OP', 'LIKE', '%' . $request->busca . '%')->orWhere('APONTAMENTO_MES', 'LIKE', '%' . $request->busca . '%');
         }
 
         return response()->json($etiquetas->orderBy('APONTAMENTO_MES', 'DESC')->paginate(10));
