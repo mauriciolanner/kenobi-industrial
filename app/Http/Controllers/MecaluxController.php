@@ -61,7 +61,7 @@ class MecaluxController extends Controller
         // }
 
         $etiquetas = ImpressaoMecalux::where('IMPRESSO', '0')
-            ->where('RECURSO', $request->recurso);
+            ->where('RECURSO', $request->recurso)->whereNull('ESTORNO');
 
         if ($request->busca != '') {
             $etiquetas = ImpressaoMecalux::where('OP', 'LIKE', '%' . $request->busca . '%')->orWhere('APONTAMENTO_MES', 'LIKE', '%' . $request->busca . '%');
