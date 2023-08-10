@@ -3,18 +3,36 @@
         <template #header>
             <h2 class="h4 font-weight-bold">Etiquetas Impressas</h2>
         </template>
-        <div class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top table-responsive">
+        <div
+            class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top table-responsive"
+        >
             <div class="row mb-3">
                 <div class="col-sm-9">
-                    <label for="Pesquisa" class="form-label inputImpressas">Pesquisa</label>
-                    <jet-input-search id="buscar" type="text" v-model="buscador" placeholder="Buscar..."
-                        class="inputImpressas" />
+                    <label for="Pesquisa" class="form-label inputImpressas"
+                        >Pesquisa</label
+                    >
+                    <jet-input-search
+                        id="buscar"
+                        type="text"
+                        v-model="buscador"
+                        placeholder="Buscar..."
+                        class="inputImpressas"
+                    />
                 </div>
                 <div class="col-sm-2">
-                    <button type="button" v-on:click="buscar" class="btn btn-success mt-30">
+                    <button
+                        type="button"
+                        v-on:click="buscar"
+                        class="btn btn-success mt-30"
+                    >
                         Buscar
                     </button>
-                    <button type="button" style="margin-left: 20px" v-on:click="limpar" class="btn btn-danger mt-30">
+                    <button
+                        type="button"
+                        style="margin-left: 20px"
+                        v-on:click="limpar"
+                        class="btn btn-danger mt-30"
+                    >
                         Limpar
                     </button>
                 </div>
@@ -24,52 +42,100 @@
                     <table class="table table-striped table-padrao">
                         <thead>
                             <tr>
-                                <th class="colunasAbaImpressas colIni" scope="col">
+                                <th
+                                    class="colunasAbaImpressas colIni"
+                                    scope="col"
+                                >
                                     NumSeq
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Ordem
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     T
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Data Início
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Hora início
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Hora Final
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Emissão
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Lote
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     ID
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Produto
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Produzida
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Saldo
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Operador
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Via
                                 </th>
-                                <th class="colunasAbaImpressas text-center" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center"
+                                    scope="col"
+                                >
                                     Etiqueta
                                 </th>
-                                <th class="colunasAbaImpressas text-center colFim" scope="col">
+                                <th
+                                    class="colunasAbaImpressas text-center colFim"
+                                    scope="col"
+                                >
                                     Info
                                 </th>
                             </tr>
@@ -117,27 +183,48 @@
                                     {{ parseInt(consulta.Via) }}
                                 </td>
                                 <td class="text-center">
-                                    <a :href="asset +
-                                        'impressas/pdf/' +
-                                        consulta.Recno +
-                                        '/' +
-                                        consulta.OrdemProducao +
-                                        '/' +
-                                        consulta.NumSeq +
-                                        '/ApontamentoImpresso'
-                                        " target="blank" class="btn btn-info"><i class="bi bi-printer"></i></a>
+                                    <a
+                                        :href="
+                                            asset +
+                                            'impressas/pdf/' +
+                                            consulta.Recno +
+                                            '/' +
+                                            consulta.OrdemProducao +
+                                            '/' +
+                                            consulta.NumSeq +
+                                            '/ApontamentoImpresso'
+                                        "
+                                        target="blank"
+                                        class="btn btn-info"
+                                        ><i class="bi bi-printer"></i
+                                    ></a>
                                 </td>
                                 <td>
-                                    <button v-if="btnbuscar" type="button" data-bs-toggle="modal" :data-bs-target="'#exampleModal' + consulta.NumSeq
-                                        " class="btn btn-info">
+                                    <button
+                                        v-if="btnbuscar"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        :data-bs-target="
+                                            '#exampleModal' + consulta.NumSeq
+                                        "
+                                        class="btn btn-info"
+                                    >
                                         <i class="bi bi-info-square"></i>
                                     </button>
-                                    <div class="modal fade" :id="'exampleModal' + consulta.NumSeq" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div
+                                        class="modal fade"
+                                        :id="'exampleModal' + consulta.NumSeq"
+                                        tabindex="-1"
+                                        aria-labelledby="exampleModalLabel"
+                                        aria-hidden="true"
+                                    >
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">
+                                                    <h5
+                                                        class="modal-title"
+                                                        id="exampleModalLabel"
+                                                    >
                                                         NumSeq:
                                                         {{ consulta.NumSeq }}
                                                     </h5>
@@ -145,17 +232,23 @@
                                                 <div class="modal-body">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <table class="table table-striped table-padrao">
+                                                            <table
+                                                                class="table table-striped table-padrao"
+                                                            >
                                                                 <thead>
                                                                     <tr>
-                                                                        <th scope="col">
+                                                                        <th
+                                                                            scope="col"
+                                                                        >
                                                                             Saldo
                                                                             PR
                                                                         </th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr v-for="saldoPR in saldopr">
+                                                                    <tr
+                                                                        v-for="saldoPR in saldopr"
+                                                                    >
                                                                         <th>
                                                                             {{
                                                                                 parseInt(
@@ -170,17 +263,54 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <table class="table table-striped table-padrao">
+                                                            <table
+                                                                class="table table-striped table-padrao"
+                                                            >
                                                                 <thead>
                                                                     <tr>
-                                                                        <th scope="col">
+                                                                        <th
+                                                                            scope="col"
+                                                                        >
+                                                                            Saldo
+                                                                            QL
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr
+                                                                        v-for="saldoql in saldoQL"
+                                                                    >
+                                                                        <th>
+                                                                            {{
+                                                                                parseInt(
+                                                                                    saldoql.saldoQL
+                                                                                )
+                                                                            }}
+                                                                        </th>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <table
+                                                                class="table table-striped table-padrao"
+                                                            >
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th
+                                                                            scope="col"
+                                                                        >
                                                                             Saldo
                                                                             LO
                                                                         </th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr v-for="saldoLO in saldolo">
+                                                                    <tr
+                                                                        v-for="saldoLO in saldolo"
+                                                                    >
                                                                         <th>
                                                                             {{
                                                                                 parseInt(
@@ -193,28 +323,42 @@
                                                             </table>
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-md-12">
-                                                                <table class="table table-striped table-padrao">
+                                                            <div
+                                                                class="col-md-12"
+                                                            >
+                                                                <table
+                                                                    class="table table-striped table-padrao"
+                                                                >
                                                                     <thead>
                                                                         <tr>
-                                                                            <th scope="col">
+                                                                            <th
+                                                                                scope="col"
+                                                                            >
                                                                                 OP
                                                                             </th>
-                                                                            <th scope="col">
+                                                                            <th
+                                                                                scope="col"
+                                                                            >
                                                                                 Qtd
                                                                                 da
                                                                                 OP
                                                                             </th>
-                                                                            <th scope="col">
+                                                                            <th
+                                                                                scope="col"
+                                                                            >
                                                                                 Apontado
                                                                             </th>
-                                                                            <th scope="col">
+                                                                            <th
+                                                                                scope="col"
+                                                                            >
                                                                                 Falta
                                                                             </th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <tr v-for="consulta in consulta2">
+                                                                        <tr
+                                                                            v-for="consulta in consulta2"
+                                                                        >
                                                                             <th>
                                                                                 {{
                                                                                     consulta.OrdemProducao
@@ -246,9 +390,14 @@
                                                                 </table>
                                                             </div>
 
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal">
+                                                            <div
+                                                                class="modal-footer"
+                                                            >
+                                                                <button
+                                                                    type="button"
+                                                                    class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal"
+                                                                >
                                                                     Fechar
                                                                 </button>
                                                             </div>
@@ -278,9 +427,13 @@ export default defineComponent({
         AppLayout,
         JetInputSearch,
     },
+    mounted() {
+        console.log(this.saldoQL, this.saldolo, this.saldopr);
+    },
     methods: {
         buscar() {
-            this.$inertia.get(route("consulta.impressas"),
+            this.$inertia.get(
+                route("consulta.impressas"),
                 {
                     busca: this.buscador,
                     dataini: this.dataInicio,
@@ -312,7 +465,7 @@ export default defineComponent({
             return date.getDate() + " " + mes + ", " + date.getFullYear();
         },
     },
-    props: ["consultas", "saldopr", "saldolo", "consulta2", "asset"],
+    props: ["consultas", "saldoQL", "saldopr", "saldolo", "consulta2", "asset"],
     data() {
         return {
             buscador: "",
