@@ -79,7 +79,15 @@ class MecaluxController extends Controller
 
         $linha = ImpressaoMecalux::where('CODIGO_APONTAMENTO', $cod)->first();
 
-        $now = Carbon::now();
+        if ($linha->created_at != null) {
+            $now = Carbon::create($linha->created_at);
+        } else {
+            ImpressaoMecalux::where('id', $linha->id)->update([
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+            $now = Carbon::now();
+        }
+
         $produto = DB::connection('protheus')->select("SELECT * FROM SB1010 WHERE B1_COD = '$linha->PRODUTO' AND B1_FILIAL = '0101' AND D_E_L_E_T_ <> '*'");
 
         $pdf = new PDFCode128('L', 'mm', [100, 40]);
