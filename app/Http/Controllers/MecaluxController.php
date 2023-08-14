@@ -80,7 +80,7 @@ class MecaluxController extends Controller
         $linha = ImpressaoMecalux::where('CODIGO_APONTAMENTO', $cod)->first();
 
         $now = Carbon::now();
-        $produto = DB::connection('protheus')->select("SELECT * FROM SB1010 WHERE B1_COD = '$linha->PRODUTO'");
+        $produto = DB::connection('protheus')->select("SELECT * FROM SB1010 WHERE B1_COD = '$linha->PRODUTO' AND B1_FILIAL = '0101' AND D_E_L_E_T_ <> '*'");
 
         $pdf = new PDFCode128('L', 'mm', [100, 40]);
         $pdf->SetMargins(0, 0, 0, 0);
@@ -100,14 +100,14 @@ class MecaluxController extends Controller
 
         $pdf->Output("F", public_path("PDF\\" . $cod . ".pdf"));
 
-        ImpressaoMecalux::where('id', $linha->id)->update([
-            'IMPRESSO' => 1
-        ]);
-
 
         if ($printer != 'PDF')
             exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf"  \\\192.168.254.71\192.168.255.2' . $printer . '');
 
+        ImpressaoMecalux::where('id', $linha->id)->update([
+            'IMPRESSO' => 1,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
         //exec('DEL /F /Q /A C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf');
 
         return response()->json(['status' => true]);
