@@ -79,8 +79,15 @@ class MecaluxController extends Controller
 
         $linha = ImpressaoMecalux::where('CODIGO_APONTAMENTO', $cod)->first();
 
+        $via = 1;
+
         if ($linha->created_at != null) {
             $now = Carbon::create($linha->created_at);
+            $via = intval(ImpressaoMecalux::where('id', $linha->id)->first()->IMPRESSO) + 1;
+
+            ImpressaoMecalux::where('id', $linha->id)->update([
+                'IMPRESSO' => $via
+            ]);
         } else {
             ImpressaoMecalux::where('id', $linha->id)->update([
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s')
@@ -96,7 +103,7 @@ class MecaluxController extends Controller
         $pdf->SetAutoPageBreak(false);
         $pdf->SetFont('helvetica', 'B', 8);
         $pdf->Cell(100/*width*/, 4/*height*/, "BOMIX | " . $now->format('d') . ' ' .  $this->mes($now->format('m')) . ' ' .  $now->format('Y') . ' ' . $now->isoFormat('H:mm') . ' | ' . $turnoAgora . ' | QTD: ' . intval($linha->QUANTIDADE)/*String*/, ''/*Border*/, 1/*ln*/, 'C'/*alinhamento*/, false);
-        $pdf->Cell(100/*width*/, 4/*height*/, 'RECEITA: ' .  trim($linha->RECEITA) . ' | ' . $turnoAgora . ' | RECURSO: ' . $linha->RECURSO/*String*/, 'B'/*Border*/, 1/*ln*/, 'C'/*alinhamento*/, false);
+        $pdf->Cell(100/*width*/, 4/*height*/, 'RECEITA: ' .  trim($linha->RECEITA) . ' | ' . $turnoAgora . ' | RECURSO: ' . $linha->RECURSO . ' | Via ' . $via/*String*/, 'B'/*Border*/, 1/*ln*/, 'C'/*alinhamento*/, false);
 
         $pdf->SetFont('helvetica', 'B', 8);
         $pdf->Code128(10/*x*/, 14/*y*/, $linha->OP . $linha->CODIGO_APONTAMENTO, 80/*width*/, 15/*height*/);
