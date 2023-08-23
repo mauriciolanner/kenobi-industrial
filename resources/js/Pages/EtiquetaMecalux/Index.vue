@@ -230,7 +230,8 @@ export default defineComponent({
             var retorno = date.getDate() + ' ' + mes +
                 ', ' + date.getFullYear() +
                 ' ' + date.getHours() +
-                ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + '';
+                ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
+                + (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()) + '';
 
             return retorno;
         },
@@ -291,8 +292,8 @@ export default defineComponent({
             });
         },
         viewDoc(arquivo) {
-            console.log(this.asset + "public/PDF/" + arquivo + '.pdf')
-            this.attSrc = this.asset + "public/PDF/" + arquivo + '.pdf';
+            console.log(this.asset + "PDF/" + arquivo + '.pdf')
+            this.attSrc = this.asset + "PDF/" + arquivo + '.pdf';
             var modalAtt = new bootstrap.Modal(document.getElementById("modalAnexos"), {});
             modalAtt.show()
         },
