@@ -78,13 +78,18 @@
                                 <td>{{ consulta.RECEITA }}</td>
                                 <td>{{ consulta.RECURSO }}</td>
                                 <td>
-                                    <div v-if="consulta.IMPRESSO == 1" class="impresso bg-success text-center">
+                                    <div v-if="consulta.IMPRESSO == 1" class="impresso bg-success text-center"
+                                        :class="{ 'bg-danger': consulta.ESTORNO == 'E' }">
                                         <i class="bi bi-printer-fill" style="font-size: 19px;"></i><br>
                                         {{ dateTask(consulta.updated_at) }}
                                     </div>
+                                    <div v-if="consulta.ESTORNO == 'E'"
+                                        class="impresso bg-secondary text-center text-light">
+                                        Estornado
+                                    </div>
                                 </td>
                                 <td>
-                                    <div class="dropdown">
+                                    <div class="dropdown" v-if="consulta.ESTORNO != 'E'">
                                         <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                             aria-expanded="false">
                                             <i class="bi bi-printer" style="font-size: 19px;"></i>
@@ -191,6 +196,9 @@ export default defineComponent({
     methods: {
         buscar() {
             this.dadosConsulta(this.page)
+        },
+        reprint(cod, printer) {
+
         },
         async goPrint(cod, printer) {
             this.loading = true

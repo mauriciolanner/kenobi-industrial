@@ -1340,5 +1340,10 @@ tr.loading-tabel td {
 
 .impresso {
     border-radius: 50px;
-    
+
 }
+
+.qrcode-stream-overlay {
+    margin-top: -480px !important;
+}
+

@@ -6,6 +6,7 @@ use App\Http\Controllers\FormController;
 use App\Http\Controllers\APIUteisController;
 use App\Http\Controllers\PushNotificationController;
 use App\Http\Controllers\ApontamentoImpressoController;
+use App\Http\Controllers\ConsultaPalletController;
 use App\Http\Controllers\ConsultaApontamentoController;
 use App\Http\Controllers\ConsultaApontamentoMatriz;
 use App\Http\Controllers\ConsultaSaldoLOController;
@@ -33,6 +34,11 @@ require 'form.php';
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/', fn () => Inertia::render('Dashboard'))->name('dashboard');
+});
+
+//rotas abertas
+Route::controller(ConsultaPalletController::class)->group(function () {
+    Route::get('op', 'index')->name('conuslta.OP');
 });
 
 
