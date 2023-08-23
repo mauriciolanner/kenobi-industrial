@@ -39,6 +39,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 //rotas abertas
 Route::controller(ConsultaPalletController::class)->group(function () {
     Route::get('op', 'index')->name('conuslta.OP');
+    Route::get('API/VerificPallet', 'APIVerificaPalet')->name('API.conuslta.OP');
 });
 
 
