@@ -6,14 +6,19 @@
                         class="bi bi-camera-fill"></i></button>
             </div>
             <div class="col-md-12">
-                <div v-if="camera" class="card bg-white card-login shadow-sm p-3 mt-4" style="height: 530px;">
-                    <qrcode-stream :formats="formato" :track="paintOutline" @detect="onDetect" @error="onError">
+                <div class="card bg-white card-login shadow-sm p-3 mt-4">
+
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div v-if="camera" class="card bg-white card-login shadow-sm p-3 mt-4">
+                    <qrcode-stream width="100%" :formats="formato" @detect="onDetect" @error="onError">
                         <!-- <button @click="switchCamera">
                             <img :src="'http://localhost/bomixKenobi/img/camera.svg'" alt="switch camera" />
                         </button> -->
                     </qrcode-stream>
                 </div>
-                <div class="card bg-white card-login shadow-sm p-3 mt-4">
+                <div class="card bg-white card-login shadow-sm p-3 mt-4 mb-4">
                     <div class="row" v-if="pallet">
                         <h3>{{ codigo }}</h3>
                         <div v-if="pallet.status" class="col-md-12">
