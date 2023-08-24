@@ -80,7 +80,7 @@ export default defineComponent({
         return {
             camera: false,
             codigo: '',
-            formato: ["code_128"],
+            formato: ["code_128", "code_39", "code_93"],
             loadingDados: false,
             pallet: null
         }
