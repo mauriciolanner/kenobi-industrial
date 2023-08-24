@@ -1371,10 +1371,6 @@ tr.loading-tabel td {
     position: absolute
 }
 
-.qrcode-stream-overlay {
-    margin-top: -480px !important;
-}
-
 .btn-camera {
     border-radius: 20px;
     font-size: 33px;
