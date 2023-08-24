@@ -12,7 +12,8 @@
             </div>
             <div class="col-md-12">
                 <div v-if="camera" class="card bg-white card-login shadow-sm p-3 mt-4">
-                    <qrcode-stream width="100%" :formats="formato" @detect="onDetect" @error="onError">
+                    <qrcode-stream width="100%" :formats="formato" :track="paintOutline" @detect="onDetect"
+                        @error="onError">
                         <!-- <button @click="switchCamera">
                             <img :src="'http://localhost/bomixKenobi/img/camera.svg'" alt="switch camera" />
                         </button> -->
