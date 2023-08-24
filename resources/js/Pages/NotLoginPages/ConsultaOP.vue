@@ -41,23 +41,23 @@
                                 <li class="list-group-item"><b>Apontamento MES: </b>{{ pallet.APONTAMENTO_MES }}</li>
                                 <li class="list-group-item"><b>OP: </b>{{ pallet.OP }}</li>
                                 <li class="list-group-item"><b>Integrado Mecalux: </b>{{ pallet.RESULTADO }}</li>
+                                <li class="list-group-item"><b>Status Mecalux: </b>{{ pallet.StatusMecalux }}</li>
+                                <li class="list-group-item"><b>Localização: </b>{{ pallet.LOCATIONCODE }}</li>
+                                <li class="list-group-item"><b>Id Mecalux: </b>{{ pallet.ZF9_FSCMID }}</li>
+                                <li class="list-group-item"><b>Data integração Mecalux: </b>{{ pallet.ZF9_DATA }}</li>
+                                <li class="list-group-item"><b>Hora integração mecalux: </b>{{ pallet.ZF9_HORA }}</li>
+                                <li class="list-group-item"><b>Erro de integração MES: </b>{{ pallet.ERRO_INTEGRACAO }}</li>
+                                <li class="list-group-item"><b>Estorno MES: </b>{{ pallet.ESTORNO_MES }}</li>
                                 <li class="list-group-item"><b>Status: </b>{{ pallet.STATUS }}</li>
                                 <li class="list-group-item"><b>Cod ST: </b>{{ pallet.COD_ST }}</li>
                                 <li class="list-group-item"><b>Data/Hora: </b>{{ pallet.DATA_HORA }}</li>
                                 <li class="list-group-item"><b>Produto: </b>{{ pallet.PRODUTO }}</li>
                                 <li class="list-group-item"><b>Descrição: </b>{{ pallet.DESCRICAO }}</li>
                                 <li class="list-group-item"><b>Qtd: </b>{{ pallet.QUANTIDADE }}</li>
-                                <li class="list-group-item"><b>Erro de integração MES: </b>{{ pallet.ERRO_INTEGRACAO }}</li>
-                                <li class="list-group-item"><b>Estorno MES: </b>{{ pallet.ESTORNO_MES }}</li>
                                 <li class="list-group-item"><b>Receita: </b>{{ pallet.RECEITA }}</li>
                                 <li class="list-group-item"><b>Recurso: </b>{{ pallet.RECURSO }}</li>
-                                <!-- <li class="list-group-item"><b>Req Origem: </b>{{ pallet.REQ_ORIGEM }}</li> -->
-                                <!-- <li class="list-group-item"><b>Rotina: </b>{{ pallet.ROTINA }}</li> -->
                                 <li class="list-group-item"><b>Etiqueta Palet: </b>{{ pallet.ST_PALETE }}</li>
                                 <li class="list-group-item"><b>Etiqueta Deletada: </b>{{ pallet.ST_DELETADA }}</li>
-                                <li class="list-group-item"><b>Id Mecalux: </b>{{ pallet.ZF9_FSCMID }}</li>
-                                <li class="list-group-item"><b>Data integração Mecalux: </b>{{ pallet.ZF9_DATA }}</li>
-                                <li class="list-group-item"><b>Hora integração mecalux: </b>{{ pallet.ZF9_HORA }}</li>
                                 <li class="list-group-item"><b>Status: </b>{{ pallet.ZF9_STATUS }}</li>
                             </ul>
                         </div>
