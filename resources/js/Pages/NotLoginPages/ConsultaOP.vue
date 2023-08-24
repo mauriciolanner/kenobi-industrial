@@ -43,6 +43,7 @@
                                 <li class="list-group-item"><b>Integrado Mecalux: </b>{{ pallet.RESULTADO }}</li>
                                 <li class="list-group-item"><b>Status Mecalux: </b>{{ pallet.StatusMecalux }}</li>
                                 <li class="list-group-item"><b>Localização: </b>{{ pallet.LOCATIONCODE }}</li>
+                                <li class="list-group-item"><b>Histórico: </b>{{ pallet.Historico }}</li>
                                 <li class="list-group-item"><b>Id Mecalux: </b>{{ pallet.ZF9_FSCMID }}</li>
                                 <li class="list-group-item"><b>Data integração Mecalux: </b>{{ pallet.ZF9_DATA }}</li>
                                 <li class="list-group-item"><b>Hora integração mecalux: </b>{{ pallet.ZF9_HORA }}</li>
