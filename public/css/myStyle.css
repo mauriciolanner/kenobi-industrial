@@ -1351,3 +1351,7 @@ tr.loading-tabel td {
     border-radius: 20px;
     font-size: 33px;
 }
+
+.qrcode-stream-camera {
+    width: 100%;
+}
