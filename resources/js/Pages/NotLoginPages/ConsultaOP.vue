@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-success w-100 mt-4 btn-camera" @click="camera = true, pallet = null"><i
+                <button class="btn btn-success w-100 mt-4 btn-camera" @click="camera = !camera, pallet = null"><i
                         class="bi bi-camera-fill"></i></button>
             </div>
         </div>
