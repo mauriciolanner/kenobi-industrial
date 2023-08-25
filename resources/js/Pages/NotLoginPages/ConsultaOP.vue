@@ -37,9 +37,11 @@
                     <div class="row" v-if="pallet">
                         <!-- <h3>{{ codigo }}</h3> -->
                         <div v-if="pallet.status" class="col-md-12">
-                            <div class="card bg-success card-login shadow-sm p-3 mt-4 mb-4" :class="{
-                                'bg-success': pallet.pallet[0].LOCATIONCODE == 'LostFound',
-                                'bg-success': pallet.pallet[0].LOCATIONCODE == 'LostFound',
+                            <div class="card card-login shadow-sm p-3 mt-4 mb-4 text-center" :class="{
+                                'bg-success text-light': success.includes(pallet.pallet[0].SOLUCAO),
+                                'bg-warning': warning.includes(pallet.pallet[0].SOLUCAO),
+                                'bg-info text-light': info.includes(pallet.pallet[0].SOLUCAO),
+                                'bg-danger text-light': danger.includes(pallet.pallet[0].SOLUCAO)
                             }">
                                 <h4>{{ pallet.pallet[0].SOLUCAO }}</h4>
                             </div>
@@ -103,7 +105,22 @@ export default defineComponent({
             codigo: '',
             formato: ["code_128", "code_39", "code_93"],
             loadingDados: false,
-            pallet: null
+            pallet: null,
+            success: ['Palete Liberado para recepção.'],
+            warning: [
+                'PRODUÇÃO: Possível etiqueta duplicada, se for o caso, reetiquetar.',
+                'PRODUÇÃO: Etiqueta errada, necessário reetiquetar.',
+                'PRODUÇÃO: Integração MES pendente.',
+                'PRODUÇÃO: Palete com pendência de insumo.',
+                'PRODUÇÃO: Apontado a maior, necessário estornar e reapontar com a quantidade base correta.',
+                'LOGISTICA: Palete vindo da doca, necessário solicitação de transferência manual.',
+                'Palete em área não mapeada, possível movimentação, entrar em contato com operador Mecalux.'
+            ],
+            info: [
+                'Palete vindo da área de picking, liberado para recepção.',
+                'Palete em Movimentação, entrar em contato com operador Mecalux.'
+            ],
+            danger: ['TI: Necessário analise de TI']
         }
     },
     methods: {
