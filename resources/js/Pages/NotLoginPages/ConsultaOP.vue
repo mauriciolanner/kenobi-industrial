@@ -37,7 +37,13 @@
                     <div class="row" v-if="pallet">
                         <!-- <h3>{{ codigo }}</h3> -->
                         <div v-if="pallet.status" class="col-md-12">
-                            <ul class="list-group" v-for="pallet in pallet.pallet">
+                            <div class="card bg-success card-login shadow-sm p-3 mt-4 mb-4" :class="{
+                                'bg-success': pallet.pallet[0].LOCATIONCODE == 'LostFound',
+                                'bg-success': pallet.pallet[0].LOCATIONCODE == 'LostFound',
+                            }">
+                                <h4>{{ pallet.pallet[0].SOLUCAO }}</h4>
+                            </div>
+                            <ul class="list-group" v-for="  pallet   in   pallet.pallet  ">
                                 <li class="list-group-item"><b>Apontamento MES: </b>{{ pallet.APONTAMENTO_MES }}</li>
                                 <li class="list-group-item"><b>OP: </b>{{ pallet.OP }}</li>
                                 <li class="list-group-item"><b>Integrado Mecalux: </b>{{ pallet.RESULTADO }}</li>
