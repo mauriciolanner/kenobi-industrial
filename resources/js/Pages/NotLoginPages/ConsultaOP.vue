@@ -113,6 +113,7 @@ export default defineComponent({
             warning: [
                 'PRODUÇÃO: Possível etiqueta duplicada, se for o caso, reetiquetar.',
                 'PRODUÇÃO: Palete com pendência de insumo.',
+                'PRODUÇÃO: Palete em movimentação ou com etiqueta duplicada, se for o caso, re-etiquetar.',
                 'PRODUÇÃO: Possível etiqueta duplicada, se for o caso, re-etiquetar.',
                 'LOGISTICA: Palete vindo do PS(doca), necessário solicitação de transferência manual.',
                 'LOGISTICA: Palete em movimentação ou com etiqueta duplicada, se for o caso, re-etiquetar.',
