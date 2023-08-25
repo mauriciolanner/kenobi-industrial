@@ -38,8 +38,7 @@
                         <!-- <h3>{{ codigo }}</h3> -->
                         <div v-if="pallet.status" class="col-md-12">
                             <div class="card bg-success card-login shadow-sm p-3 mt-4 mb-4" :class="{
-                                'bg-success': pallet.pallet[0].LOCATIONCODE == 'LostFound',
-                                'bg-success': pallet.pallet[0].LOCATIONCODE == 'LostFound',
+                                'bg-success text-ligth': pallet.pallet[0].LOCATIONCODE == 'LostFound'
                             }">
                                 <h4>{{ pallet.pallet[0].SOLUCAO }}</h4>
                             </div>
