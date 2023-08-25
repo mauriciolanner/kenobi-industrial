@@ -106,9 +106,18 @@ export default defineComponent({
             formato: ["code_128", "code_39", "code_93"],
             loadingDados: false,
             pallet: null,
-            success: ['Palete Liberado para recepção.'],
+            success: [
+                'Palete Liberado para recepção.',
+                'LOGISTICA: Palete Liberado para recepção.'
+            ],
             warning: [
                 'PRODUÇÃO: Possível etiqueta duplicada, se for o caso, reetiquetar.',
+                'PRODUÇÃO: Palete com pendência de insumo.',
+                'PRODUÇÃO: Possível etiqueta duplicada, se for o caso, re-etiquetar.',
+                'LOGISTICA: Palete vindo do PS(doca), necessário solicitação de transferência manual.',
+                'LOGISTICA: Palete em movimentação ou com etiqueta duplicada, se for o caso, re-etiquetar.',
+                'PRODUÇÃO: Apontado a maior, necessário estornar e re-apontar com a quantidade base correta.',
+                'PRODUÇÃO: Etiqueta errada, necessário re-etiquetar.',
                 'PRODUÇÃO: Etiqueta errada, necessário reetiquetar.',
                 'PRODUÇÃO: Integração MES pendente.',
                 'PRODUÇÃO: Palete com pendência de insumo.',
@@ -118,9 +127,12 @@ export default defineComponent({
             ],
             info: [
                 'Palete vindo da área de picking, liberado para recepção.',
-                'Palete em Movimentação, entrar em contato com operador Mecalux.'
+                'Palete em Movimentação, entrar em contato com operador Mecalux.',
             ],
-            danger: ['TI: Necessário analise de TI']
+            danger: [
+                'TI: Necessário analise de TI',
+                'TI: Pendência no cadastro do produto.'
+            ]
         }
     },
     methods: {
