@@ -131,7 +131,7 @@ export default defineComponent({
                 'Palete em Movimentação, entrar em contato com operador Mecalux.',
             ],
             danger: [
-                'TI: Necessário analise de TI',
+                'TI: Necessário analise de TI.',
                 'TI: Pendência no cadastro do produto.'
             ]
         }
