@@ -17,6 +17,14 @@ class ConsultaPalletController extends Controller
         );
     }
 
+    public function indexSaldo(Request $request)
+    {
+        return Inertia::render(
+            'NotLoginPages/SaldosMX',
+            []
+        );
+    }
+
     public function APIVerificaPalet(Request $request)
     {
         $dados = null;
@@ -40,5 +48,12 @@ class ConsultaPalletController extends Controller
             'pallet' => $dados,
             'status' => false
         ]);
+    }
+
+    public function APIConsultaSaldoMX(Request $request)
+    {
+        $dados =  DB::connection('protheus')->select(DB::raw("SELECT * FROM BMX_VW_Compara_Lotes_Protheus_Mecalux where CODIGO = '$request->codigo'"));
+
+        return response()->json($dados);
     }
 }

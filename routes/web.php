@@ -40,6 +40,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::controller(ConsultaPalletController::class)->group(function () {
     Route::get('op', 'index')->name('conuslta.OP');
     Route::get('API/VerificPallet', 'APIVerificaPalet')->name('API.conuslta.OP');
+    //
+    Route::get('/saldo', 'indexSaldo')->name('consultaSaldo');
+    Route::get('/API/VerificPallet', 'APIConsultaSaldoMX')->name('API.conuslta.saldoMX');
 });
 
 
