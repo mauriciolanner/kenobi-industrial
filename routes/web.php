@@ -42,7 +42,7 @@ Route::controller(ConsultaPalletController::class)->group(function () {
     Route::get('API/VerificPallet', 'APIVerificaPalet')->name('API.conuslta.OP');
     //
     Route::get('/saldo', 'indexSaldo')->name('consultaSaldo');
-    Route::get('/API/VerificPallet', 'APIConsultaSaldoMX')->name('API.conuslta.saldoMX');
+    Route::get('/API/saldo', 'APIConsultaSaldoMX')->name('API.conuslta.saldoMX');
 });
 
 
