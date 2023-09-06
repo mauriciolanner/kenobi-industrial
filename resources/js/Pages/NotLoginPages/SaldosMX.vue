@@ -27,10 +27,10 @@
                         <h5>{{ dados[0].DESCRICAO }}</h5>
                     </div>
                     <div class="card card-login shadow-sm p-3 mt-4 bg-success" v-if="dados.length > 0">
-                        <h5>SALDO MX: {{ parseInt(dados[0].QUANT_MECALUX) }}</h5>
+                        <h5>SALDO MECALUX: {{ parseInt(dados[0].QUANT_MECALUX) }}</h5>
                     </div>
                     <div class="card card-login shadow-sm p-3 mt-4 mb-4 bg-success" v-if="dados.length > 0">
-                        <h5>SALDO PROTHEUS: {{ dados[0].QUANT_PROTHEUS }}</h5>
+                        <h5>SALDO PROTHEUS: {{ total }}</h5>
                     </div>
 
                     <table v-if="dados.length > 0" class="table table-striped table-padrao">
@@ -39,6 +39,7 @@
                                 <th scope="col">Lote</th>
                                 <th scope="col">Validade</th>
                                 <th scope="col">Armazém</th>
+                                <th scope="col">Saldo</th>
                                 <th scope="col">Empenho</th>
                             </tr>
                         </thead>
@@ -47,6 +48,7 @@
                                 <td>{{ lote.LOTE }}</td>
                                 <td>{{ lote.DT_VALIDADE }}</td>
                                 <td>{{ lote.ARMAZEM }}</td>
+                                <td>{{ lote.QUANT_PROTHEUS }}</td>
                                 <td>{{ lote.EMPENHO }}</td>
                             </tr>
                         </tbody>
@@ -76,10 +78,18 @@ export default defineComponent({
         return {
             codigo: '',
             dados: [],
-            loading: false
+            loading: false,
+            total: 0
         }
     },
     methods: {
+        somaMx() {
+            this.total = 0
+            this.dados.forEach((nodo, index) => {
+                if (nodo.ARMAZEM == 'MX')
+                    this.total += parseInt(nodo.QUANT_PROTHEUS);
+            })
+        },
         async carregaDados() {
             this.loading = true
             await axios.get(route('API.conuslta.saldoMX'), {
@@ -89,6 +99,7 @@ export default defineComponent({
             }).then(response => {
                 this.dados = response.data;
                 this.loading = false
+                this.somaMx()
             });
         }
     }
