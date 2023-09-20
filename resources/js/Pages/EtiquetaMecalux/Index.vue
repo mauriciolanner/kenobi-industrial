@@ -89,7 +89,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="dropdown" v-if="consulta.ESTORNO != 'E'">
+                                    <div class="dropdown" v-if="consulta.ESTORNO != 'E' && (!consulta.IMPRESSO == 1)">
                                         <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                             aria-expanded="false">
                                             <i class="bi bi-printer" style="font-size: 19px;"></i>
@@ -108,9 +108,12 @@
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 'PDF')">EM PDF</a></li>
                                         </ul>
                                     </div>
-                                    <!-- <a :href="route('mecalux.apontamentoPdf', consulta.CODIGO_APONTAMENTO.trim())"
-                                        @click="dadosConsulta(page)" target="blank" class="btn btn-info"><i
-                                            class="bi bi-printer"></i></a> -->
+                                    <div v-if="consulta.ESTORNO != 'E' && consulta.IMPRESSO == 1">
+                                        <button class="btn btn-info" type="button"
+                                            @click="reprint(consulta.CODIGO_APONTAMENTO)">
+                                            <i class="bi bi-printer" style="font-size: 19px;"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -127,6 +130,47 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <!-- modalReprint -->
+                    <div class="modal fade" id="modalReprint" tabindex="-1" aria-labelledby="modalReprintLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header text-end">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h3>Autorização gerencial</h3>
+                                    <div class="mb-3">
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" id="login" name="login"
+                                                placeholder="Nome de usuário" v-model="form.login">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="input-group mb-3">
+                                            <input type="password" class="form-control" id="senha" placeholder="Senha"
+                                                v-model="form.senha">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="input-group mb-3">
+                                            <VueMultiselect v-model="form.impressora" :placeholder="'Esolher impressora'"
+                                                :selectedLabel="'Selecionado'" :deselectLabel="'remover'"
+                                                :selectLabel="'Selecionar'" :options="impressoras">
+                                            </VueMultiselect>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" @click="reprintAxio()" class="btn btn-success">IMPRIMIR</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">FECHAR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- ModalAnexos -->
                     <div class="modal fade" id="modalAnexos" tabindex="-1" aria-labelledby="modalAnexosLabel"
@@ -166,9 +210,11 @@
                         <strong>Erro na impressão!</strong> Ouve um erro ao tentar imprimir, tente novamente.
                         <button type="button" class="btn-close" @click="erroPrint = false"></button>
                     </div>
-                    <div v-if="successPrint" class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Sucesso!</strong> <i class="bi bi-printer"></i> Etiqueta impressa com sucesso.
-                        <button type="button" class="btn-close" @click="successPrint = false"></button>
+                    <div v-if="successPrint.status" class="alert alert-dismissible fade show" :class="successPrint.tipo"
+                        role="alert">
+                        <strong>{{ successPrint.titulo }}</strong> <i class="bi bi-printer"></i>
+                        {{ successPrint.mensagem }}
+                        <button type="button" class="btn-close" @click="successPrint.status = false"></button>
                     </div>
 
                 </div>
@@ -190,6 +236,7 @@ export default defineComponent({
         VueMultiselect
     },
     mounted() {
+        this.modalReprint = new bootstrap.Modal(document.getElementById("modalReprint"), {});
         this.dadosConsulta(this.page);
         setInterval(() => this.dadosConsulta(this.page), 1000 * 20);
     },
@@ -197,20 +244,87 @@ export default defineComponent({
         buscar() {
             this.dadosConsulta(this.page)
         },
-        reprint(cod, printer) {
-
+        reprint(cod) {
+            this.modalReprint.show();
+            this.form.apontamento = cod
+        },
+        async reprintAxio() {
+            console.log(this.form.apontamento);
+            console.log(this.form.impressora);
+            console.log(this.form.login);
+            console.log(this.form.senha);
+            this.loading = true
+            this.erroPrint = false
+            this.successPrint.status = false
+            this.successPrint.titulo = ''
+            this.successPrint.mensagem = ''
+            this.successPrint.tipo = ''
+            await axios.get(route('mecalux.apontamentoPdf'),
+                {
+                    params: {
+                        cod: this.form.apontamento,
+                        printer: this.form.impressora,
+                        login: this.form.login,
+                        senha: this.form.senha
+                    }
+                })
+                .then(response => {
+                    if (response.data.status) {
+                        this.successPrint.status = true
+                        this.successPrint.titulo = 'Sucesso!'
+                        this.successPrint.mensagem = 'Etiqueta Impressa com sucesso'
+                        this.successPrint.tipo = 'alert-success'
+                        if (this.form.impressora == 'PDF') {
+                            this.viewDoc(this.form.apontamento)
+                        }
+                        this.loading = false
+                        this.dadosConsulta(this.page)
+                        this.modalReprint.hide();
+                        this.form.apontamento = ''
+                        this.form.impressora = ''
+                        this.form.login = ''
+                        this.form.senha = ''
+                    } else {
+                        this.successPrint.status = true
+                        this.successPrint.titulo = response.data.title
+                        this.successPrint.mensagem = response.data.message
+                        this.successPrint.tipo = response.data.type
+                    }
+                }).catch(function (error) {
+                    this.erroPrint = true
+                    this.loading = false
+                })
         },
         async goPrint(cod, printer) {
             this.loading = true
             this.erroPrint = false
-            this.successPrint = false
-            await axios.get(route('mecalux.apontamentoPdf', [cod, printer]))
+            this.successPrint.status = false
+            this.successPrint.titulo = ''
+            this.successPrint.mensagem = ''
+            this.successPrint.tipo = ''
+            await axios.get(route('mecalux.apontamentoPdf'),
+                {
+                    params: {
+                        cod: cod,
+                        printer: printer
+                    }
+                })
                 .then(response => {
-                    this.successPrint = true
-                    this.loading = false
-                    this.dadosConsulta(this.page)
-                    if (printer == 'PDF')
-                        this.viewDoc(cod)
+                    if (response.data.status) {
+                        this.successPrint.status = true
+                        this.successPrint.titulo = 'Sucesso!'
+                        this.successPrint.mensagem = 'Etiqueta Impressa com sucesso'
+                        this.successPrint.tipo = 'alert-success'
+                        this.loading = false
+                        this.dadosConsulta(this.page)
+                        if (printer == 'PDF')
+                            this.viewDoc(cod)
+                    } else {
+                        this.successPrint.status = true
+                        this.successPrint.titulo = response.data.title
+                        this.successPrint.mensagem = response.data.message
+                        this.successPrint.tipo = response.data.type
+                    }
                 }).catch(function (error) {
                     this.erroPrint = true
                     this.loading = false
@@ -309,16 +423,32 @@ export default defineComponent({
     props: ['recurso', 'recursos', 'asset'],
     data() {
         return {
+            successPrint: {
+                status: false,
+                titulo: '',
+                mensagem: '',
+                tipo: ''
+            },
+            impressoras: [
+                '38', '39', '40', '41', 'PDF'
+            ],
+            modalReprint: '',
             CancelToken: '',
             source: [],
             attSrc: '',
             erroPrint: false,
-            successPrint: false,
+            //successPrint: false,
             page: 1,
             loading: false,
             consultas: [],
             buscador: '',
             selectRecurso: this.recurso,
+            form: {
+                apontamento: '',
+                impressora: '',
+                login: '',
+                senha: ''
+            }
             // recursos: [
             //     '180-03', '380-22', '550-13', '380-06', '180-02', '380-21', '160-03', '220-04', '180-04', '180-07', '380-10', '380-14', '160-02', '550-14', '380-02',
             //     '550-08', '550-09', '180-05', '550-07', '550-05', '380-01', '550-06', '380-16', '550-21', '160-01', '180-06', '380-08', '380-12', '220-01', '550-18',
