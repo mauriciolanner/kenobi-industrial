@@ -10,6 +10,8 @@ use App\Force\PDFCode39;
 use App\Force\PDFCode128;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class MecaluxController extends Controller
 {
@@ -35,32 +37,9 @@ class MecaluxController extends Controller
 
     public function APIMecaluxRecurso(Request $request)
     {
-        // $todosApontamentos = DB::connection('protheus')
-        //     ->select("SELECT * from P12OFICIAL.dbo.BMX_VW_APONTAMENTO_MES
-        //     where CODIGO_APONTAMENTO");
+        $dataReferencia = Carbon::now()->subDays(90)->format('Y-m-d');
 
-
-        // foreach ($todosApontamentos as $apontamento) {
-        //     ImpressaoMecalux::firstOrCreate(
-        //         ["CODIGO_APONTAMENTO" => $apontamento->CODIGO_APONTAMENTO],
-        //         [
-        //             "APONTAMENTO_MES" => $apontamento->APONTAMENTO_MES,
-        //             "ID_INTEGRACAO_MES" => $apontamento->ID_INTEGRACAO_MES,
-        //             "DtMov" => $apontamento->DtMov,
-        //             "QUANTIDADE" => $apontamento->QUANTIDADE,
-        //             "PRODUTO" => $apontamento->PRODUTO,
-        //             "RECEITA" => $apontamento->RECEITA,
-        //             "OP" => $apontamento->OP,
-        //             "ARMAZEM" => $apontamento->ARMAZEM,
-        //             "ErrDescription" => $apontamento->ErrDescription,
-        //             "IDPCFACTORY" => $apontamento->IDPCFACTORY,
-        //             "RECURSO" => $apontamento->RECURSO,
-        //             "IMPRESSO" => "0"
-        //         ]
-        //     );
-        // }
-
-        $etiquetas = ImpressaoMecalux::where('IMPRESSO', '0')
+        $etiquetas = ImpressaoMecalux::where('IMPRESSO', '0')->where('DtMov', '>', $dataReferencia . ' 00:00:00.000000')
             ->where('RECURSO', $request->recurso)->whereNull('ESTORNO');
 
         if ($request->busca != '') {
@@ -70,14 +49,28 @@ class MecaluxController extends Controller
         return response()->json($etiquetas->orderBy('APONTAMENTO_MES', 'DESC')->paginate(10));
     }
 
-    public function apontamentoPdf($cod, $printer)
+
+    public function apontamentoPdf(Request $request)
     {
         $turnoAgora = '';
         (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 05:20:00'), Carbon::now()->format('Y-m-d 13:50:00'))) ? $turnoAgora = 'TURNO 1' : '';
         (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 13:50:00'), Carbon::now()->format('Y-m-d 22:00:00'))) ? $turnoAgora = 'TURNO 2' : '';
         (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 22:00:00'), Carbon::now()->addDay()->format('Y-m-d 05:20:00'))) ? $turnoAgora = 'TURNO 3' : '';
 
-        $linha = ImpressaoMecalux::where('CODIGO_APONTAMENTO', $cod)->first();
+        $linha = ImpressaoMecalux::where('CODIGO_APONTAMENTO', $request->cod)->first();
+
+        if ($linha->IMPRESSO == 1) {
+            $user = User::where('user_name', $request->login)->where('status', '1')
+                ->orWhere('email', $request->login)->whereIn('role_id', ['10005', '1'])->first();
+            if (!($user && Hash::check($request->senha, $user->password))) {
+                return response()->json([
+                    'status' => false,
+                    'title' => 'Erro!',
+                    'message' => 'O usuário não pode imprimir essa etiqueta, entrar em contato com um gerente.',
+                    'type' => 'alert-danger'
+                ]);
+            }
+        }
 
         $via = 1;
 
@@ -113,11 +106,11 @@ class MecaluxController extends Controller
         $pdf->SetXY(3, 26);
         $pdf->Cell(100, 10, $linha->PRODUTO . ' - ' . $produto[0]->B1_DESC, 0, 1, "");
 
-        $pdf->Output("F", public_path("PDF\\" . $cod . ".pdf"));
+        $pdf->Output("F", public_path("PDF\\" . $request->cod . ".pdf"));
 
 
-        if ($printer != 'PDF')
-            exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $cod . '.pdf"  \\\192.168.254.71\192.168.255.2' . $printer . '');
+        if ($request->printer != 'PDF')
+            exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $request->cod . '.pdf"  \\\192.168.254.71\192.168.255.2' . $request->printer . '');
 
         ImpressaoMecalux::where('id', $linha->id)->update([
             'IMPRESSO' => 1,
