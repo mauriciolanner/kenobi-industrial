@@ -37,32 +37,9 @@ class MecaluxController extends Controller
 
     public function APIMecaluxRecurso(Request $request)
     {
-        // $todosApontamentos = DB::connection('protheus')
-        //     ->select("SELECT * from P12OFICIAL.dbo.BMX_VW_APONTAMENTO_MES
-        //     where CODIGO_APONTAMENTO");
+        $dataReferencia = Carbon::now()->subDays(90)->format('Y-m-d');
 
-
-        // foreach ($todosApontamentos as $apontamento) {
-        //     ImpressaoMecalux::firstOrCreate(
-        //         ["CODIGO_APONTAMENTO" => $apontamento->CODIGO_APONTAMENTO],
-        //         [
-        //             "APONTAMENTO_MES" => $apontamento->APONTAMENTO_MES,
-        //             "ID_INTEGRACAO_MES" => $apontamento->ID_INTEGRACAO_MES,
-        //             "DtMov" => $apontamento->DtMov,
-        //             "QUANTIDADE" => $apontamento->QUANTIDADE,
-        //             "PRODUTO" => $apontamento->PRODUTO,
-        //             "RECEITA" => $apontamento->RECEITA,
-        //             "OP" => $apontamento->OP,
-        //             "ARMAZEM" => $apontamento->ARMAZEM,
-        //             "ErrDescription" => $apontamento->ErrDescription,
-        //             "IDPCFACTORY" => $apontamento->IDPCFACTORY,
-        //             "RECURSO" => $apontamento->RECURSO,
-        //             "IMPRESSO" => "0"
-        //         ]
-        //     );
-        // }
-
-        $etiquetas = ImpressaoMecalux::where('IMPRESSO', '0')
+        $etiquetas = ImpressaoMecalux::where('IMPRESSO', '0')->where('DtMov', '>', $dataReferencia . ' 00:00:00.000000')
             ->where('RECURSO', $request->recurso)->whereNull('ESTORNO');
 
         if ($request->busca != '') {
