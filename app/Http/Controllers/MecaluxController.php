@@ -42,6 +42,7 @@ class MecaluxController extends Controller
         $etiquetas = ImpressaoMecalux::where('IMPRESSO', '0')->where('DtMov', '>', $dataReferencia . ' 00:00:00.000000')
             ->where('RECURSO', $request->recurso)->whereNull('ESTORNO');
 
+
         if ($request->busca != '') {
             $etiquetas = ImpressaoMecalux::whereNull('ESTORNO')->where('OP', 'LIKE', '%' . $request->busca . '%')->orWhere('APONTAMENTO_MES', 'LIKE', '%' . $request->busca . '%');
         }

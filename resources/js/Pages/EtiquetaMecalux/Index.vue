@@ -89,7 +89,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="dropdown" v-if="consulta.ESTORNO != 'E' && (!consulta.IMPRESSO == 1)">
+                                    <div class="dropdown" v-if="consulta.ESTORNO != 'E' && consulta.IMPRESSO != 1">
                                         <button class="btn btn-info dropdown-toggle" type="button" data-bs-toggle="dropdown"
                                             aria-expanded="false">
                                             <i class="bi bi-printer" style="font-size: 19px;"></i>
