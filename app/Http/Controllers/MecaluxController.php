@@ -60,18 +60,18 @@ class MecaluxController extends Controller
 
         $linha = ImpressaoMecalux::where('CODIGO_APONTAMENTO', $request->cod)->first();
 
-        if ($linha->IMPRESSO == 1) {
-            $user = User::where('user_name', $request->login)->where('status', '1')
-                ->orWhere('email', $request->login)->whereIn('role_id', ['10005', '1'])->first();
-            if (!($user && Hash::check($request->senha, $user->password))) {
-                return response()->json([
-                    'status' => false,
-                    'title' => 'Erro!',
-                    'message' => 'O usuário não pode imprimir essa etiqueta, entrar em contato com um gerente.',
-                    'type' => 'alert-danger'
-                ]);
-            }
-        }
+        // if ($linha->IMPRESSO == 1) {
+        //     $user = User::where('user_name', $request->login)->where('status', '1')
+        //         ->orWhere('email', $request->login)->whereIn('role_id', ['10005', '1', '10007'])->first();
+        //     if (!($user && Hash::check($request->senha, $user->password))) {
+        //         return response()->json([
+        //             'status' => false,
+        //             'title' => 'Erro!',
+        //             'message' => 'O usuário não pode imprimir essa etiqueta, entrar em contato com um gerente.',
+        //             'type' => 'alert-danger'
+        //         ]);
+        //     }
+        // }
 
         $via = 1;
 
@@ -110,9 +110,12 @@ class MecaluxController extends Controller
         $pdf->Output("F", public_path("PDF\\" . $request->cod . ".pdf"));
 
 
-        if ($request->printer != 'PDF')
-            exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $request->cod . '.pdf"  \\\192.168.254.71\192.168.255.2' . $request->printer . '');
-
+        if ($request->printer != 'PDF'){
+            if($request->printer == '19')
+                exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $request->cod . '.pdf"  \\\192.168.254.71\192.168.254.2' . $request->printer . '');
+            else
+                exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $request->cod . '.pdf"  \\\192.168.254.71\192.168.255.2' . $request->printer . '');
+        }
         ImpressaoMecalux::where('id', $linha->id)->update([
             'IMPRESSO' => 1,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s')

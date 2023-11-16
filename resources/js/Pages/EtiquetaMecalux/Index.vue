@@ -96,6 +96,8 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item fs-3" href="#"
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 19)">Impressora 19</a></li>
+                                            <li><a class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 38)">Impressora 38</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 39)">Impressora 39</a></li>
@@ -414,8 +416,8 @@ export default defineComponent({
             });
         },
         viewDoc(arquivo) {
-            console.log(this.asset + "public/PDF/" + arquivo + '.pdf')
-            this.attSrc = this.asset + "public/PDF/" + arquivo + '.pdf';
+            console.log(this.asset + "PDF/" + arquivo + '.pdf')
+            this.attSrc = this.asset + "PDF/" + arquivo + '.pdf';
             var modalAtt = new bootstrap.Modal(document.getElementById("modalAnexos"), {});
             modalAtt.show()
         },
