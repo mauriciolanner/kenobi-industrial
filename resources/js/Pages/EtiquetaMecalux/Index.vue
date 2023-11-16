@@ -432,7 +432,7 @@ export default defineComponent({
                 tipo: ''
             },
             impressoras: [
-                '38', '39', '40', '41', 'PDF'
+                '19', '38', '39', '40', '41', 'PDF'
             ],
             modalReprint: '',
             CancelToken: '',
