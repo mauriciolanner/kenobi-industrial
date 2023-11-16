@@ -32,7 +32,7 @@
                     </VueMultiselect>
                 </div>
                 <div class="col-6">
-                    <jet-input-search id="buscar" v-on:keyup.enter="buscar" type="text" v-model="buscador"
+                    <input class="form-control" autocomplete="off" v-on:keyup.enter="buscar" type="text" v-model="buscador"
                         placeholder="Buscar..." />
                 </div>
                 <div class="col-1">
@@ -144,14 +144,14 @@
                                     <h3>Autorização gerencial</h3>
                                     <div class="mb-3">
                                         <div class="input-group mb-3">
-                                            <input type="text" class="form-control" id="login" name="login"
+                                            <input type="text" autocomplete="off" class="form-control"
                                                 placeholder="Nome de usuário" v-model="form.login">
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <div class="input-group mb-3">
-                                            <input type="password" class="form-control" id="senha" placeholder="Senha"
-                                                v-model="form.senha">
+                                            <input type="password" autocomplete="off" class="form-control"
+                                                placeholder="Senha" v-model="form.senha">
                                         </div>
                                     </div>
                                     <div class="mb-3">
