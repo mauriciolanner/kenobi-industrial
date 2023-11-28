@@ -96,23 +96,29 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 19, consulta.id)">Impressora 19</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 19, consulta.id)">Impressora
+                                                    19</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 38, consulta.id)">Impressora 38</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 38, consulta.id)">Impressora
+                                                    38</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 39, consulta.id)">Impressora 39</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 39, consulta.id)">Impressora
+                                                    39</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 40, consulta.id)">Impressora 40</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 40, consulta.id)">Impressora
+                                                    40</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 41, consulta.id)">Impressora 41</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 41, consulta.id)">Impressora
+                                                    41</a></li>
                                             <li v-if="$page.props.user.user_name != 'producao'"><a
                                                     class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 'PDF', consulta.id)">EM PDF</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 'PDF', consulta.id)">EM
+                                                    PDF</a></li>
                                         </ul>
                                     </div>
                                     <div v-if="consulta.ESTORNO != 'E' && consulta.IMPRESSO == 1">
                                         <button class="btn btn-info" type="button"
-                                            @click="reprint(consulta.CODIGO_APONTAMENTO)">
+                                            @click="reprint(consulta.CODIGO_APONTAMENTO, consulta.id)">
                                             <i class="bi bi-printer" style="font-size: 19px;"></i>
                                         </button>
                                     </div>
@@ -142,7 +148,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body" v-if="!loadingPrint">
                                     <h3>Autorização gerencial</h3>
                                     <div class="mb-3">
                                         <div class="input-group mb-3">
@@ -164,6 +170,9 @@
                                             </VueMultiselect>
                                         </div>
                                     </div>
+                                </div>
+                                <div v-else class="modal-body text-center">
+                                    Carregando impressão...
                                 </div>
 
                                 <div class="modal-footer">
@@ -246,16 +255,13 @@ export default defineComponent({
         buscar() {
             this.dadosConsulta(this.page)
         },
-        reprint(cod) {
+        reprint(cod, id) {
             this.modalReprint.show();
             this.form.apontamento = cod
+            this.form.id = id
         },
         async reprintAxio() {
-            console.log(this.form.apontamento);
-            console.log(this.form.impressora);
-            console.log(this.form.login);
-            console.log(this.form.senha);
-            this.loading = true
+            this.loadingPrint = true
             this.erroPrint = false
             this.successPrint.status = false
             this.successPrint.titulo = ''
@@ -264,6 +270,7 @@ export default defineComponent({
             await axios.get(route('mecalux.apontamentoPdf'),
                 {
                     params: {
+                        id: this.form.id,
                         cod: this.form.apontamento,
                         printer: this.form.impressora,
                         login: this.form.login,
@@ -279,9 +286,8 @@ export default defineComponent({
                         if (this.form.impressora == 'PDF') {
                             this.viewDoc(this.form.apontamento)
                         }
-                        this.loading = false
+                        this.loadingPrint = false
                         this.dadosConsulta(this.page)
-                        this.modalReprint.hide();
                         this.form.apontamento = ''
                         this.form.impressora = ''
                         this.form.login = ''
@@ -292,9 +298,11 @@ export default defineComponent({
                         this.successPrint.mensagem = response.data.message
                         this.successPrint.tipo = response.data.type
                     }
+                    this.modalReprint.hide();
                 }).catch(function (error) {
                     this.erroPrint = true
-                    this.loading = false
+                    this.loadingPrint = false
+                    this.modalReprint.hide();
                 })
         },
         async goPrint(cod, printer, id) {
@@ -426,6 +434,7 @@ export default defineComponent({
     props: ['recurso', 'recursos', 'asset'],
     data() {
         return {
+            loadingPrint: false,
             successPrint: {
                 status: false,
                 titulo: '',
@@ -450,7 +459,8 @@ export default defineComponent({
                 apontamento: '',
                 impressora: '',
                 login: '',
-                senha: ''
+                senha: '',
+                id: ''
             }
             // recursos: [
             //     '180-03', '380-22', '550-13', '380-06', '180-02', '380-21', '160-03', '220-04', '180-04', '180-07', '380-10', '380-14', '160-02', '550-14', '380-02',
