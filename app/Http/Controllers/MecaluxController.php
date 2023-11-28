@@ -58,7 +58,7 @@ class MecaluxController extends Controller
         (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 13:50:00'), Carbon::now()->format('Y-m-d 22:00:00'))) ? $turnoAgora = 'TURNO 2' : '';
         (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 22:00:00'), Carbon::now()->addDay()->format('Y-m-d 05:20:00'))) ? $turnoAgora = 'TURNO 3' : '';
 
-        $linha = ImpressaoMecalux::where('CODIGO_APONTAMENTO', $request->cod)->first();
+        $linha = ImpressaoMecalux::where('id', $request->id)->first();
 
         // if ($linha->IMPRESSO == 1) {
         //     $user = User::where('user_name', $request->login)->where('status', '1')

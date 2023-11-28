@@ -96,18 +96,18 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 19)">Impressora 19</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 19, consulta.id)">Impressora 19</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 38)">Impressora 38</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 38, consulta.id)">Impressora 38</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 39)">Impressora 39</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 39, consulta.id)">Impressora 39</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 40)">Impressora 40</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 40, consulta.id)">Impressora 40</a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 41)">Impressora 41</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 41, consulta.id)">Impressora 41</a></li>
                                             <li v-if="$page.props.user.user_name != 'producao'"><a
                                                     class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 'PDF')">EM PDF</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 'PDF', consulta.id)">EM PDF</a></li>
                                         </ul>
                                     </div>
                                     <div v-if="consulta.ESTORNO != 'E' && consulta.IMPRESSO == 1">
@@ -297,7 +297,7 @@ export default defineComponent({
                     this.loading = false
                 })
         },
-        async goPrint(cod, printer) {
+        async goPrint(cod, printer, id) {
             this.loading = true
             this.erroPrint = false
             this.successPrint.status = false
@@ -308,7 +308,8 @@ export default defineComponent({
                 {
                     params: {
                         cod: cod,
-                        printer: printer
+                        printer: printer,
+                        id: id,
                     }
                 })
                 .then(response => {
