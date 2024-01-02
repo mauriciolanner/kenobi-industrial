@@ -23,6 +23,7 @@
         "nascent-africa/jetstrap": "^2.5",
         "pusher/pusher-php-server": "^7.0",
         "ricorocks-digital-agency/soap": "^1.6",
+        "setasign/fpdi": "^2.6",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "tightenco/ziggy": "^1.0"
     },

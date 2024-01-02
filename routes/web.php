@@ -11,6 +11,7 @@ use App\Http\Controllers\ConsultaApontamentoController;
 use App\Http\Controllers\ConsultaApontamentoMatriz;
 use App\Http\Controllers\ConsultaSaldoLOController;
 use App\Http\Controllers\MecaluxController;
+use App\Http\Controllers\EtiquetaFardoController;
 use App\Http\Controllers\TesteController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -137,4 +138,10 @@ Route::middleware(['auth:sanctum', 'verified'])->controller(MecaluxController::c
     Route::get('/etiquetaMecalux', 'index')->name('mecalux.index');
     Route::get('/Api/etiquetaMecalux', 'APIMecaluxRecurso')->name('mecalux.apiEtiquetas');
     Route::get('/Api/etiquetaMecalux/print', 'apontamentoPdf')->name('mecalux.apontamentoPdf');
+});
+
+//rotas de etiqueta fardo
+Route::middleware(['auth:sanctum', 'verified'])->controller(EtiquetaFardoController::class)->group(function () {
+    Route::get('/API/EtiquetaFardo', 'APIEtiquetaFardo')->name('EtiqFardo.APIEtiquetaFardo');
+    Route::get('/API/APIProgramacaoMaquina/{recurso}', 'APIProgramacaoMaquina')->name('EtiqFardo.APIProgramacaoMaquina');
 });

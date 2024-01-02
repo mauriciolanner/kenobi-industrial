@@ -25,16 +25,16 @@
 
         <div class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top">
             <div class="row mb-3">
-                <div class="col-md-3">
+                <form class="col-md-2" autocomplete="off">
                     <VueMultiselect v-model="selectRecurso" :placeholder="'Por recurso'" :selectedLabel="'Selecionado'"
                         :deselectLabel="'remover'" @select="dadosConsulta(page)" :selectLabel="'Selecionar'"
                         :options="recursos">
                     </VueMultiselect>
-                </div>
-                <div class="col-6">
-                    <input class="form-control" autocomplete="off" v-on:keyup.enter="buscar" type="text" v-model="buscador"
-                        placeholder="Buscar..." />
-                </div>
+                </form>
+                <form class="col-5" autocomplete="off">
+                    <input class="form-control" autocomplete="false" name="buscador" v-on:keyup.enter="buscar" type="text"
+                        v-model="buscador" placeholder="Buscar..." />
+                </form>
                 <div class="col-1">
                     <button class="btn btn-success" @click="buscar">
                         <div v-if="loading" class="spinner-border spinner-border-sm" role="status">
@@ -49,6 +49,14 @@
                             <span class="visually-hidden">Carregando...</span>
                         </div>
                         <i v-else class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </div>
+                <div class="col-3">
+                    <button class="btn w-100 btn-info" v-if="selectRecurso" @click="programacaoRecurso">
+                        <div v-if="loading" class="spinner-border spinner-border-sm" role="status">
+                            <span class="visually-hidden">Carregando...</span>
+                        </div>
+                        Etiqueta de fardo
                     </button>
                 </div>
             </div>
@@ -96,8 +104,9 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li><a class="dropdown-item fs-3" href="#"
-                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 19, consulta.id)">Impressora
-                                                    19</a></li>
+                                                    @click="goPrint(consulta.CODIGO_APONTAMENTO, 'GRANDE', consulta.id)">
+                                                    Impressora grande
+                                                </a></li>
                                             <li><a class="dropdown-item fs-3" href="#"
                                                     @click="goPrint(consulta.CODIGO_APONTAMENTO, 38, consulta.id)">Impressora
                                                     38</a></li>
@@ -152,14 +161,14 @@
                                     <h3>Autorização gerencial</h3>
                                     <div class="mb-3">
                                         <div class="input-group mb-3">
-                                            <input type="text" autocomplete="off" class="form-control"
+                                            <input type="text" name="login" class="form-control"
                                                 placeholder="Nome de usuário" v-model="form.login">
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <div class="input-group mb-3">
-                                            <input type="password" autocomplete="off" class="form-control"
-                                                placeholder="Senha" v-model="form.senha">
+                                            <input type="password" name="password" class="form-control" placeholder="Senha"
+                                                v-model="form.senha">
                                         </div>
                                     </div>
                                     <div class="mb-3">
@@ -194,6 +203,81 @@
                                 </div>
                                 <div class="modal-body">
                                     <iframe :src="attSrc" height="450px" width="100%"></iframe>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">FECHAR</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ModalOps -->
+                    <div class="modal fade" id="modalOps" tabindex="-1" aria-labelledby="modalOpsLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header text-end">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="dropdown" v-if="!loginFardo" v-for="ops in opsPrograma">
+                                        <button class="btn btn-info w-100 mb-3 p-2" style="border-radius: 12px;"
+                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <h3>{{ ops.OP }}</h3>
+                                            {{ ops.Produto }}
+                                        </button>
+
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item fs-3" href="#" @click="goPrintFardo(40, ops.OP)">
+                                                    Impressora 40
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item fs-3" href="#" @click="goPrintFardo(41, ops.OP)">
+                                                    Impressora 41
+                                                </a>
+                                            </li>
+                                            <li v-if="$page.props.user.user_name != 'producao'">
+                                                <a class="dropdown-item fs-3" href="#" @click="goPrintFardo('PDF', ops.OP)">
+                                                    EM PDF
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div v-else>
+                                        <h3 class="mb-3">Autorização gerencial</h3>
+                                        <div class="mb-3">
+                                            <div class="input-group mb-3">
+                                                <input type="text" name="login" class="form-control"
+                                                    placeholder="Nome de usuário" v-model="form.login">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="input-group mb-3">
+                                                <input type="password" name="password" class="form-control"
+                                                    placeholder="Senha" v-model="form.senha">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="input-group mb-3">
+                                                <VueMultiselect v-model="form.impressora"
+                                                    :placeholder="'Esolher impressora'" :selectedLabel="'Selecionado'"
+                                                    :deselectLabel="'remover'" :selectLabel="'Selecionar'"
+                                                    :options="impressoras">
+                                                </VueMultiselect>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button class="btn btn-success w-100"
+                                                @click="goPrintFardo(form.impressora, null)">IMPRIMIR</button>
+                                        </div>
+                                    </div>
+                                    <div class="md-3 text-danger">
+                                        {{ this.successPrint.mensagem }}
+                                    </div>
+
                                 </div>
 
                                 <div class="modal-footer">
@@ -248,10 +332,31 @@ export default defineComponent({
     },
     mounted() {
         this.modalReprint = new bootstrap.Modal(document.getElementById("modalReprint"), {});
+        this.modalOps = new bootstrap.Modal(document.getElementById("modalOps"), {});
         this.dadosConsulta(this.page);
-        setInterval(() => this.dadosConsulta(this.page), 1000 * 20);
+        this.buscaIntervalos();
+    },
+    beforeUnmount() {
+        clearInterval(this.dadosContTempo)
     },
     methods: {
+        async programacaoRecurso() {
+            this.loading = true
+            await axios.get(route('EtiqFardo.APIProgramacaoMaquina', this.selectRecurso))
+                .then(response => {
+                    this.opsPrograma = response.data
+                    this.successPrint.mensagem = ''
+                    this.modalOps.show();
+                    this.loading = false
+                }).catch(function (error) {
+                    this.erroPrint = true
+                    this.loading = false
+                    this.modalOps.hide();
+                })
+        },
+        buscaIntervalos() {
+            this.dadosContTempo = setInterval(() => this.dadosConsulta(this.page), 1000 * 20);
+        },
         buscar() {
             this.dadosConsulta(this.page)
         },
@@ -335,6 +440,50 @@ export default defineComponent({
                         this.successPrint.titulo = response.data.title
                         this.successPrint.mensagem = response.data.message
                         this.successPrint.tipo = response.data.type
+                    }
+                }).catch(function (error) {
+                    this.erroPrint = true
+                    this.loading = false
+                })
+        },
+        async goPrintFardo(printer, op) {
+            if (op != null) {
+                this.opReimprimir = op;
+            }
+            this.loading = true;
+            this.erroPrint = false;
+            this.successPrint.status = false;
+            this.successPrint.titulo = '';
+            this.successPrint.mensagem = '';
+            this.successPrint.tipo = '';
+            await axios.get(route('EtiqFardo.APIEtiquetaFardo'),
+                {
+                    params: {
+                        printer: printer,
+                        op: this.opReimprimir,
+                        login: this.form
+                    }
+                })
+                .then(response => {
+                    console.log('teste')
+                    if (response.data.status) {
+                        this.successPrint.status = true
+                        this.successPrint.titulo = 'Sucesso!'
+                        this.successPrint.mensagem = 'Etiqueta Impressa com sucesso'
+                        this.successPrint.tipo = 'alert-success'
+                        this.loading = false
+                        this.dadosConsulta(this.page)
+                        this.modalOps.hide();
+                        if (printer == 'PDF') {
+                            this.viewDoc(cod)
+                        }
+                        this.opReimprimir = ''
+                    } else {
+                        this.successPrint.mensagem = response.data.mensagem
+
+                        if (response.data.login) {
+                            this.loginFardo = response.data.login
+                        }
                     }
                 }).catch(function (error) {
                     this.erroPrint = true
@@ -434,6 +583,10 @@ export default defineComponent({
     props: ['recurso', 'recursos', 'asset'],
     data() {
         return {
+            opReimprimir: '',
+            loginFardo: false,
+            opsPrograma: [],
+            dadosContTempo: null,
             loadingPrint: false,
             successPrint: {
                 status: false,
@@ -442,9 +595,10 @@ export default defineComponent({
                 tipo: ''
             },
             impressoras: [
-                '19', '38', '39', '40', '41', 'PDF'
+                'GRANDE', '38', '39', '40', '41', 'PDF'
             ],
             modalReprint: '',
+            modalOps: '',
             CancelToken: '',
             source: [],
             attSrc: '',
