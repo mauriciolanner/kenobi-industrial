@@ -155,7 +155,7 @@ class EtiquetaFardoController extends Controller
 
         if ($printer != 'PDF') {
             for ($i = 0; $i < $totalFor; $i++) {
-                if ($printer == '19')
+                if ($printer == 'GRANDE')
                     exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\storage\PDF\\' . $dadosOp->OP_REAL . '.pdf"  \\\192.168.254.71\192.168.254.236');
                 else
                     exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\storage\PDF\\' . $dadosOp->OP_REAL . '.pdf"  \\\192.168.254.71\192.168.255.2' . $printer . '');
