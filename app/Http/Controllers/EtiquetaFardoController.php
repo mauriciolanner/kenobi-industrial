@@ -52,7 +52,7 @@ class EtiquetaFardoController extends Controller
                     }
                 }
 
-                $printDados = $this->toPrint($dadosOp[0], $login, $request->printerF);
+                $printDados = $this->toPrint($dadosOp[0], $login, $request->printer);
             } else {
                 $printDados = [
                     'status' => false,
@@ -152,7 +152,7 @@ class EtiquetaFardoController extends Controller
         $pdf->Cell(48, 1, 'BOMIX INDUSTRIA DE EMBALAGENS LTDA', 0, 0, "C");
 
         $pdf->Output("F", public_path("\storage\PDF\\" . $dadosOp->OP_REAL . ".pdf"));
-
+  
         if ($printer != 'PDF') {
             for ($i = 0; $i < $totalFor; $i++) {
                 if ($printer == 'GRANDE')

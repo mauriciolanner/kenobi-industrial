@@ -108,7 +108,7 @@ class MecaluxController extends Controller
 
         $pdf->Output("F", public_path("PDF\\" . $request->cod . ".pdf"));
 
-
+        
         if ($request->printer != 'PDF') {
             if ($request->printer == 'GRANDE')
                 exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\PDF\\' . $request->cod . '.pdf"  \\\192.168.254.71\192.168.254.236');
