@@ -160,16 +160,16 @@
                                 <div class="modal-body" v-if="!loadingPrint">
                                     <h3>Autorização gerencial</h3>
                                     <div class="mb-3">
-                                        <div class="input-group mb-3">
+                                        <form class="input-group mb-3" autocomplete="off">
                                             <input type="text" name="login" class="form-control"
                                                 placeholder="Nome de usuário" v-model="form.login">
-                                        </div>
+                                        </form>
                                     </div>
                                     <div class="mb-3">
-                                        <div class="input-group mb-3">
+                                        <form class="input-group mb-3" autocomplete="off">
                                             <input type="password" name="password" class="form-control" placeholder="Senha"
                                                 v-model="form.senha">
-                                        </div>
+                                        </form>
                                     </div>
                                     <div class="mb-3">
                                         <div class="input-group mb-3">
@@ -220,7 +220,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body" v-if="!loadingPrint">
                                     <div class="dropdown" v-if="!loginFardo" v-for="ops in opsPrograma">
                                         <button class="btn btn-info w-100 mb-3 p-2" style="border-radius: 12px;"
                                             type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -249,16 +249,16 @@
                                     <div v-else>
                                         <h3 class="mb-3">Autorização gerencial</h3>
                                         <div class="mb-3">
-                                            <div class="input-group mb-3">
+                                            <form class="input-group mb-3" autocomplete="off">
                                                 <input type="text" name="login" class="form-control"
                                                     placeholder="Nome de usuário" v-model="form.login">
-                                            </div>
+                                            </form>
                                         </div>
                                         <div class="mb-3">
-                                            <div class="input-group mb-3">
+                                            <form class="input-group mb-3" autocomplete="off">
                                                 <input type="password" name="password" class="form-control"
                                                     placeholder="Senha" v-model="form.senha">
-                                            </div>
+                                            </form>
                                         </div>
                                         <div class="mb-3">
                                             <div class="input-group mb-3">
@@ -278,6 +278,9 @@
                                         {{ this.successPrint.mensagem }}
                                     </div>
 
+                                </div>
+                                <div v-else class="modal-body text-center">
+                                    Carregando impressão...
                                 </div>
 
                                 <div class="modal-footer">
@@ -348,7 +351,7 @@ export default defineComponent({
                     this.successPrint.mensagem = ''
                     this.modalOps.show();
                     this.loading = false
-                }).catch(function (error) {
+                }).catch(error => {
                     this.erroPrint = true
                     this.loading = false
                     this.modalOps.hide();
@@ -404,7 +407,7 @@ export default defineComponent({
                         this.successPrint.tipo = response.data.type
                     }
                     this.modalReprint.hide();
-                }).catch(function (error) {
+                }).catch(error => {
                     this.erroPrint = true
                     this.loadingPrint = false
                     this.modalReprint.hide();
@@ -441,7 +444,7 @@ export default defineComponent({
                         this.successPrint.mensagem = response.data.message
                         this.successPrint.tipo = response.data.type
                     }
-                }).catch(function (error) {
+                }).catch(error => {
                     this.erroPrint = true
                     this.loading = false
                 })
@@ -450,6 +453,7 @@ export default defineComponent({
             if (op != null) {
                 this.opReimprimir = op;
             }
+            this.loadingPrint = true
             this.loading = true;
             this.erroPrint = false;
             this.successPrint.status = false;
@@ -465,7 +469,7 @@ export default defineComponent({
                     }
                 })
                 .then(response => {
-                    console.log('teste')
+                    this.loadingPrint = false
                     if (response.data.status) {
                         this.successPrint.status = true
                         this.successPrint.titulo = 'Sucesso!'
@@ -485,7 +489,8 @@ export default defineComponent({
                             this.loginFardo = response.data.login
                         }
                     }
-                }).catch(function (error) {
+                }).catch(error => {
+                    this.loadingPrint = false
                     this.erroPrint = true
                     this.loading = false
                 })

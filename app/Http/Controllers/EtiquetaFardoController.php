@@ -68,6 +68,7 @@ class EtiquetaFardoController extends Controller
     static function toPrint($dadosOp, $login, $printer)
     {
         $verifica = EtiquetaFardo::where('OP', $dadosOp->OP_REAL)->orderBy('id', 'desc')->first();
+
         $via = 1;
         $totalEtiqueta = (intval($dadosOp->FARDO_PALLET) + intval($dadosOp->FARDO_PALLET) % 2) + 4;
         $totalFor = $totalEtiqueta / 2;
@@ -115,9 +116,9 @@ class EtiquetaFardoController extends Controller
         $pdf->SetFont('helvetica', 'B', 5.5);
 
         $pdf->SetXY(1, 1);
-        $pdf->MultiCell(48, 3, $dadosOp->C2_BRPROD, 0, 1);
+        $pdf->MultiCell(48, 2, $dadosOp->C2_BRPROD, 0, 1);
         $pdf->SetXY(47, 1);
-        $pdf->MultiCell(48, 3, $dadosOp->C2_BRPROD, 0, 1);
+        $pdf->MultiCell(48, 2, $dadosOp->C2_BRPROD, 0, 1);
         $pdf->SetFont('helvetica', 'B', 5.5);
 
         $pdf->SetXY(1, 9);
@@ -152,7 +153,7 @@ class EtiquetaFardoController extends Controller
         $pdf->Cell(48, 1, 'BOMIX INDUSTRIA DE EMBALAGENS LTDA', 0, 0, "C");
 
         $pdf->Output("F", public_path("\storage\PDF\\" . $dadosOp->OP_REAL . ".pdf"));
-  
+
         if ($printer != 'PDF') {
             for ($i = 0; $i < $totalFor; $i++) {
                 if ($printer == 'GRANDE')
