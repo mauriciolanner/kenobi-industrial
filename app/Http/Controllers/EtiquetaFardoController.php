@@ -70,6 +70,7 @@ class EtiquetaFardoController extends Controller
         $verifica = EtiquetaFardo::where('OP', $dadosOp->OP_REAL)->orderBy('id', 'desc')->first();
         $via = 1;
         $totalEtiqueta = (intval($dadosOp->FARDO_PALLET) + intval($dadosOp->FARDO_PALLET) % 2) + 4;
+        $totalFor = $totalEtiqueta / 2;
 
         if ($verifica == null) {
             $verifica =  EtiquetaFardo::create([
@@ -153,7 +154,7 @@ class EtiquetaFardoController extends Controller
         $pdf->Output("F", public_path("\storage\PDF\\" . $dadosOp->OP_REAL . ".pdf"));
 
         if ($printer != 'PDF') {
-            for ($i = 0; $i < 10; $i++) {
+            for ($i = 0; $i < $totalFor; $i++) {
                 if ($printer == '19')
                     exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\storage\PDF\\' . $dadosOp->OP_REAL . '.pdf"  \\\192.168.254.71\192.168.254.236');
                 else
