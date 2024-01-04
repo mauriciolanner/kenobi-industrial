@@ -6,10 +6,11 @@
                     <i class="bi bi-camera-fill"></i></button>
             </div>
             <div class="col-md-12">
-                <button class="btn btn-info w-100 mt-4 btn-camera" @click="comparar = !comparar"
-                    :class="{ 'btn-success': comparar }">
-                    <div v-if="comparar">Desativar Comparar</div>
-                    <div v-else>Ativar Comparar</div>
+                <button class="btn btn-info w-100 mt-4 btn-camera" @click="comparar = !comparar" :class="{ 'btn-success': comparar }">
+                    <h4>
+                        <div v-if="comparar">Desativar Comparar</div>
+                        <div v-else>Ativar Comparar</div>
+                    </h4>
                 </button>
             </div>
         </div>
@@ -85,7 +86,7 @@
                             </ul>
                         </div>
                         <div v-if="!pallet.status" class="col-md-12">
-                            <h3>Nada encontrado</h3>
+                            <h4>Nada encontrado</h4>
                         </div>
                     </div>
                     <div class="row" v-if="pallet && pallet.op && pallet.status">
@@ -111,7 +112,7 @@
                         <div class="col-md-12">
                             <div class="card card-login shadow-sm p-3 mt-4 mb-4 text-center" :class="{
                                 'bg-success': resultComprar,
-                                'bg-danger': !resultComprar
+                                'bg-danger text-light': !resultComprar
                             }">
                                 <h4 v-if="resultComprar">Pallet Liberado</h4>
                                 <h4 v-else>Pallet divergente</h4>
