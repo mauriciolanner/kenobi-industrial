@@ -2,8 +2,15 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <button class="btn btn-success w-100 mt-4 btn-camera" @click="camera = !camera, pallet = null"><i
-                        class="bi bi-camera-fill"></i></button>
+                <button class="btn btn-success w-100 mt-4 btn-camera" @click="camera = !camera, pallet = null">
+                    <i class="bi bi-camera-fill"></i></button>
+            </div>
+            <div class="col-md-12">
+                <button class="btn btn-info w-100 mt-4 btn-camera" @click="comparar = !comparar"
+                    :class="{ 'btn-success': comparar }">
+                    <div v-if="comparar">Desativar Comparar</div>
+                    <div v-else>Ativar Comparar</div>
+                </button>
             </div>
         </div>
         <div class="row">
@@ -12,10 +19,10 @@
                     <div class="row">
                         <div class="col-10">
                             <label class="form-label">Num etiqueta / Num palete</label>
-                            <input type="text" class="form-control" v-model="codigo" v-on:keyup.enter="carregaDados">
+                            <input type="text" class="form-control" v-model="codigo" v-on:keyup.enter="modoCompara()">
                         </div>
                         <div class="col-2">
-                            <button class="btn btn-info w-100" @click="carregaDados" style="margin-top: 29px;">
+                            <button class="btn btn-info w-100" @click="modoCompara()" style="margin-top: 29px;">
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
@@ -34,7 +41,14 @@
                     </qrcode-stream>
                 </div>
                 <div class="card bg-white card-login shadow-sm p-3 mt-4 mb-4">
-                    <div class="row" v-if="pallet">
+                    <div class="row" v-if="loadingDados">
+                        <div class="col-md-12 text-center">
+                            <div class="spinner-border text-info" style="width: 5rem; height: 5rem" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" v-if="pallet && pallet.pallet">
                         <!-- <h3>{{ codigo }}</h3> -->
                         <div v-if="pallet.status" class="col-md-12">
                             <div class="card card-login shadow-sm p-3 mt-4 mb-4 text-center" :class="{
@@ -71,7 +85,37 @@
                             </ul>
                         </div>
                         <div v-if="!pallet.status" class="col-md-12">
-                            Nada encontrado
+                            <h3>Nada encontrado</h3>
+                        </div>
+                    </div>
+                    <div class="row" v-if="pallet && pallet.op && pallet.status">
+                        <div class="col-md-12">
+                            <b>OP: {{ pallet.op[0].OP }}</b><br>
+                            <b>Cod Prod: {{ pallet.op[0].PRODUTO }}</b><br>
+                            <b>Desc: {{ pallet.op[0].DESCRICAO }}</b><br>
+                            <b>Pallets:</b>
+                            <ul class="list-group mt-3" v-for="  op   in   pallet.op  ">
+                                <li class="list-group-item"><b>Cod apontamento: </b>{{ op.CODIGO_APONTAMENTO }}</li>
+                                <li class="list-group-item"><b>MES: </b>{{ op.APONTAMENTO_MES }}</li>
+                                <li class="list-group-item"><b>Solução: </b>{{ op.SOLUCAO }}</li>
+                                <li class="list-group-item"><b>Status Mecalux: </b>{{ op.STATIONBASECODE }}</li>
+                                <li class="list-group-item"><b>Integração MES: </b>{{ op.ID_INTEGRACAO_MES }}</li>
+                                <li class="list-group-item"><b>Data Movimento: </b>{{ dateTask(op.DtMov) }}</li>
+                                <li class="list-group-item"><b>Recurso: </b>{{ op.RECURSO }}</li>
+                                <li class="list-group-item"><b>Qtd: </b>{{ parseInt(op.QUANTIDADE) }}</li>
+                                <li class="list-group-item"><b>Data/Hora apontamento: </b>{{ dateTask(op.DATA_HORA) }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row" v-if="resultComprar != null">
+                        <div class="col-md-12">
+                            <div class="card card-login shadow-sm p-3 mt-4 mb-4 text-center" :class="{
+                                'bg-success': resultComprar,
+                                'bg-danger': !resultComprar
+                            }">
+                                <h4 v-if="resultComprar">Pallet Liberado</h4>
+                                <h4 v-else>Pallet divergente</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -101,9 +145,13 @@ export default defineComponent({
 
     data() {
         return {
+            comparar: false,
+            etiquetaUm: null,
+            etiquetaDois: null,
+            resultComprar: null,
             camera: false,
             codigo: '',
-            formato: ["code_128", "code_39", "code_93"],
+            formato: ["code_128", "code_39", "code_93", "qr_code"],
             loadingDados: false,
             pallet: null,
             success: [
@@ -137,7 +185,14 @@ export default defineComponent({
         }
     },
     methods: {
+        modoCompara() {
+            if (this.comparar)
+                this.compararEtiqueta()
+            else
+                this.carregaDados()
+        },
         async carregaDados() {
+            this.mensagemRetorno = ''
             this.loadingDados = true
             await axios.get(route('API.conuslta.OP'), {
                 params: {
@@ -147,6 +202,15 @@ export default defineComponent({
                 this.pallet = response.data;
                 this.loadingDados = false
             });
+        },
+        compararEtiqueta() {
+            if (this.etiquetaUm == null)
+                this.etiquetaUm = this.codigo
+            else if (this.etiquetaDois == null)
+                this.etiquetaDois = this.codigo
+            if (this.etiquetaUm != null && this.etiquetaDois != null)
+                this.resultComprar = (this.etiquetaUm.substring(0, 8) == this.etiquetaDois.substring(0, 8))
+
         },
         paintOutline(detectedCodes, ctx) {
             for (const detectedCode of detectedCodes) {
@@ -164,10 +228,39 @@ export default defineComponent({
                 ctx.stroke()
             }
         },
+        dateTask(dateIni) {
+            var date = new Date(dateIni);
+            var mes = '';
+            (date.getMonth() == 0) ? mes = 'Jan' : '';
+            (date.getMonth() == 1) ? mes = 'Fev' : '';
+            (date.getMonth() == 2) ? mes = 'Mar' : '';
+            (date.getMonth() == 3) ? mes = 'Abr' : '';
+            (date.getMonth() == 4) ? mes = 'Mai' : '';
+            (date.getMonth() == 5) ? mes = 'Jun' : '';
+            (date.getMonth() == 6) ? mes = 'Jul' : '';
+            (date.getMonth() == 7) ? mes = 'Ago' : '';
+            (date.getMonth() == 8) ? mes = 'Set' : '';
+            (date.getMonth() == 9) ? mes = 'Out' : '';
+            (date.getMonth() == 10) ? mes = 'Nov' : '';
+            (date.getMonth() == 11) ? mes = 'Dez' : '';
+
+            var retorno = date.getDate() + ' ' + mes +
+                ', ' + date.getFullYear() +
+                ' ' + (date.getHours() + 3) +
+                ':' + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + '';
+
+            return retorno;
+        },
         onDetect(detectedCodes) {
+            if ((this.etiquetaUm != null && this.etiquetaDois != null) || !this.comparar) {
+                this.etiquetaUm = null
+                this.etiquetaDois = null
+                this.resultComprar = null
+            }
+
             this.codigo = detectedCodes[0].rawValue;
             this.camera = false;
-            this.carregaDados();
+            this.modoCompara();
         },
         onError(detectedCodes) {
             this.codigo = detectedCodes;

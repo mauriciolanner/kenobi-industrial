@@ -4,19 +4,11 @@
             <h2 class="h4 font-weight-bold">Consulta Apontamento</h2>
         </template>
 
-        <div
-            class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top table-responsive"
-        >
+        <div class="card-body card-tabelas bg-white shadow-sm border-bottom rounded-top table-responsive">
             <div class="row mb-3">
                 <div class="col-md-12">
-                    <jet-input-search
-                        id="buscar"
-                        :class="'mt-3'"
-                        type="text"
-                        v-model="buscador"
-                        @keyup="buscar"
-                        placeholder="Buscar..."
-                    />
+                    <jet-input-search id="buscar" :class="'mt-3'" type="text" v-model="buscador" @keyup="buscar"
+                        placeholder="Buscar..." />
                 </div>
             </div>
             <div class="row">
@@ -48,16 +40,12 @@
                                 <td>{{ parseInt(consulta.Saldo) }}</td>
                                 <td>{{ consulta.NumSeq }}</td>
                                 <td>
-                                    <button
-                                        v-if="consulta.Via != '0'"
-                                        @click="
-                                            imprimir(
-                                                consulta.Recno,
-                                                consulta.OrdemProducao
-                                            )
-                                        "
-                                        class="btn btn-info"
-                                    >
+                                    <button v-if="consulta.Via != '0'" @click="
+                                        imprimir(
+                                            consulta.Recno,
+                                            consulta.OrdemProducao
+                                        )
+                                        " class="btn btn-info">
                                         <i class="bi bi-printer"> </i>
                                     </button>
                                 </td>
@@ -67,14 +55,9 @@
                             <tr>
                                 <th scope="col text-center" colspan="10">
                                     <div class="text-center">
-                                        <div
-                                            class="spinner-border text-info"
-                                            style="width: 5rem; height: 5rem"
-                                            role="status"
-                                        >
-                                            <span class="visually-hidden"
-                                                >Loading...</span
-                                            >
+                                        <div class="spinner-border text-info" style="width: 5rem; height: 5rem"
+                                            role="status">
+                                            <span class="visually-hidden">Loading...</span>
                                         </div>
                                     </div>
                                 </th>

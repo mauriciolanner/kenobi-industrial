@@ -222,13 +222,13 @@
                                 </div>
                                 <div class="modal-body" v-if="!loadingPrint">
                                     <div class="dropdown" v-if="!loginFardo" v-for="ops in opsPrograma">
-                                        <button class="btn btn-info w-100 mb-3 p-2" style="border-radius: 12px;"
-                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="btn btn-info w-100 mb-3 p-2" @click="abreSenha(ops.OP)"
+                                            style="border-radius: 12px;" type="button">
                                             <h3>{{ ops.OP }}</h3>
                                             {{ ops.Produto }}
                                         </button>
 
-                                        <ul class="dropdown-menu">
+                                        <!-- <ul class="dropdown-menu">
                                             <li>
                                                 <a class="dropdown-item fs-3" href="#" @click="goPrintFardo(40, ops.OP)">
                                                     Impressora 40
@@ -244,10 +244,10 @@
                                                     EM PDF
                                                 </a>
                                             </li>
-                                        </ul>
+                                        </ul> -->
                                     </div>
                                     <div v-else>
-                                        <h3 class="mb-3">Autorização gerencial</h3>
+                                        <h4 class="mb-3">{{ this.successPrint.mensagem }}</h4>
                                         <div class="mb-3">
                                             <form class="input-group mb-3" autocomplete="off">
                                                 <input type="text" name="login" class="form-control"
@@ -273,9 +273,6 @@
                                             <button class="btn btn-success w-100"
                                                 @click="goPrintFardo(form.impressora, null)">IMPRIMIR</button>
                                         </div>
-                                    </div>
-                                    <div class="md-3 text-danger">
-                                        {{ this.successPrint.mensagem }}
                                     </div>
 
                                 </div>
@@ -358,7 +355,7 @@ export default defineComponent({
                 })
         },
         buscaIntervalos() {
-            this.dadosContTempo = setInterval(() => this.dadosConsulta(this.page), 1000 * 20);
+            this.dadosContTempo = setInterval(() => this.dadosConsulta(this.page), 1000 * 60);
         },
         buscar() {
             this.dadosConsulta(this.page)
@@ -449,6 +446,10 @@ export default defineComponent({
                     this.loading = false
                 })
         },
+        abreSenha(op) {
+            this.loginFardo = true;
+            this.opReimprimir = op;
+        },
         async goPrintFardo(printer, op) {
             if (op != null) {
                 this.opReimprimir = op;
@@ -475,6 +476,10 @@ export default defineComponent({
                         this.successPrint.titulo = 'Sucesso!'
                         this.successPrint.mensagem = 'Etiqueta Impressa com sucesso'
                         this.successPrint.tipo = 'alert-success'
+                        this.loginFardo = false
+                        this.opReimprimir = ''
+                        this.form.login = ''
+                        this.form.senha = ''
                         this.loading = false
                         this.dadosConsulta(this.page)
                         this.modalOps.hide();

@@ -25,6 +25,7 @@
         "ricorocks-digital-agency/soap": "^1.6",
         "setasign/fpdi": "^2.6",
         "simplesoftwareio/simple-qrcode": "^4.2",
+        "spatie/browsershot": "^3.58",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
