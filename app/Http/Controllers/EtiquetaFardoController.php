@@ -225,16 +225,30 @@ class EtiquetaFardoController extends Controller
 
         $pdf->Output("F", public_path("\storage\PDF\\" . $dadosOp->OP_REAL . ".pdf"));
 
-        if ($printer != 'PDF') {
-            for ($i = 0; $i < $totalFor; $i++) {
-                if ($printer == 'GRANDE')
-                    exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\storage\PDF\\' . $dadosOp->OP_REAL . '.pdf"  \\\192.168.254.71\192.168.254.236');
-                else
-                    exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\storage\PDF\\' . $dadosOp->OP_REAL . '.pdf"  \\\192.168.254.71\192.168.255.2' . $printer . '');
-            }
+        $hoje = Carbon::now()->format('Y-m-d H:i:s');
+
+        $testaLote = DB::connection('protheus')->select("SELECT * from PCF4.dbo.TBLLot where Code = '$lote'");
+        $criaLote = true;
+
+        if (count($testaLote) > 0) {
+            $criaLote = false;
         }
 
-        $hoje = Carbon::now()->format('Y-m-d H:i:s');
+        $insertLote = "INSERT INTO PCF4.dbo.TBLLot (Code, Classification, IDProduct, Origin, DtTimeStamp, DtIssue, IDUser, IDDocType, IDWOHD, FlgEnable, DtCreation, IDUserLastUpdate) VALUES
+        (
+        '$lote',
+        0, 
+        '$IDProduct', --idproduto
+        1,
+        '$hoje',
+        '$hoje', 
+        '191', 
+        7, 
+        '$IDWOHD',--id da op no mes 
+        1, 
+        '$hoje', 
+        '191'
+        )";
 
         $insertMes = "INSERT into PCF4.dbo.CTBLEtiquetaPrev (
             Etq, 
@@ -263,13 +277,25 @@ class EtiquetaFardoController extends Controller
             )";
 
         try {
+            if ($criaLote)
+                DB::connection('protheus')->insert($insertLote);
+
             DB::connection('protheus')->insert($insertMes);
         } catch (\Exception $e) {
             return  [
                 'status' => false,
                 'login' => false,
-                'mensagem' => 'A etiqueta foi impressa mas houve um erro no MES.'
+                'mensagem' => 'A etiqueta não foi impressa pois houve um erro no MES.'
             ];
+        }
+
+        if ($printer != 'PDF') {
+            for ($i = 0; $i < $totalFor; $i++) {
+                if ($printer == 'GRANDE')
+                    exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\storage\PDF\\' . $dadosOp->OP_REAL . '.pdf"  \\\192.168.254.71\192.168.254.236');
+                else
+                    exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\storage\PDF\\' . $dadosOp->OP_REAL . '.pdf"  \\\192.168.254.71\192.168.255.2' . $printer . '');
+            }
         }
 
         return  [
