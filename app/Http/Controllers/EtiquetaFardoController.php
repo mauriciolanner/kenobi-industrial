@@ -139,6 +139,8 @@ class EtiquetaFardoController extends Controller
             ->noSandbox()->setScreenshotType('png')
             ->save($caminhoImagemPNG);
 
+        $lote = substr($dadosOp->OP_REAL, 0, -3) . substr($dadosOp->OP_REAL, -2);
+
 
         $pdf = new PDFCode128('L', 'mm', [96, 48]);
         $pdf->SetMargins(1, 1, 1, 1);
@@ -167,9 +169,9 @@ class EtiquetaFardoController extends Controller
         $pdf->Cell(1, 1, 'VIA ' . $via . '/' . $totalEtiqueta . ' - ' . mb_strimwidth($userName, 0, 8), 0, 0, "L");
 
         $pdf->SetXY(1, 15);
-        $pdf->Cell(1, 1, 'LOTE:' . $dadosOp->C2_FSLOTOP, 0, 0, "L");
+        $pdf->Cell(1, 1, 'LOTE:' . $lote, 0, 0, "L");
         $pdf->SetXY(47, 15);
-        $pdf->Cell(1, 1, 'LOTE:' . $dadosOp->C2_FSLOTOP, 0, 0, "L");
+        $pdf->Cell(1, 1, 'LOTE:' . $lote, 0, 0, "L");
 
         $pdf->SetXY(1, 18);
         $pdf->Cell(1, 1, 'DT:' . Carbon::now()->format('d/m/Y H:i:s'), 0, 0, "L");

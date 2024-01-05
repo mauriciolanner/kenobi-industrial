@@ -574,7 +574,9 @@ export default defineComponent({
             }).then(response => {
                 this.consultas = response.data;
                 this.loading = false
-            }).catch(function (thrown) {
+            }).catch(thrown => {
+                console.log("TESTE ERRO")
+                console.log(thrown)
                 if (axios.isCancel(thrown)) {
                     console.log('AXIOS CANCELADO', thrown.message);
                     this.loading = false
