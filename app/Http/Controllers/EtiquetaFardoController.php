@@ -128,6 +128,39 @@ class EtiquetaFardoController extends Controller
             }
         }
 
+        $idRecurso = DB::connection('protheus')->select("SELECT IDResource,* from PCF4.dbo.TBLResource WHERE  Code='$dadosOp->C2_RECURSO'");
+        if (count($idRecurso) > 0) {
+            $idRecurso = $idRecurso[0]->IDResource;
+        } else {
+            return  [
+                'status' => false,
+                'login' => false,
+                'mensagem' => 'Erro ao encontrar recurso.'
+            ];
+        }
+
+        $IDWOHD = DB::connection('protheus')->select("SELECT TOP 1 IDWOHD from PCF4.dbo.TBLWOHD where Code='$dadosOp->OP_REAL'"); //[0]->IDWOHD;
+        if (count($IDWOHD) > 0) {
+            $IDWOHD = $IDWOHD[0]->IDWOHD;
+        } else {
+            return  [
+                'status' => false,
+                'login' => false,
+                'mensagem' => 'Erro ao encontrar ORDEM MES.'
+            ];
+        }
+
+        $IDProduct = DB::connection('protheus')->select("SELECT TOP 1 IDProduct from PCF4.dbo.TBLProduct where Code='$dadosOp->C2_PRODUTO'");
+        if (count($IDProduct) > 0) {
+            $IDProduct = $IDProduct[0]->IDProduct;
+        } else {
+            return  [
+                'status' => false,
+                'login' => false,
+                'mensagem' => 'Erro ao encontrar Produto MES.'
+            ];
+        }
+
         $turnoAgora = '';
         (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 05:20:00'), Carbon::now()->format('Y-m-d 13:50:00'))) ? $turnoAgora = 'TURNO 1' : '';
         (Carbon::create(Carbon::now()->format('Y-m-d H:i:s'))->between(Carbon::now()->format('Y-m-d 13:50:00'), Carbon::now()->format('Y-m-d 22:00:00'))) ? $turnoAgora = 'TURNO 2' : '';
@@ -199,6 +232,44 @@ class EtiquetaFardoController extends Controller
                 else
                     exec('"C:\Program Files (x86)\Foxit Software\Foxit PDF Reader\FoxitPDFReader.exe" /t "C:\xampp\htdocs\bomixKenobi\public\storage\PDF\\' . $dadosOp->OP_REAL . '.pdf"  \\\192.168.254.71\192.168.255.2' . $printer . '');
             }
+        }
+
+        $hoje = Carbon::now()->format('Y-m-d H:i:s');
+
+        $insertMes = "INSERT into CTBLEtiquetaPrev (
+            Etq, 
+            TotalReprint,
+            Data, 
+            OP,
+            ProductCode, -- codigo do produto no Protheus
+            ProductName, --descrição do produto
+            Shift, -- sempre 2
+            IDResource,  --Id do recurso
+            IDWOHD, --id da OP
+            IDProduct, -- id do produto no MES
+            IDUser --Id do usuário
+            ) values (
+            '$lote', --do php
+            '0',
+            '$hoje', -- do php
+            '$dadosOp->OP_REAL', -- do php
+            '$dadosOp->C2_PRODUTO', -- do php
+            '$dadosOp->C2_BRPROD', -- do php
+            2,
+            '$idRecurso',--id da maquina
+            '$IDWOHD',--id da op no mes
+            '$IDProduct',
+            '191'
+            )";
+
+        try {
+            DB::connection('protheus')->select($insertMes);
+        } catch (\Exception $e) {
+            return  [
+                'status' => false,
+                'login' => false,
+                'mensagem' => 'A etiqueta foi impressa mas houve um erro no MES.'
+            ];
         }
 
         return  [
