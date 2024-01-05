@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\ImpressaoMecalux;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class ConsultaPalletController extends Controller
 {
@@ -32,10 +33,13 @@ class ConsultaPalletController extends Controller
         $pallet = null;
         $opDados = null;
         $etiquetaToco = [];
+        $dataReferencia = Carbon::now()->subDays(90)->format('Y-m-d');
 
         if ($request->op != '') {
             if (strlen($request->op) == 11) {
-                $etiquetaToco = ImpressaoMecalux::where('OP', $request->op)->where('IMPRESSO', '=', 0)->get();
+                $etiquetaToco = ImpressaoMecalux::where('IMPRESSO', '0')->where('DtMov', '>', $dataReferencia . ' 00:00:00.000000')
+                    ->whereNull('ESTORNO')->where('OP', $request->op)->get();
+
                 $opDados =  DB::connection('protheus')
                     ->select(DB::raw("SELECT 
                         /*Obs: Necessário seguir a ordem colocada */
