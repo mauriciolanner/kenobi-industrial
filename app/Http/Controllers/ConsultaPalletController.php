@@ -35,7 +35,7 @@ class ConsultaPalletController extends Controller
 
         if ($request->op != '') {
             if (strlen($request->op) == 11) {
-                $etiquetaToco = ImpressaoMecalux::where('OP', $request->op)->where('IMPRESSO', '<>', 1)->get();
+                $etiquetaToco = ImpressaoMecalux::where('OP', $request->op)->where('IMPRESSO', '=', 0)->get();
                 $opDados =  DB::connection('protheus')
                     ->select(DB::raw("SELECT 
                         /*Obs: Necessário seguir a ordem colocada */
