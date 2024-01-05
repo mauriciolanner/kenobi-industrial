@@ -45,7 +45,7 @@ Route::controller(ConsultaPalletController::class)->group(function () {
     Route::get('/saldo', 'indexSaldo')->name('consultaSaldo');
     Route::get('/API/saldo', 'APIConsultaSaldoMX')->name('API.conuslta.saldoMX');
 });
-
+//fim rotas abertas
 
 Route::middleware(['auth:sanctum', 'verified'])->controller(PushNotificationController::class)->group(function () {
     Route::get('API/notificacao/todas', 'index')->name('notifications.all');
@@ -138,6 +138,10 @@ Route::middleware(['auth:sanctum', 'verified'])->controller(MecaluxController::c
     Route::get('/etiquetaMecalux', 'index')->name('mecalux.index');
     Route::get('/Api/etiquetaMecalux', 'APIMecaluxRecurso')->name('mecalux.apiEtiquetas');
     Route::get('/Api/etiquetaMecalux/print', 'apontamentoPdf')->name('mecalux.apontamentoPdf');
+});
+//rotas ABERTAS de Apontamento já impressos
+Route::controller(MecaluxController::class)->group(function () {
+    Route::get('/Api/etiquetaMecalux/opem/print', 'apontamentoPdf')->name('API.OPEM.mecalux.apontamentoPdf');
 });
 
 //rotas de etiqueta fardo
