@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Models\ImpressaoMecalux;
 use Illuminate\Support\Facades\DB;
 
 class ConsultaPalletController extends Controller
@@ -30,9 +31,11 @@ class ConsultaPalletController extends Controller
         $dados = null;
         $pallet = null;
         $opDados = null;
+        $etiquetaToco = [];
 
         if ($request->op != '') {
             if (strlen($request->op) == 11) {
+                $etiquetaToco = ImpressaoMecalux::where('OP', $request->op)->where('IMPRESSO', '<>', 1)->get();
                 $opDados =  DB::connection('protheus')
                     ->select(DB::raw("SELECT 
                         /*Obs: Necessário seguir a ordem colocada */
@@ -109,6 +112,7 @@ class ConsultaPalletController extends Controller
                 return response()->json([
                     'pallet' => $dados,
                     'status' => true,
+                    'etiquetaMecalux' => $etiquetaToco,
                     'op' => $opDados
                 ]);
             }
@@ -125,12 +129,14 @@ class ConsultaPalletController extends Controller
                 return response()->json([
                     'pallet' => $dados,
                     'status' => true,
+                    'etiquetaMecalux' => $etiquetaToco,
                     'op' => $opDados
                 ]);
             else
                 return response()->json([
                     'pallet' => [],
                     'status' => false,
+                    'etiquetaMecalux' => $etiquetaToco,
                     'op' => $opDados
                 ]);
         }
@@ -138,6 +144,7 @@ class ConsultaPalletController extends Controller
         return response()->json([
             'pallet' => $dados,
             'status' => false,
+            'etiquetaMecalux' => $etiquetaToco,
             'op' => $opDados
         ]);
     }

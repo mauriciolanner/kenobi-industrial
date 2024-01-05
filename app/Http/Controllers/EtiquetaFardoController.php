@@ -7,6 +7,7 @@ use Illuminate\Support\Carbon;
 use App\Force\PDFCode128;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use App\Models\ImpressaoMecalux;
 use Illuminate\Support\Facades\Storage;
 use App\Models\EtiquetaFardo;
 use App\Models\User;
