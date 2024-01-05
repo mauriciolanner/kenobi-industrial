@@ -236,7 +236,7 @@ class EtiquetaFardoController extends Controller
 
         $hoje = Carbon::now()->format('Y-m-d H:i:s');
 
-        $insertMes = "INSERT into CTBLEtiquetaPrev (
+        $insertMes = "INSERT into PCF4.dbo.CTBLEtiquetaPrev (
             Etq, 
             TotalReprint,
             Data, 
@@ -263,7 +263,7 @@ class EtiquetaFardoController extends Controller
             )";
 
         try {
-            DB::connection('protheus')->select($insertMes);
+            DB::connection('protheus')->insert($insertMes);
         } catch (\Exception $e) {
             return  [
                 'status' => false,
