@@ -153,9 +153,9 @@ class EtiquetaFardoController extends Controller
         $pdf->Image($caminhoImagemPNG, 78, 9, -1100);
 
         $pdf->SetXY(1, 1);
-        $pdf->MultiCell(48, 2, $dadosOp->C2_FSPRODC . '-' . $dadosOp->C2_BRPROD, 0, 1);
+        $pdf->MultiCell(48, 2, $dadosOp->C2_PRODUTO . '-' . $dadosOp->C2_BRPROD, 0, 1);
         $pdf->SetXY(47, 1);
-        $pdf->MultiCell(48, 2, $dadosOp->C2_FSPRODC . '-' . $dadosOp->C2_BRPROD, 0, 1);
+        $pdf->MultiCell(48, 2, $dadosOp->C2_PRODUTO . '-' . $dadosOp->C2_BRPROD, 0, 1);
         $pdf->SetFont('helvetica', 'B', 5.5);
 
         $pdf->SetXY(1, 9);
@@ -183,10 +183,10 @@ class EtiquetaFardoController extends Controller
         $pdf->SetXY(47, 21);
         $pdf->Cell(1, 1, 'QTD:' . $dadosOp->C2_QTDCARR, 0, 0, "L");
 
-        $pdf->SetXY(1, 25);
+        $pdf->SetXY(1, 24);
         $pdf->SetFont('helvetica', 'B', 5);
         $pdf->Cell(48, 1, 'BOMIX INDUSTRIA DE EMBALAGENS LTDA', 0, 0, "C");
-        $pdf->SetXY(47, 25);
+        $pdf->SetXY(47, 24);
         $pdf->Cell(48, 1, 'BOMIX INDUSTRIA DE EMBALAGENS LTDA', 0, 0, "C");
 
         $pdf->Output("F", public_path("\storage\PDF\\" . $dadosOp->OP_REAL . ".pdf"));
