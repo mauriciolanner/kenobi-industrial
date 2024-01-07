@@ -57,7 +57,10 @@ class EtiquetaFardoController extends Controller
         $verifica = EtiquetaFardo::where('OP', $request->op)->orderBy('id', 'desc')->first();
 
         if ($request->op != '') {
-            $dadosOp = DB::connection('protheus')->select("SELECT TOP 1 C2_NUM + C2_ITEM + C2_SEQUEN as OP_REAL, C2_QTDCARR/C2_QTDEMB as FARDO_PALLET, * FROM SC2010 (NOLOCK) WHERE C2_NUM + C2_ITEM + C2_SEQUEN  = '$request->op'");
+            $dadosOp = DB::connection('protheus')->select("SELECT TOP 1 C2_NUM + C2_ITEM + C2_SEQUEN as OP_REAL, C2_QTDCARR/C2_QTDEMB as FARDO_PALLET, * FROM SC2010 (NOLOCK) 
+            WHERE C2_NUM + C2_ITEM + C2_SEQUEN  = '$request->op' AND 
+			D_E_L_E_T_ <> '*' AND 
+			C2_FILIAL = '010101'");
 
             if (count($dadosOp) > 0) {
                 if ($verifica != null) {
